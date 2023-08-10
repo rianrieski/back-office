@@ -12,12 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
         $this->call(RefDokumenSeeder::class);
         $this->call(JenisKursusSeeder::class);
         $this->call(AgamaSeeder::class);
@@ -33,8 +27,24 @@ class DatabaseSeeder extends Seeder
         $this->call(JenisKpSeeder::class);
         $this->call(InstansiSeeder::class);
         $this->call(PropinsiSeeder::class);
-        $this->call(KotaSeeder::class);
-        $this->call(KecamatanSeeder::class);
-        $this->call(DesaSeeder::class);
+//        $this->call(KotaSeeder::class);
+//        $this->call(KecamatanSeeder::class);
+//        $this->call(DesaSeeder::class);
+        $this->call(LatihanStrukturalSeeder::class);
+        $this->call(SatuanKerjaSeeder::class);
+        $this->call(ProfesiSeeder::class);
+        $this->call(EselonSeeder::class);
+        $this->call(AlasanHukumanDisiplinSeeder::class);
+        $this->call(JenisRiwayatSeeder::class);
+        $this->call(JenisPemberhentianSeeder::class);
+        $this->call(KpknSeeder::class);
+        $this->call(KedudukanHukumSeeder::class);
+        $this->call(JenisHukumanSeeder::class);
+        $this->call(CltnSeeder::class);
+        $this->call(JenisKompetensiSeeder::class);
+        $this->call(JenisPengadaanSeeder::class);
+        $this->call(JenisPensiunSeeder::class);
+        $this->call(KelJabatanSeeder::class);
+        $this->call(PendidikanSeeder::class);
     }
 }
