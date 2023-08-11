@@ -46,5 +46,11 @@ class DatabaseSeeder extends Seeder
         $this->call(JenisPensiunSeeder::class);
         $this->call(KelJabatanSeeder::class);
         $this->call(PendidikanSeeder::class);
+        $this->call(StatusPegawaiSeeder::class);
+        $this->call(JenisUnitKerjaSeeder::class);
+        $this->call(UnitKerjaSeeder::class);
+        $this->call(HirarkiUnitKerjaSeeder::class);
+        $this->call(BankSeeder::class);
+
     }
 }
