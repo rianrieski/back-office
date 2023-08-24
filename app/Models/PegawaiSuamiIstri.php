@@ -12,4 +12,21 @@ class PegawaiSuamiIstri extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class);
+    }
+    public function pendidikan()
+    {
+        return $this->belongsTo(Pendidikan::class);
+    }
+    public function media_foto_pasangan()
+    {
+        return $this->hasOne(Media::class,'media_foto_pasangan_id');
+    }
+    public function media_buku_nikah()
+    {
+        return $this->hasOne(Media::class,'media_buku_nikah_id');
+    }
 }

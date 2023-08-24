@@ -12,4 +12,9 @@ class JenisKawin extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+
+    public function pegawai_riwayat_thp()
+    {
+        return $this->hasMany(PegawaiRiwayatThp::class);
+    }
 }

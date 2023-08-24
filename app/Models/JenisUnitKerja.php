@@ -12,4 +12,8 @@ class JenisUnitKerja extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+    public function unit_kerja()
+    {
+        return $this->hasMany(UnitKerja::class);
+    }
 }

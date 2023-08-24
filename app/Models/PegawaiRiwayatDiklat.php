@@ -12,4 +12,17 @@ class PegawaiRiwayatDiklat extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class);
+    }
+    public function jenis_diklat()
+    {
+        return $this->belongsTo(JenisDiklat::class);
+    }
+    public function media()
+    {
+        return $this->hasOne(Media::class,'media_sertifikat_id');
+    }
 }

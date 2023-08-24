@@ -12,4 +12,8 @@ class JabatanFungsional extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+    public function jabatan_fungsional()
+    {
+        return $this->belongsTo(KelJabatan::class);
+    }
 }

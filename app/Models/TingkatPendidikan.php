@@ -12,4 +12,8 @@ class TingkatPendidikan extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+    public function pendidikan()
+    {
+        return $this->hasMany(Pendidikan::class);
+    }
 }

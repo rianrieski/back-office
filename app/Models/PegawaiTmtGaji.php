@@ -12,4 +12,13 @@ class PegawaiTmtGaji extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class);
+    }
+    public function gaji()
+    {
+        return $this->belongsTo(Gaji::class);
+    }
 }

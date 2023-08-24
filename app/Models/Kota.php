@@ -50,8 +50,12 @@ class Kota extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function districts()
+    public function kecamatan()
     {
         return $this->hasMany(Kecamatan::class);
+    }
+    public function pegawai_alamat()
+    {
+        return $this->hasMany(PegawaiAlamat::class);
     }
 }

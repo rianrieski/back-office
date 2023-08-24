@@ -34,4 +34,8 @@ class Propinsi extends Model
     {
         return $this->hasMany(Kota::class);
     }
+    public function pegawai_alamat()
+    {
+        return $this->hasMany(PegawaiAlamat::class);
+    }
 }

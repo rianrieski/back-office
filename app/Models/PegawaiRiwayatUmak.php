@@ -12,4 +12,13 @@ class PegawaiRiwayatUmak extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class);
+    }
+    public function uang_makan()
+    {
+        return $this->belongsTo(UangMakan::class);
+    }
 }

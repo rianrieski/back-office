@@ -12,4 +12,13 @@ class PegawaiRiwayatThp extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class);
+    }
+    public function jenis_kawin()
+    {
+        return $this->belongsTo(JenisKawin::class);
+    }
 }

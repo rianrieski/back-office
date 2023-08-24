@@ -12,4 +12,12 @@ class Golongan extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+    public function uang_makan()
+    {
+        return $this->hasMany(UangMakan::class);
+    }
+    public function gaji()
+    {
+        return $this->hasMany(Gaji::class);
+    }
 }

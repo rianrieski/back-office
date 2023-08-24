@@ -56,4 +56,8 @@ class Kecamatan extends Model
     {
         return $this->hasMany(Desa::class);
     }
+    public function pegawai_alamat()
+    {
+        return $this->hasMany(PegawaiAlamat::class);
+    }
 }

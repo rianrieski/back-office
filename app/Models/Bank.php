@@ -13,4 +13,9 @@ class Bank extends Model
     protected $keyType = 'int';
     public $incrementing = true;
     public $timestamps = false;
+
+    public function pegawai_rekening()
+    {
+        return $this->hasMany(PegawaiRekening::class);
+    }
 }

@@ -12,4 +12,12 @@ class Gaji extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+    public function golongan()
+    {
+        return $this->belongsTo(Golongan::class);
+    }
+    public function pegawai_tmt_gaji()
+    {
+        return $this->hasMany(PegawaiTmtGaji::class);
+    }
 }

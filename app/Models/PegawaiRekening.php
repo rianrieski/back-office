@@ -12,4 +12,12 @@ class PegawaiRekening extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class);
+    }
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
 }

@@ -12,4 +12,16 @@ class JabatanUnitKerja extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+    public function jabatan_tukin()
+    {
+        return $this->belongsTo(JabatanTukin::class);
+    }
+    public function hirarki_unit_kerja()
+    {
+        return $this->belongsTo(HirarkiUnitKerja::class);
+    }
+    public function pegawai_riwayat_jabatan()
+    {
+        return $this->hasMany(PegawaiRiwayatJabatan::class);
+    }
 }

@@ -12,4 +12,12 @@ class UangMakan extends Model
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+    public function golongan()
+    {
+        return $this->belongsTo(Golongan::class);
+    }
+    public function pegawai_riwayat_umak()
+    {
+        return $this->hasMany(PegawaiRiwayatUmak::class);
+    }
 }

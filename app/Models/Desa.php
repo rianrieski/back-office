@@ -45,4 +45,8 @@ class Desa extends Model
     {
         return $this->belongsTo(Kecamatan::class);
     }
+    public function pegawai_alamat()
+    {
+        return $this->hasMany(PegawaiAlamat::class);
+}
 }
