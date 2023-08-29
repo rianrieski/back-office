@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tukin extends Model
 {
+    use HasFactory;
     protected $table = 'tukin';
     protected $guarded = [];
     protected $primaryKey = 'id';

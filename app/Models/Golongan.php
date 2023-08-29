@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Golongan extends Model
 {
+    use HasFactory;
     protected $table = 'golongan';
     protected $guarded = [];
     protected $primaryKey = 'id';

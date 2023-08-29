@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('tukin', function (Blueprint $table) {
             $table->integerIncrements('id');
-            $table->tinyInteger('grade_tukin');
-            $table->bigInteger('nominal_tukin');
-            $table->string('keterangan')->nullable(true);
+            $table->tinyInteger('grade');
+            $table->bigInteger('nominal');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }
