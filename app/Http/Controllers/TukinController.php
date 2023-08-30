@@ -13,6 +13,7 @@ class TukinController extends Controller
     {
         return Inertia::render('Tukin/Index', [
             'tukin_list' => Tukin::all(),
+            'title' => 'Tukin'
         ]);
     }
 

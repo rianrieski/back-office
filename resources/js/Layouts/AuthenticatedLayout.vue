@@ -4,9 +4,13 @@ import useRouteStore from "@/Stores/RouteStore.js";
 import Sidebar from "@/Layouts/components/Sidebar.vue";
 
 const routes = useRouteStore();
+defineProps({
+    title: "",
+});
 </script>
 
 <template>
+    <Head :title="title" />
     <div class="drawer min-h-screen">
         <Sidebar class="hidden lg:block" />
         <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
