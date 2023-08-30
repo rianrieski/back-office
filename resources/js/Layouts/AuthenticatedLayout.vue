@@ -1,7 +1,8 @@
 <script setup>
-import { Bars3Icon, UserCircleIcon } from "@heroicons/vue/24/outline/index.js";
+import { Bars3Icon } from "@heroicons/vue/24/outline/index.js";
 import useRouteStore from "@/Stores/RouteStore.js";
 import Sidebar from "@/Layouts/components/Sidebar.vue";
+import ToastList from "@/Components/ToastList.vue";
 
 const routes = useRouteStore();
 defineProps({
@@ -12,6 +13,7 @@ defineProps({
 <template>
     <Head :title="title" />
     <div class="drawer min-h-screen">
+        <ToastList />
         <Sidebar class="hidden lg:block" />
         <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col">
@@ -26,12 +28,11 @@ defineProps({
                     <div class="text-xl leading-tight tracking-wider">
                         BACKOFFICE
                     </div>
-                    <div class="">
-                        <ul class="menu menu-horizontal px-4">
-                            <!-- Navbar menu content here -->
-                            <li><UserCircleIcon /></li>
-                        </ul>
-                    </div>
+                    <!-- TODO: set proper class -->
+                    <!--                    <ul class="menu menu-horizontal px-4">-->
+                    <!-- Navbar menu content here -->
+                    <!--                        <li><UserCircleIcon /></li>-->
+                    <!--                    </ul>-->
                 </div>
             </div>
 
