@@ -29,7 +29,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->name('dashboard');
 
 Route::resource('tukin', TukinController::class)->only('index', 'store', 'update', 'destroy');
 Route::resource('umak', UangMakanController::class)->only('index', 'store', 'update', 'destroy');
