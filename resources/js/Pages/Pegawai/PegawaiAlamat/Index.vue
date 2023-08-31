@@ -4,8 +4,12 @@ import { router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import { debounce } from "lodash";
 import Swal from "sweetalert2";
+
+const props = defineProps({
+    pegawaiAlamat:'',
+})
 const tambahAlamat = ()=>{
-    router.get('/pegawai/alamat/create');
+    router.get(route('alamat.create'));
 }
 const toEdit = (id)=>{
     router.get(route('alamat.edit',id))
@@ -46,9 +50,7 @@ const toDelete = (id)=>{
     })
 
 }
-defineProps({
-    pegawaiAlamat:'',
-})
+
 const cari = ref('')
 const paginate = ref('10')
 watch(cari,debounce (value =>{
@@ -60,15 +62,28 @@ watch(cari,debounce (value =>{
     });
 },500));
 watch(paginate,value =>{
-    console.log('triger');
     router.get(route('alamat.index'), {paginate:value},{
         preserveState:true,
         preserveScroll:true,
         replace:true
     });
 });
+const pegawaiAlamatDetail = ref([])
+const showDetail=(id)=>{
+    router.get(route('alamat.index'),{pegawai_alamat_id:id},{
 
-
+        preserveState:true,
+        preserveScroll:true,
+        replace:true,
+        only:[
+            'pegawaiAlamatDetail'
+        ],
+        onSuccess:(response)=>{
+            pegawaiAlamatDetail.value = response.props.pegawaiAlamatDetail
+        }
+    })
+    modal_alamat.showModal()
+}
 </script>
 <template>
     <div class="text-sm breadcrumbs">
@@ -120,7 +135,7 @@ watch(paginate,value =>{
                             <label tabindex="0" class="btn btn-xs m-1">Aksi</label>
                             <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-30">
                                 <li><a href="javascript:void(0)" @click="toEdit(alamat.id)">Edit</a></li>
-                                <li><a >Detail</a></li>
+                                <li><a @click="showDetail(alamat.id)">Detail</a></li>
                                 <li><a href="javascript:void(0)" @click="toDelete(alamat.id)">Hapus</a></li>
                             </ul>
                         </div>
@@ -140,4 +155,56 @@ watch(paginate,value =>{
                 </div>
         </div>
     </MainCard>
+    <!-- Open the modal using ID.showModal() method -->
+    <dialog id="modal_alamat" class="modal">
+        <form method="dialog" class="modal-box">
+            <div class="overflow-x-auto">
+               <table class="w-11/12">
+                   <caption class="font-bold text-lg mb-4">Detail Pegawai</caption>
+                   <thead>
+                   <tr>
+                       <th></th>
+                       <th></th>
+                   </tr>
+                   </thead>
+                   <tr>
+                       <td class="">Nama Pegawai</td>
+                       <td v-if="pegawaiAlamatDetail"  v-html="pegawaiAlamatDetail.nama_depan +' ' + pegawaiAlamatDetail.nama_belakang"></td>
+                   </tr>
+                   <tr>
+                       <td>Tipe Alamat</td>
+                       <td v-if="pegawaiAlamatDetail.tipe_alamat === 'D'">Domisili</td>
+                       <td v-if="pegawaiAlamatDetail.tipe_alamat === 'K'">Kampung</td>
+                   </tr>
+                   <tr>
+                       <td>Propinsi</td>
+                       <td v-html="pegawaiAlamatDetail.nama_propinsi"></td>
+                   </tr>
+                   <tr>
+                       <td>Kota/Kabupaten</td>
+                       <td v-html="pegawaiAlamatDetail.nama_kota"></td>
+                   </tr>
+                   <tr>
+                       <td>Kecamatan</td>
+                       <td v-html="pegawaiAlamatDetail.nama_kecamatan"></td>
+                   </tr>
+                   <tr>
+                       <td>Desa</td>
+                       <td v-html="pegawaiAlamatDetail.nama_desa"></td>
+                   </tr>
+                   <tr>
+                       <td>Kode Pos</td>
+                       <td v-html="pegawaiAlamatDetail.kode_pos"></td>
+                   </tr>
+                   <tr>
+                       <td>Alamat</td>
+                       <td v-html="pegawaiAlamatDetail.alamat"></td>
+                   </tr>
+               </table>
+            </div>
+            <div class="modal-action">
+                <button class="btn btn-sm btn-primary">Tutup</button>
+            </div>
+        </form>
+    </dialog>
 </template>
