@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('siasn_tokens', function (Blueprint $table) {
+        Schema::create('integration_tokens', function (Blueprint $table) {
             $table->id();
             $table->string('token_type');
             $table->integer('expires_in');
@@ -18,6 +18,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('siasn_tokens');
+        Schema::dropIfExists('integration_tokens');
     }
 };

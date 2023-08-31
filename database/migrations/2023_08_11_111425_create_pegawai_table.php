@@ -31,21 +31,16 @@ return new class extends Migration
             $table->boolean('status_dinas');
             $table->string('tanggal_berhenti')->nullable(true);
             $table->string('tanggal_wafat')->nullable(true);
-            $table->unsignedBigInteger('media_kartu_pegawai_id')->nullable(true);
             $table->string('no_bpjs',13);
             $table->string('no_taspen',50)->nullable(true);
             $table->string('npwp',16)->nullable(true);
             $table->string('no_enroll',50)->nullable(true)->comment('no_urut_finger');
-            $table->unsignedBigInteger('media_foto_id')->nullable(true);
 
             $table->timestamps();
             $table->foreign('agama_id')->references('id')->on('agama')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('jenis_kawin_id')->references('id')->on('jenis_kawin')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('jenis_pegawai_id')->references('id')->on('jenis_pegawai')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('status_pegawai_id')->references('id')->on('status_pegawai')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('media_kartu_pegawai_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('media_foto_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
-
         });
     }
 
