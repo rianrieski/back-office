@@ -1,11 +1,11 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import Swal from 'sweetalert2';
 const props = defineProps({
     propinsi:'',
-    desa:'',
-    success : false
+    pegawai:''
 })
 const kota = ref([]);
 const kecamatan = ref([]);
@@ -17,7 +17,8 @@ const form = useForm('createAlamat',{
     kecamatan_id:'',
     desa_id:'',
     kode_pos:'',
-    alamat:''
+    alamat:'',
+    pegawai_id:''
 });
 const simpanAlamat = ()=>{
     form.post('/pegawai/alamat',{
@@ -25,54 +26,57 @@ const simpanAlamat = ()=>{
         preserveState:true,
         replace:true,
         onSuccess:(response)=>{
+            Swal.fire({
+                title: 'Tersimpan!',
+                text: 'alamat pegawai berhasil disimpan',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            })
             router.get(route('alamat.index'));
-            console.log('SUKSES');
         },
         onError:(errors)=>{
-            console.log(errors.query);
+            if(errors.query){
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: 'alamat pegawai gagal disimpan',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+            }
         }
     })
 }
-
-const getKota = (propinsi_id)=>{
-    form.clearErrors()
-     router.get(route('alamat.create'),{
-        propinsi_id: propinsi_id
-    }, {
-            only:['kota'],
-            onSuccess:(response)=>{
-                kota.value = response.props.kota
-            },
-            preserveState:true,
-            preserveScroll:true,
-            replace:true
-        })
-}
-const getKecamatan = (kota_id)=>{
-    router.get(route('alamat.create'),{
-        kota_id:kota_id
-    },{
-        only:['kecamatan'],
+watch(()=>form.propinsi_id,(value)=>{
+    router.get(route('alamat.create'),{propinsi_id:value},{
+        preserveState:true,
+        preserveScroll:true,
+        onSuccess:(response)=>{
+            kota.value = response.props.kota
+        }
+    });
+});
+watch(()=>form.kota_id,(value)=>{
+    router.get(route('alamat.create'),{kota_id:value},{
+        preserveState:true,
+        preserveScroll:true,
         onSuccess:(response)=>{
             kecamatan.value = response.props.kecamatan
-        },
+        }
+    });
+});
+
+watch(()=>form.kecamatan_id,(value)=>{
+    router.get(route('alamat.create'),{kecamatan_id:value},{
         preserveState:true,
         preserveScroll:true,
-        replace:true
-    })
-}
-const getDesa = (kecamatan_id)=>{
-    router.get(route('alamat.create'),{
-        kecamatan_id:kecamatan_id
-    },{
-        only:['desa'],
         onSuccess:(response)=>{
             desa.value = response.props.desa
-        },
-        preserveScroll:true,
-        preserveState:true,
-        replace:true
-    })
+        }
+    });
+});
+
+const back = ()=>{
+    router.get(route('alamat.index'));
 }
 </script>
 
@@ -80,16 +84,27 @@ const getDesa = (kecamatan_id)=>{
     <div class="text-sm breadcrumbs">
         <ul>
             <li><a>Beranda</a></li>
-            <li><a>Pegawai</a></li>
-            <li><a>Alamat</a></li>
-            <li>Tambah</li>
+            <li>Pegawai</li>
+            <li><Link href="/pegawai/alamat">Alamat</Link></li>
+            <li><span class="text-info">Tambah Alamat</span></li>
         </ul>
     </div>
 <MainCard>
             <div class="w-full p-6 m-auto lg:max-w-xl">
                 <h2 class="text-2xl font-semibold text-center text-gray-700">Tambah Alamat</h2>
                 <form class="space-y-4" @submit.prevent="simpanAlamat">
-
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Pegawai</span>
+                        </label>
+                        <select v-model="form.pegawai_id" class="select select-bordered" :class="{'select-error':form.errors.pegawai_id}">
+                            <option disabled selected>Pilih Pegawai</option>
+                            <option v-for="peg in pegawai" :value="peg.id">{{peg.nama_depan + ' ' + peg.nama_belakang}}</option>
+                        </select>
+                        <label class="label">
+                            <span v-if="form.errors.pegawai_id" class="label-text-alt text-error">{{form.errors.pegawai_id}}</span>
+                        </label>
+                    </div>
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text">Tipe</span>
@@ -107,7 +122,7 @@ const getDesa = (kecamatan_id)=>{
                         <label class="label">
                             <span class="label-text">Propinsi</span>
                         </label>
-                        <select v-model="form.propinsi_id" @change.prevent="getKota(form.propinsi_id)" class="select select-bordered" :class="{'select-error':form.errors.propinsi_id}">
+                        <select v-model="form.propinsi_id" class="select select-bordered" :class="{'select-error':form.errors.propinsi_id}">
                             <option disabled selected>Pilih propinsi</option>
                             <option v-for="prop in propinsi" :value="prop.id">{{prop.nama}}</option>
                         </select>
@@ -119,7 +134,7 @@ const getDesa = (kecamatan_id)=>{
                         <label class="label">
                             <span class="label-text">Kota/Kabupaten</span>
                         </label>
-                        <select v-model="form.kota_id" @change="getKecamatan(form.kota_id)" class="select select-bordered" :class="{'select-error':form.errors.kota_id}">
+                        <select v-model="form.kota_id" class="select select-bordered" :class="{'select-error':form.errors.kota_id}">
                             <option disabled selected>Pilih kota/kabupaten</option>
                             <option v-for="kot in kota" :value="kot.id">{{kot.nama}}</option>
                         </select>
@@ -131,7 +146,7 @@ const getDesa = (kecamatan_id)=>{
                         <label class="label">
                             <span class="label-text">Kecamatan</span>
                         </label>
-                        <select v-model="form.kecamatan_id" @change="getDesa(form.kecamatan_id)" class="select select-bordered" :class="{'select-error':form.errors.kecamatan_id}">
+                        <select v-model="form.kecamatan_id" class="select select-bordered" :class="{'select-error':form.errors.kecamatan_id}">
                             <option disabled selected>Pilih kecamatan</option>
                             <option v-for="kec in kecamatan" :value="kec.id">{{kec.nama}}</option>
                         </select>
@@ -170,7 +185,7 @@ const getDesa = (kecamatan_id)=>{
                         </label>
                     </div>
                     <div class="flex justify-end">
-                        <button class="btn btn-error mx-2">Batal</button>
+                        <a class="btn btn-error mx-2" @click="back">Batal</a>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
