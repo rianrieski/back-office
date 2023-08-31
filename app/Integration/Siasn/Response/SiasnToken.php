@@ -2,7 +2,6 @@
 
 namespace App\Integration\Siasn\Response;
 
-
 use Saloon\Contracts\Response;
 
 class SiasnToken
@@ -23,6 +22,15 @@ class SiasnToken
     {
         $data = $response->json();
 
-        return new static($data['access_token'], $data['expires_in'], $data['$refresh_expires_in'], $data['refresh_token'], $data['token_type'], $data['not_before_policy'], $data['session_state'], $data['scope']);
+        return new static(
+            $data['access_token'],
+            $data['expires_in'],
+            $data['refresh_expires_in'],
+            $data['refresh_token'],
+            $data['token_type'],
+            $data['not-before-policy'],
+            $data['session_state'],
+            $data['scope']
+        );
     }
 }

@@ -35,6 +35,9 @@ return [
         'grant_type' => env('SSO_SIASN_GRANT_TYPE', 'password'),
         'username' => env('SSO_SIASN_USERNAME'),
         'password' => env('SSO_SIASN_PASSWORD'),
+    ],
+    'apimws-bkn' => [
+        'username' => env('APIMWS_BKN_USERNAME'),
+        'password' => env('APIMWS_BKN_PASSWORD'),
     ]
-
 ];

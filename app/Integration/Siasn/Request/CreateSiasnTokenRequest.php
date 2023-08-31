@@ -2,6 +2,7 @@
 
 namespace App\Integration\Siasn\Request;
 
+use App\Integration\Siasn\Response\SiasnToken;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\Response;
 use Saloon\Enums\Method;
@@ -31,7 +32,7 @@ class CreateSiasnTokenRequest extends SoloRequest implements HasBody
 
     public function createDtoFromResponse(Response $response): mixed
     {
-
+        return SiasnToken::fromResponse($response);
     }
 
 }

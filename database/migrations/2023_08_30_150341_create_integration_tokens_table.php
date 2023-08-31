@@ -9,7 +9,9 @@ return new class extends Migration {
     {
         Schema::create('siasn_tokens', function (Blueprint $table) {
             $table->id();
-            $table->
+            $table->string('token_type');
+            $table->integer('expires_in');
+            $table->longText('access_token');
             $table->timestamps();
         });
     }
