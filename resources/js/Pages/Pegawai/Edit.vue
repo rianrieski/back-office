@@ -3,7 +3,8 @@ import { Link, router, useForm } from "@inertiajs/vue3";
 
 import MainCard from "@/Components/MainCard.vue";
 
-defineProps({
+const props = defineProps({
+    pegawai: Object,
     agama: Array,
     statusNikah: Array,
     jenisPegawai: Array,
@@ -11,56 +12,45 @@ defineProps({
 });
 
 const form = useForm({
-    nik: "",
-    nip: "",
-    nama_depan: "",
-    nama_belakang: "",
-    jenis_kelamin: "",
-    agama_id: "",
-    golongan_darah: "",
-    jenis_kawin_id: "",
-    tempat_lahir: "",
-    tanggal_lahir: "",
-    email_kantor: "",
-    email_pribadi: "",
-    no_telp: "",
-    jenis_pegawai_id: "",
-    status_pegawai_id: "",
-    status_dinas: "",
-    no_kartu_pegawai: "",
-    tanggal_berhenti: "",
-    tanggal_wafat: "",
-    no_bpjs: "",
-    no_taspen: "",
-    npwp: "",
-    no_enroll: "",
-    media_foto_pegawai: "",
-    media_kartu_pegawai: "",
+    nik: props.pegawai.nik,
+    nip: props.pegawai.nip,
+    nama_depan: props.pegawai.nama_depan,
+    nama_belakang: props.pegawai.nama_belakang,
+    jenis_kelamin: props.pegawai.jenis_kelamin,
+    agama_id: props.pegawai.agama_id,
+    golongan_darah: props.pegawai.golongan_darah,
+    jenis_kawin_id: props.pegawai.jenis_kawin_id,
+    tempat_lahir: props.pegawai.tempat_lahir,
+    tanggal_lahir: props.pegawai.tanggal_lahir,
+    email_kantor: props.pegawai.email_kantor,
+    email_pribadi: props.pegawai.email_pribadi,
+    no_telp: props.pegawai.no_telp,
+    jenis_pegawai_id: props.pegawai.jenis_pegawai_id,
+    status_pegawai_id: props.pegawai.status_pegawai_id,
+    status_dinas: props.pegawai.status_dinas,
+    no_kartu_pegawai: props.pegawai.no_kartu_pegawai,
+    tanggal_berhenti: props.pegawai.tanggal_berhenti,
+    tanggal_wafat: props.pegawai.tanggal_wafat,
+    no_bpjs: props.pegawai.no_bpjs,
+    no_taspen: props.pegawai.no_taspen,
+    npwp: props.pegawai.npwp,
+    no_enroll: props.pegawai.no_enroll,
+    media_foto_pegawai: props.pegawai.media_foto_pegawai,
+    media_kartu_pegawai: props.pegawai.media_kartu_pegawai,
 });
-
-const simpanPegawai = () => {
-    form.post(route("pegawai.store"), {
-        onSuccess: (response) => {
-            Toast.fire({
-                icon: "success",
-                text: response.props.flash.success,
-            });
-        },
-    });
-};
 </script>
 
 <template>
     <div>
-        <Head title="Tambah Pegawai" />
+        <Head title="Edit Pegawai" />
 
         <MainCard>
             <h2
                 class="mb-4 text-center text-2xl font-semibold text-gray-700 dark:text-gray-500"
             >
-                Tambah Pegawai
+                Edit Pegawai
             </h2>
-            <form @submit.prevent="simpanPegawai">
+            <form @submit.prevent="updatePegawai">
                 <div class="grid grid-cols-6 gap-4">
                     <div class="form-control col-span-3">
                         <label class="label justify-start">

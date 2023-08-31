@@ -56,6 +56,16 @@ const showAlert = () => {
                             <td>{{ item.nip }}</td>
                             <td class="flex justify-evenly">
                                 <Link
+                                    class="rounded-md bg-indigo-700 p-2 text-white hover:bg-indigo-500"
+                                    :href="
+                                        route('pegawai.show', {
+                                            pegawai: item.id,
+                                        })
+                                    "
+                                >
+                                    Lihat
+                                </Link>
+                                <Link
                                     class="rounded-md bg-yellow-600 p-2 text-white hover:bg-yellow-500"
                                     :href="
                                         route('pegawai.edit', {
