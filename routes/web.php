@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
 use App\Http\Controllers\GajiController;
+use App\Http\Controllers\JabatanTukinController;
 
 use App\Http\Controllers\Pegawai\PegawaiAlamatController;
 use Illuminate\Foundation\Application;
@@ -46,7 +47,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::resource('gaji', GajiController::class)->only('index', 'create','edit','store', 'update', 'destroy');
+    Route::resource('jabatan-tukin', JabatanTukinController::class)->only('index', 'create','edit','store', 'update', 'destroy');
+
 });
 
 
