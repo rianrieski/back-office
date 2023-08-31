@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
+use App\Http\Controllers\Pegawai\PegawaiAlamatController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,6 +35,10 @@ Route::get('/dashboard', function () {
 Route::resource('tukin', TukinController::class)->only('index', 'store', 'update', 'destroy');
 Route::resource('umak', UangMakanController::class)->only('index', 'store', 'update', 'destroy');
 
+Route::prefix('pegawai')->group(function (){
+    Route::resource('alamat',PegawaiAlamatController::class)->only('index','create','store');
+    Route::post('alamat/getkota',[PegawaiAlamatController::class,'getKota'])->name('alamat.getkota');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
