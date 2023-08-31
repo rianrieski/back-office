@@ -3,8 +3,48 @@ import MainCard from "@/Components/MainCard.vue";
 import { router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import { debounce } from "lodash";
+import Swal from "sweetalert2";
 const tambahAlamat = ()=>{
     router.get('/pegawai/alamat/create');
+}
+const toEdit = (id)=>{
+    router.get(route('alamat.edit',id))
+}
+const toDelete = (id)=>{
+    Swal.fire({
+        title: 'Apakah Anda Yakin?',
+        text: "hapus data pegawai",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Batal',
+        confirmButtonText: 'Ya'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(route('alamat.destroy',id),{
+                onSuccess:(response)=>{
+                    Swal.fire(
+                        'Dihapus!',
+                        'data pegawai berhasil dihapus.',
+                        'success'
+                    )
+                },
+                onError:(errors)=>{
+                    if(errors.query){
+                        Swal.fire({
+                            title: 'Gagal!',
+                            text: 'alamat pegawai gagal dihapus',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                }
+            })
+
+        }
+    })
+
 }
 defineProps({
     pegawaiAlamat:'',
@@ -27,6 +67,8 @@ watch(paginate,value =>{
         replace:true
     });
 });
+
+
 </script>
 <template>
     <div class="text-sm breadcrumbs">
@@ -77,9 +119,9 @@ watch(paginate,value =>{
                         <div class="dropdown dropdown-left">
                             <label tabindex="0" class="btn btn-xs m-1">Aksi</label>
                             <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-30">
-                                <li><a>Edit</a></li>
-                                <li><a>Detail</a></li>
-                                <li><a>Hapus</a></li>
+                                <li><a href="javascript:void(0)" @click="toEdit(alamat.id)">Edit</a></li>
+                                <li><a >Detail</a></li>
+                                <li><a href="javascript:void(0)" @click="toDelete(alamat.id)">Hapus</a></li>
                             </ul>
                         </div>
                     </td>

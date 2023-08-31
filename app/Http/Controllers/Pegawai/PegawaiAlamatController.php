@@ -35,7 +35,7 @@ class PegawaiAlamatController extends Controller
             $query->orWhere('kecamatan.nama','like',"%{$cari}%");
             })
             ->whereNull('tanggal_berhenti')
-            ->join('pegawai','pegawai_alamat.id','=','pegawai.id')
+            ->join('pegawai','pegawai_alamat.pegawai_id','=','pegawai.id')
             ->join('propinsi','pegawai_alamat.propinsi_id', '=','propinsi.id')
             ->join('kota','pegawai_alamat.kota_id', '=','kota.id')
             ->join('kecamatan','pegawai_alamat.kecamatan_id', '=','kecamatan.id')
@@ -85,6 +85,12 @@ class PegawaiAlamatController extends Controller
      */
     public function store(PegawaiAlamatRequest $request)
     {
+        $countPegawai = PegawaiAlamat::where('pegawai_id',$request->pegawai_id)->count();
+        if($countPegawai >= 2){
+            return redirect()->back()->withErrors([
+                'pegawai_id' => 'Pegawai sudah memiliki dua alamat'
+            ]);
+        }
         $alamat = new PegawaiAlamat();
         $alamat->pegawai_id = $request->pegawai_id;
         $alamat->tipe_alamat = $request->tipe_alamat;
@@ -116,17 +122,57 @@ class PegawaiAlamatController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request,string $alamat)
     {
-        //
+        $pegawaiAlamat = PegawaiAlamat::where('id',$alamat)->first();
+        $kota = Kota::select('id','nama','propinsi_id')->where('propinsi_id',$pegawaiAlamat->propinsi_id)->get();
+        $kecamatan = Kecamatan::select('id','nama','kota_id')->where('kota_id',$pegawaiAlamat->kota_id)->get();
+        $desa = Desa::select('id','nama','kecamatan_id')->where('kecamatan_id',$pegawaiAlamat->kecamatan_id)->get();
+        $pegawai = Pegawai::where('id',$pegawaiAlamat->pegawai_id)->select('nama_depan','nama_belakang')->first();
+        $propinsi = Propinsi::select('id','nama')->get();
+        if ($request->propinsi_id){
+            $kota = Kota::select('id','nama','propinsi_id')->where('propinsi_id',$request->propinsi_id)->get();
+        }
+        if ($request->kota_id){
+            $kecamatan = Kecamatan::select('id','nama','kota_id')->where('kota_id',$request->kota_id)->get();
+        }
+        if ($request->kecamatan_id){
+            $desa = Desa::select('id','nama','kecamatan_id')->where('kecamatan_id',$request->kecamatan_id)->get();
+        }
+        return Inertia::render('Pegawai/PegawaiAlamat/Edit',[
+            'pegawaiAlamat' => $pegawaiAlamat,
+            'title'=>'Alamat',
+            'pegawai'=>fn()=>$pegawai,
+            'propinsi' => fn()=>$propinsi,
+            'kota' =>fn()=>$kota,
+            'kecamatan' =>fn()=>$kecamatan,
+            'desa' =>fn()=>$desa
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PegawaiAlamatRequest $request, string $id)
     {
-        //
+        $alamat = PegawaiAlamat::where('id',$id)->first();
+        $alamat->pegawai_id = $request->pegawai_id;
+        $alamat->tipe_alamat = $request->tipe_alamat;
+        $alamat->propinsi_id = $request->propinsi_id;
+        $alamat->kota_id = $request->kota_id;
+        $alamat->kecamatan_id = $request->kecamatan_id;
+        $alamat->desa_id = $request->desa_id;
+        $alamat->kode_pos = $request->kode_pos;
+        $alamat->alamat = $request->alamat;
+        try {
+            $alamat->save();
+            return redirect()->back()->with('success','Data alamat berhasil diubah');
+        }catch (QueryException $e){
+            Log::error('terjadi kesalahan pada koneksi database');
+            return redirect()->back()->withErrors([
+                'query' => 'data alamat gagal disimpan'
+            ]);
+        }
     }
 
     /**
@@ -134,7 +180,16 @@ class PegawaiAlamatController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $pegawaiAlamat = PegawaiAlamat::where('id',$id)->first();
+        try {
+            $pegawaiAlamat->delete();
+            return redirect()->back()->with('success','Data alamat berhasil dihapus');
+        }catch (QueryException $e){
+            Log::error('terjadi kesalahan pada koneksi database');
+            return redirect()->back()->withErrors([
+                'query' => 'data alamat gagal disimpan'
+            ]);
+        }
     }
 
     /**

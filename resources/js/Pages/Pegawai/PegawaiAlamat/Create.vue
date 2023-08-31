@@ -28,7 +28,7 @@ const simpanAlamat = ()=>{
         onSuccess:(response)=>{
             Swal.fire({
                 title: 'Tersimpan!',
-                text: 'Alamat pegawai berhasil disimpan',
+                text: 'alamat pegawai berhasil disimpan',
                 icon: 'success',
                 confirmButtonText: 'OK'
             })
@@ -38,7 +38,7 @@ const simpanAlamat = ()=>{
             if(errors.query){
                 Swal.fire({
                     title: 'Gagal!',
-                    text: 'Alamat pegawai gagal disimpan',
+                    text: 'alamat pegawai gagal disimpan',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 })
@@ -74,6 +74,10 @@ watch(()=>form.kecamatan_id,(value)=>{
         }
     });
 });
+
+const back = ()=>{
+    router.get(route('alamat.index'));
+}
 </script>
 
 <template>
@@ -98,7 +102,7 @@ watch(()=>form.kecamatan_id,(value)=>{
                             <option v-for="peg in pegawai" :value="peg.id">{{peg.nama_depan + ' ' + peg.nama_belakang}}</option>
                         </select>
                         <label class="label">
-                            <span v-if="form.errors.tipe_alamat" class="label-text-alt text-error">{{form.errors.tipe_alamat}}</span>
+                            <span v-if="form.errors.pegawai_id" class="label-text-alt text-error">{{form.errors.pegawai_id}}</span>
                         </label>
                     </div>
                     <div class="form-control">
@@ -181,7 +185,7 @@ watch(()=>form.kecamatan_id,(value)=>{
                         </label>
                     </div>
                     <div class="flex justify-end">
-                        <button class="btn btn-error mx-2">Batal</button>
+                        <a class="btn btn-error mx-2" @click="back">Batal</a>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
