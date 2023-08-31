@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.8",
         "saloonphp/laravel-plugin": "^2.0",
         "saloonphp/saloon": "^2.0",
+        "spatie/laravel-medialibrary": "^10.0.0",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
