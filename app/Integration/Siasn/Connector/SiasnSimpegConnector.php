@@ -3,12 +3,9 @@
 namespace App\Integration\Siasn\Connector;
 
 use App\Integration\Siasn\Authenticator\SiasnSimpegAuthenticator;
-use App\Integration\Siasn\Request\CreateSiasnTokenRequest;
+use App\Jobs\GetSiasnTokenJob;
 use Saloon\Contracts\Authenticator;
-use Saloon\Contracts\OAuthAuthenticator;
-use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
-use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Http\Connector;
 use Saloon\Traits\OAuth2\ClientCredentialsGrant;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
@@ -19,7 +16,13 @@ class SiasnSimpegConnector extends Connector
 
     public function __construct()
     {
-//        $this->middleware()->onResponse(new RefreshTokenMiddleware);
+        $this->middleware()->onResponse(function (Response $response) {
+            if ($response->status() === 401) {
+                GetSiasnTokenJob::dispatchSync();
+
+                $response->getRequest()->authenticate(new SiasnSimpegAuthenticator);
+            }
+        });
     }
 
     public function resolveBaseUrl(): string
@@ -38,18 +41,5 @@ class SiasnSimpegConnector extends Connector
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ];
-    }
-
-    protected function resolveAccessTokenRequest(OAuthConfig $oauthConfig, array $scopes = [], string $scopeSeparator = ' '): Request
-    {
-        return new CreateSiasnTokenRequest($oauthConfig, $scopes, $scopeSeparator);
-    }
-
-    protected function createOAuthAuthenticatorFromResponse(Response $response): OAuthAuthenticator
-    {
-        $responseData = $response->object();
-        dd($responseData);
-//        $accessToken = $responseData->access_token;
-//        $expires_at = $responseData->exp
     }
 }

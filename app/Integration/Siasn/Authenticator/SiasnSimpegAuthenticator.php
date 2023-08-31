@@ -15,11 +15,11 @@ class SiasnSimpegAuthenticator implements Authenticator
             return;
         }
 
-        $apimws = IntegrationToken::where('token_type', '=','apimws-bkn')->firstOrFail();
-        $siasn = IntegrationToken::where('token_type', '=', 'sso-siasn')->firstOrFail();
+        $apimws = IntegrationToken::where('token_type', '=', 'apimws-bkn')->first();
+        $siasn = IntegrationToken::where('token_type', '=', 'sso-siasn')->first();
 
         $pendingRequest->headers()
-            ->add('Authorization', 'Bearer ' . $apimws->access_token)
-            ->add('Auth', 'Bearer ' . $siasn->access_token);
+            ->add('Authorization', 'Bearer ' . $apimws?->access_token)
+            ->add('Auth', 'Bearer ' . $siasn?->access_token);
     }
 }

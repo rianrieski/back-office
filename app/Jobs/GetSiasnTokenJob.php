@@ -25,14 +25,14 @@ class GetSiasnTokenJob implements ShouldQueue
 
         IntegrationToken::updateOrCreate(
             ['token_type' => 'sso-siasn'],
-            ['access_token' => $siasnToken->accessToken]
+            ['access_token' => $siasnToken->accessToken, 'expires_in' => $siasnToken->expiresIn]
         );
 
         $apimwsToken = (new CreateApimwsToken())->send()->dtoOrFail();
 
         IntegrationToken::updateOrCreate(
             ['token_type' => 'apimws-bkn'],
-            ['access_token' => $apimwsToken->accessToken]
+            ['access_token' => $apimwsToken->accessToken, 'expires_in' => $apimwsToken->expiresIn]
         );
     }
 }
