@@ -59,7 +59,7 @@ class PegawaiAlamatRequest extends FormRequest
             'kecamatan_id.exists'=>'kecamatan tidak valid',
             'desa_id.required'=>'desa harus diisi',
             'desa_id.max'=>'desa tidak valid',
-            'desa_id.exists'=>'desa tidak valid',
+            'desa_id.exists'=>'desa tidak valids',
             'kode_pos.required'=>'kode pos harus diisi',
             'kode_pos.max'=>'kode pos tidak valid',
             'alamat.required'=>'alamat harus diisi',

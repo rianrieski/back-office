@@ -1,8 +1,9 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import Swal from 'sweetalert2';
+import vSelect from 'vue-select'
 const props = defineProps({
     propinsi:'',
     pegawai:''
@@ -78,6 +79,49 @@ watch(()=>form.kecamatan_id,(value)=>{
 const back = ()=>{
     router.get(route('alamat.index'));
 }
+const selectedPegawai = computed({
+    get(){
+        return props.pegawai.find(peg => peg.id === form.pegawai_id)
+    },
+    set(pegawai){
+        form.pegawai_id = pegawai.id
+    }
+})
+const selectedPropinsi = computed({
+    get(){
+        return props.propinsi.find(prop => prop.id === form.propinsi_id)
+    },
+    set(propinsi){
+        form.propinsi_id = propinsi.id
+    }
+})
+const selectedKota = computed({
+    get(){
+
+        return  props.kota?.find(kot => kot.id === form.kota_id)
+
+    },
+    set(kota){
+        form.kota_id = kota.id
+    }
+})
+const selectedKecamatan = computed({
+    get(){
+        return  props.kecamatan?.find(kec => kec.id === form.kecamatan_id)
+    },
+    set(kecamatan){
+        form.kecamatan_id = kecamatan.id
+    }
+})
+const selectedDesa = computed({
+    get(){
+        return  props.desa?.find(des => des.id === form.desa_id)
+    },
+    set(desa){
+        form.desa_id = desa.id
+    }
+})
+
 </script>
 
 <template>
@@ -97,10 +141,8 @@ const back = ()=>{
                         <label class="label">
                             <span class="label-text">Pegawai</span>
                         </label>
-                        <select v-model="form.pegawai_id" class="select select-bordered" :class="{'select-error':form.errors.pegawai_id}">
-                            <option disabled selected>Pilih Pegawai</option>
-                            <option v-for="peg in pegawai" :value="peg.id">{{peg.nama_depan + ' ' + peg.nama_belakang}}</option>
-                        </select>
+                        <vSelect v-model="selectedPegawai" :options="pegawai" label="nama_lengkap" class="w-full">
+                        </vSelect>
                         <label class="label">
                             <span v-if="form.errors.pegawai_id" class="label-text-alt text-error">{{form.errors.pegawai_id}}</span>
                         </label>
@@ -122,10 +164,8 @@ const back = ()=>{
                         <label class="label">
                             <span class="label-text">Propinsi</span>
                         </label>
-                        <select v-model="form.propinsi_id" class="select select-bordered" :class="{'select-error':form.errors.propinsi_id}">
-                            <option disabled selected>Pilih propinsi</option>
-                            <option v-for="prop in propinsi" :value="prop.id">{{prop.nama}}</option>
-                        </select>
+                        <vSelect v-model="selectedPropinsi" :options="propinsi" label="nama" class="w-full">
+                        </vSelect>
                         <label class="label">
                             <span v-if="form.errors.propinsi_id" class="label-text-alt text-error">{{form.errors.propinsi_id}}</span>
                         </label>
@@ -134,10 +174,8 @@ const back = ()=>{
                         <label class="label">
                             <span class="label-text">Kota/Kabupaten</span>
                         </label>
-                        <select v-model="form.kota_id" class="select select-bordered" :class="{'select-error':form.errors.kota_id}">
-                            <option disabled selected>Pilih kota/kabupaten</option>
-                            <option v-for="kot in kota" :value="kot.id">{{kot.nama}}</option>
-                        </select>
+                        <vSelect v-model="selectedKota" :options="kota" label="nama" class="w-full" >
+                        </vSelect>
                         <label class="label">
                             <span v-if="form.errors.kota_id" class="label-text-alt text-error">{{form.errors.kota_id}}</span>
                         </label>
@@ -146,10 +184,8 @@ const back = ()=>{
                         <label class="label">
                             <span class="label-text">Kecamatan</span>
                         </label>
-                        <select v-model="form.kecamatan_id" class="select select-bordered" :class="{'select-error':form.errors.kecamatan_id}">
-                            <option disabled selected>Pilih kecamatan</option>
-                            <option v-for="kec in kecamatan" :value="kec.id">{{kec.nama}}</option>
-                        </select>
+                        <vSelect v-model="selectedKecamatan" :options="kecamatan" label="nama" class="w-full" >
+                        </vSelect>
                         <label class="label">
                             <span v-if="form.errors.kecamatan_id" class="label-text-alt text-error">{{form.errors.kecamatan_id}}</span>
                         </label>
@@ -158,10 +194,8 @@ const back = ()=>{
                         <label class="label">
                             <span class="label-text">Desa</span>
                         </label>
-                        <select v-model="form.desa_id" class="select select-bordered" :class="{'select-error':form.errors.desa_id}">
-                            <option disabled selected>Pilih desa</option>
-                            <option v-for="des in desa" :value="des.id">{{des.nama}}</option>
-                        </select>
+                        <vSelect v-model="selectedDesa" :options="desa" label="nama" class="w-full" >
+                        </vSelect>
                         <label class="label">
                             <span v-if="form.errors.desa_id" class="label-text-alt text-error">{{form.errors.desa_id}}</span>
                         </label>
@@ -192,3 +226,6 @@ const back = ()=>{
             </div>
 </MainCard>
 </template>
+<style>
+@import "vue-select/dist/vue-select.css";
+</style>

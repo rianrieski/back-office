@@ -12,6 +12,7 @@ use App\Models\PegawaiAlamat;
 use App\Models\Propinsi;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -75,7 +76,7 @@ class PegawaiAlamatController extends Controller
         $kota = [];
         $kecamatan = [];
         $desa = [];
-        $pegawai = Pegawai::select('id','nama_depan','nama_belakang')->whereNull('tanggal_berhenti')->get();
+        $pegawai = Pegawai::select('id','nama_depan','nama_belakang',DB::raw('CONCAT(nama_depan," " ,nama_belakang) AS nama_lengkap'),)->whereNull('tanggal_berhenti')->get();
         $propinsi = Propinsi::select('id','nama')->get();
         if ($request->propinsi_id){
             $kota = Kota::select('id','nama','propinsi_id')->where('propinsi_id',$request->propinsi_id)->get();
