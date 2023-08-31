@@ -8,12 +8,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('siasn_pns_data_utama', function (Blueprint $table) {
-            $table->string('id', 35)->unique();
+            $table->string('id', 50)->unique();
             $table->string('nipBaru', 18);
             $table->string('nipLama', 18)->nullable();
             $table->text('nama')->nullable();
-            $table->string('gelarDepan', 20)->nullable();
-            $table->string('gelarBelakang', 20)->nullable();
+            $table->tinyText('gelarDepan')->nullable();
+            $table->tinyText('gelarBelakang')->nullable();
             $table->string('tempatLahir', 100)->nullable();
             $table->string('tempatLahirId', 35)->nullable();
             $table->string('tglLahir', 10)->nullable();
@@ -30,7 +30,7 @@ return new class extends Migration {
             $table->tinyInteger('mkBulan')->nullable();
             $table->string('jenisPegawaiNama')->nullable();
             $table->string('kedudukanPnsId', 2)->nullable();
-            $table->string('kedudukanPnsNama', 10)->nullable();
+            $table->tinyText('kedudukanPnsNama')->nullable();
             $table->string('statusPegawai', 40)->nullable();
             $table->string('jenisKelamin', 2)->nullable();
             $table->string('jenisIdDokumenId', 5)->nullable();
@@ -85,7 +85,7 @@ return new class extends Migration {
             $table->tinyText('eselonId')->nullable();
             $table->tinyText('eselonLevel')->nullable();
             $table->tinyText('tmtEselon')->nullable()->nullable();
-            $table->unsignedBigInteger('gajiPokok')->nullable();
+            $table->string('gajiPokok')->nullable();
             $table->tinyText('kpknId')->nullable();
             $table->tinyText('kpknNama')->nullable();
             $table->tinyText('ktuaId')->nullable();

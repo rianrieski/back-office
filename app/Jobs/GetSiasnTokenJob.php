@@ -2,9 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Integration\Siasn\Request\CreateApimwsToken;
-use App\Integration\Siasn\Request\CreateSiasnTokenRequest;
-use App\Models\IntegrationToken;
+use App\Services\SiasnService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,18 +15,6 @@ class GetSiasnTokenJob implements ShouldQueue
 
     public function handle(): void
     {
-        $siasnToken = (new CreateSiasnTokenRequest())->send()->dtoOrFail();
-
-        IntegrationToken::updateOrCreate(
-            ['token_type' => 'sso-siasn'],
-            ['access_token' => $siasnToken->accessToken, 'expires_in' => $siasnToken->expiresIn]
-        );
-
-        $apimwsToken = (new CreateApimwsToken())->send()->dtoOrFail();
-
-        IntegrationToken::updateOrCreate(
-            ['token_type' => 'apimws-bkn'],
-            ['access_token' => $apimwsToken->accessToken, 'expires_in' => $apimwsToken->expiresIn]
-        );
+        (new SiasnService)->createToken();
     }
 }
