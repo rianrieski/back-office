@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Pegawai;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,10 +28,10 @@ class DatabaseSeeder extends Seeder
         $this->call(GolonganSeeder::class);
         $this->call(JenisKpSeeder::class);
         $this->call(InstansiSeeder::class);
-        $this->call(PropinsiSeeder::class);
-//        $this->call(KotaSeeder::class);
-//        $this->call(KecamatanSeeder::class);
-//        $this->call(DesaSeeder::class);
+        // $this->call(PropinsiSeeder::class);
+        // $this->call(KotaSeeder::class);
+        // $this->call(KecamatanSeeder::class);
+        // $this->call(DesaSeeder::class);
         $this->call(LatihanStrukturalSeeder::class);
         $this->call(SatuanKerjaSeeder::class);
         $this->call(ProfesiSeeder::class);
@@ -52,5 +54,6 @@ class DatabaseSeeder extends Seeder
         $this->call(HirarkiUnitKerjaSeeder::class);
         $this->call(BankSeeder::class);
 
+        Pegawai::factory(100)->create();
     }
 }

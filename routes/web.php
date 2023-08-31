@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
 use App\Http\Controllers\Pegawai\PegawaiAlamatController;
+use App\Http\Controllers\PegawaiController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,10 +35,11 @@ Route::get('/dashboard', function () {
 
 Route::resource('tukin', TukinController::class)->only('index', 'store', 'update', 'destroy');
 Route::resource('umak', UangMakanController::class)->only('index', 'store', 'update', 'destroy');
+Route::resource('pegawai', PegawaiController::class);
 
-Route::prefix('pegawai')->group(function (){
-    Route::resource('alamat',PegawaiAlamatController::class)->only('index','create','store');
-    Route::post('alamat/getkota',[PegawaiAlamatController::class,'getKota'])->name('alamat.getkota');
+Route::prefix('pegawai')->group(function () {
+    Route::resource('alamat', PegawaiAlamatController::class)->only('index', 'create', 'store');
+    Route::post('alamat/getkota', [PegawaiAlamatController::class, 'getKota'])->name('alamat.getkota');
 });
 
 Route::middleware('auth')->group(function () {
@@ -46,4 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+
+
+require __DIR__ . '/auth.php';
