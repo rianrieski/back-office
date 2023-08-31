@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class PegawaiRiwayatDiklat extends Model
 {
+    use InteractsWithMedia;
+
     protected $table = 'pegawai_riwayat_diklat';
     protected $guarded = [];
     protected $primaryKey = 'id';
@@ -20,9 +22,5 @@ class PegawaiRiwayatDiklat extends Model
     public function jenis_diklat()
     {
         return $this->belongsTo(JenisDiklat::class);
-    }
-    public function media()
-    {
-        return $this->hasOne(Media::class,'media_sertifikat_id');
     }
 }
