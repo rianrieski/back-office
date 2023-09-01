@@ -216,6 +216,5 @@ class PegawaiAlamatController extends Controller
         $kota = Kota::select('id','propinsi_id','nama')
             ->where('propinsi_id',$request->propinsi_id)
             ->get();
-        return response()->json($kota);
     }
 }
