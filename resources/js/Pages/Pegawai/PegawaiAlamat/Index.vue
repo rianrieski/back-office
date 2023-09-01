@@ -55,14 +55,21 @@ const cari = ref('')
 const paginate = ref('10')
 watch(cari,debounce (value =>{
     console.log('triger');
-        router.get(route('alamat.index'), {cari:value},{
+    router.post(route('alamat.getkota'),{
+        propinsi_id:11
+    },{
+        onSuccess:(response)=>{
+            console.log(response);
+        }
+    })
+        router.get(route('alamat.index'), {cari:value,paginate:paginate.value},{
             preserveState:true,
             preserveScroll:true,
             replace:true
     });
 },500));
 watch(paginate,value =>{
-    router.get(route('alamat.index'), {paginate:value},{
+    router.get(route('alamat.index'), {paginate:value,cari:cari.value},{
         preserveState:true,
         preserveScroll:true,
         replace:true
