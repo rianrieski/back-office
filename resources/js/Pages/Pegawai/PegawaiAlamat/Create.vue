@@ -5,6 +5,7 @@ import { computed, ref, watch } from "vue";
 import Swal from 'sweetalert2';
 import vSelect from 'vue-select'
 const props = defineProps({
+    title:String,
     propinsi:'',
     pegawai:'',
     kota:Object,
@@ -24,6 +25,7 @@ const form = useForm({
     alamat:'',
     pegawai_id:''
 });
+
 const simpanAlamat = ()=>{
     form.post('/pegawai/alamat',{
         preserveScroll:true,
@@ -132,12 +134,12 @@ const selectedPegawai = computed({
             <li><a>Beranda</a></li>
             <li>Pegawai</li>
             <li><Link href="/pegawai/alamat">Alamat</Link></li>
-            <li><span class="text-info">Tambah Alamat</span></li>
+            <li><span class="text-info">{{title}}</span></li>
         </ul>
     </div>
 <MainCard>
             <div class="w-full p-6 m-auto lg:max-w-xl">
-                <h2 class="text-2xl font-semibold text-center text-gray-700">Tambah Alamat</h2>
+                <h2 class="text-2xl font-semibold text-center text-gray-700">{{title}}</h2>
                 <form class="space-y-4" @submit.prevent="simpanAlamat">
                     <div class="form-control">
                         <label class="label">
