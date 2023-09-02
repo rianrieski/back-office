@@ -8,7 +8,18 @@ const tambahAlamat = ()=>{
     router.get(route('alamat.create'));
 }
 const toEdit = (id)=>{
-    router.get(route('alamat.edit',id))
+    router.get(route('alamat.edit',id),{},{
+        onError:(errors)=>{
+            if(errors.query){
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: errors.query,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+            }
+        }
+    })
 }
 const toDelete = (id)=>{
     Swal.fire({
@@ -25,16 +36,20 @@ const toDelete = (id)=>{
             router.delete(route('alamat.destroy',id),{
                 onSuccess:(response)=>{
                     Swal.fire(
-                        'Dihapus!',
-                        'data pegawai berhasil dihapus.',
-                        'success'
+                        {
+                            title: 'Berhasil!',
+                            text: response.props.success,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }
                     )
+                    getDataPegawaiAlamat(route('alamat.getdata'));
                 },
                 onError:(errors)=>{
                     if(errors.query){
                         Swal.fire({
                             title: 'Gagal!',
-                            text: 'alamat pegawai gagal dihapus',
+                            text: errors.query,
                             icon: 'error',
                             confirmButtonText: 'OK'
                         })
