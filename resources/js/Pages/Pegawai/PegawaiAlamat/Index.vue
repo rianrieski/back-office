@@ -1,13 +1,9 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
 import { router } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { debounce } from "lodash";
 import Swal from "sweetalert2";
-
-const props = defineProps({
-    pegawaiAlamat:'',
-})
 const tambahAlamat = ()=>{
     router.get(route('alamat.create'));
 }
@@ -50,45 +46,30 @@ const toDelete = (id)=>{
     })
 
 }
-
+const pegawaiAlamat = ref([])
+const getDataPegawaiAlamat = async (value)=>{
+    const result = await axios.get(value);
+    pegawaiAlamat.value = result.data
+}
+onMounted(()=>{
+    getDataPegawaiAlamat(route('alamat.getdata'))
+})
 const cari = ref('')
-const paginate = ref('10')
+const paginate = ref(10)
 watch(cari,debounce (value =>{
-    console.log('triger');
-    router.post(route('alamat.getkota'),{
-        propinsi_id:11
-    },{
-        onSuccess:(response)=>{
-            console.log(response);
-        }
-    })
-        router.get(route('alamat.index'), {cari:value,paginate:paginate.value},{
-            preserveState:true,
-            preserveScroll:true,
-            replace:true
-    });
+    getDataPegawaiAlamat(route('alamat.getdata')+'?cari='+value+'&paginate='+paginate.value)
 },500));
 watch(paginate,value =>{
-    router.get(route('alamat.index'), {paginate:value,cari:cari.value},{
-        preserveState:true,
-        preserveScroll:true,
-        replace:true
-    });
+    getDataPegawaiAlamat(route('alamat.getdata')+'?cari='+cari.value+'&paginate='+value)
 });
+
+const getDataAlamatPegawaiDetail = async (value)=>{
+    const result = await axios.get(value);
+    pegawaiAlamatDetail.value = result.data
+}
 const pegawaiAlamatDetail = ref([])
 const showDetail=(id)=>{
-    router.get(route('alamat.index'),{pegawai_alamat_id:id},{
-
-        preserveState:true,
-        preserveScroll:true,
-        replace:true,
-        only:[
-            'pegawaiAlamatDetail'
-        ],
-        onSuccess:(response)=>{
-            pegawaiAlamatDetail.value = response.props.pegawaiAlamatDetail
-        }
-    })
+    getDataAlamatPegawaiDetail(route('alamat.show',id))
     modal_alamat.showModal()
 }
 </script>

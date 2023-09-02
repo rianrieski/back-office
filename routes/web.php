@@ -36,8 +36,8 @@ Route::resource('tukin', TukinController::class)->only('index', 'store', 'update
 Route::resource('umak', UangMakanController::class)->only('index', 'store', 'update', 'destroy');
 
 Route::prefix('pegawai')->group(function (){
-    Route::resource('alamat',PegawaiAlamatController::class)->only('index','create','store','edit','update','destroy');
-    Route::post('alamat/getkota',[PegawaiAlamatController::class,'getKota'])->name('alamat.getkota');
+    Route::get('alamat/getdata',[PegawaiAlamatController::class,'getDataPegawaiAlamat'])->name('alamat.getdata');
+    Route::resource('alamat',PegawaiAlamatController::class)->only('index','create','store','edit','update','destroy','show');
 });
 
 Route::middleware('auth')->group(function () {

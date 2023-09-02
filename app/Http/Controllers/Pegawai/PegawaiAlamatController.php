@@ -22,12 +22,17 @@ class PegawaiAlamatController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $paginate = 10;
-        $pegawaiAlamatDetail =[];
+        return Inertia::render('Pegawai/PegawaiAlamat/Index',[
+            'title' => 'Alamat',
+        ]);
+    }
+    public function getDataPegawaiAlamat(Request $request){
         if ($request->paginate){
             $paginate = $request->paginate;
+        }else{
+            $paginate = 10;
         }
         $pegawaiAlamat = PegawaiAlamat::query()->when($request->cari,function ($query,$cari){
             $query->orWhere('nama_depan','like',"%{$cari}%");
@@ -35,7 +40,7 @@ class PegawaiAlamatController extends Controller
             $query->orWhere('propinsi.nama','like',"%{$cari}%");
             $query->orWhere('kota.nama','like',"%{$cari}%");
             $query->orWhere('kecamatan.nama','like',"%{$cari}%");
-            })
+        })
             ->whereNull('tanggal_berhenti')
             ->join('pegawai','pegawai_alamat.pegawai_id','=','pegawai.id')
             ->join('propinsi','pegawai_alamat.propinsi_id', '=','propinsi.id')
@@ -47,25 +52,8 @@ class PegawaiAlamatController extends Controller
                 'propinsi.nama as nama_propinsi','kota.nama as nama_kota',
                 'kecamatan.nama as nama_kecamatan','desa.nama as nama_desa')
             ->paginate($paginate);
-        if ($request->pegawai_alamat_id){
-            $pegawaiAlamatDetail = PegawaiAlamat::join('pegawai','pegawai_alamat.pegawai_id','=','pegawai.id')
-                ->join('propinsi','pegawai_alamat.propinsi_id', '=','propinsi.id')
-                ->join('kota','pegawai_alamat.kota_id', '=','kota.id')
-                ->join('kecamatan','pegawai_alamat.kecamatan_id', '=','kecamatan.id')
-                ->join('desa','pegawai_alamat.desa_id', '=','desa.id')
-                ->select('pegawai_alamat.id','pegawai_alamat.tipe_alamat',
-                    'pegawai_alamat.kode_pos','pegawai_alamat.alamat',
-                    'pegawai.nama_belakang','pegawai.nama_depan',
-                    'propinsi.nama as nama_propinsi','kota.nama as nama_kota',
-                    'kecamatan.nama as nama_kecamatan','desa.nama as nama_desa')
-                ->where('pegawai_alamat.id',$request->pegawai_alamat_id)->first();
-        }
 
-        return Inertia::render('Pegawai/PegawaiAlamat/Index',[
-            'title' => 'Alamat',
-            'pegawaiAlamat' => $pegawaiAlamat,
-            'pegawaiAlamatDetail' => $pegawaiAlamatDetail
-        ]);
+        return response()->json($pegawaiAlamat);
     }
 
     /**
@@ -132,7 +120,18 @@ class PegawaiAlamatController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $pegawaiAlamatDetail = PegawaiAlamat::join('pegawai','pegawai_alamat.pegawai_id','=','pegawai.id')
+            ->join('propinsi','pegawai_alamat.propinsi_id', '=','propinsi.id')
+            ->join('kota','pegawai_alamat.kota_id', '=','kota.id')
+            ->join('kecamatan','pegawai_alamat.kecamatan_id', '=','kecamatan.id')
+            ->join('desa','pegawai_alamat.desa_id', '=','desa.id')
+            ->select('pegawai_alamat.id','pegawai_alamat.tipe_alamat',
+                'pegawai_alamat.kode_pos','pegawai_alamat.alamat',
+                'pegawai.nama_belakang','pegawai.nama_depan',
+                'propinsi.nama as nama_propinsi','kota.nama as nama_kota',
+                'kecamatan.nama as nama_kecamatan','desa.nama as nama_desa')
+            ->where('pegawai_alamat.id',$id)->first();
+        return response()->json($pegawaiAlamatDetail);
     }
 
     /**
