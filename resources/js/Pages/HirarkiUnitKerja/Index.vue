@@ -15,6 +15,7 @@ defineProps({
         </ul>
     </div>
 <MainCard :title="title">
+    <span class="loading loading-infinity loading-lg"></span>
     <Table/>
 </MainCard>
 </template>

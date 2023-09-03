@@ -22,11 +22,9 @@ return new class extends Migration
             $table->string('penyelenggaran',100);
             $table->string('no_sertifikat',100);
             $table->date('tanggal_sertifikat');
-            $table->unsignedBigInteger('media_sertifikat_id');
             $table->timestamps();
             $table->foreign('pegawai_id')->references('id')->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('jenis_diklat_id')->references('id')->on('jenis_diklat')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('media_sertifikat_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

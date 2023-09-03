@@ -34,7 +34,7 @@ const simpanAlamat = ()=>{
         onSuccess:(response)=>{
             Swal.fire({
                 title: 'Tersimpan!',
-                text: 'alamat pegawai berhasil disimpan',
+                text: response.props.success,
                 icon: 'success',
                 confirmButtonText: 'OK'
             })
@@ -44,7 +44,7 @@ const simpanAlamat = ()=>{
             if(errors.query){
                 Swal.fire({
                     title: 'Gagal!',
-                    text: 'alamat pegawai gagal disimpan',
+                    text: errors.query,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 })
