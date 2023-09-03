@@ -4,7 +4,8 @@ import {
     ClipboardIcon,
     HomeIcon,
     UsersIcon,
-    MapPinIcon
+    MapPinIcon,
+    UserIcon,
 } from "@heroicons/vue/24/outline/index.js";
 
 const useRouteStore = defineStore("route-store", () => {
@@ -24,7 +25,7 @@ const useRouteStore = defineStore("route-store", () => {
                 {
                     icon: ClipboardIcon,
                     label: "Test",
-                    href:'#'
+                    href: "#",
                 },
             ],
         },
@@ -37,7 +38,12 @@ const useRouteStore = defineStore("route-store", () => {
                 {
                     icon: MapPinIcon,
                     label: "Alamat Pegawai",
-                    href: route("alamat.index")
+                    href: route("alamat.index"),
+                },
+                {
+                    icon: UserIcon,
+                    label: "Data Pegawai",
+                    href: route("pegawai.index"),
                 },
             ],
         },

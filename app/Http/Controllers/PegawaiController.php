@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PegawaiRequest;
 use App\Models\Pegawai;
 use App\Models\Agama;
 use App\Models\JenisKawin;
 use App\Models\JenisPegawai;
 use App\Models\StatusPegawai;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class PegawaiController extends Controller
@@ -45,80 +45,11 @@ class PegawaiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PegawaiRequest $request)
     {
         // dd($request->all());
 
-        $validated = $request->validate(
-            [
-                'nik' => 'required|digits:16',
-                'nip' => 'required|digits:18',
-                'nama_depan' => 'required|max:50|regex:/^[\pL\s\-]+$/u',
-                'nama_belakang' => 'required|max:50|regex:/^[\pL\s\-]+$/u',
-                'jenis_kelamin' => 'required',
-                'agama_id' => 'required',
-                'golongan_darah' => 'required',
-                'jenis_kawin_id' => 'required',
-                'tempat_lahir' => 'required|max:50|regex:/^[\pL\s\-]+$/u',
-                'tanggal_lahir' => 'required',
-                'email_kantor' => 'required|email:rfc,dns',
-                'email_pribadi' => 'required|email:rfc,dns',
-                // 'no_telp' => 'required|numeric|between:11,13',
-                'no_telp' => 'required|numeric',
-                'jenis_pegawai_id' => 'required',
-                'status_pegawai_id' => 'required',
-                'status_dinas' => 'required',
-                'no_kartu_pegawai' => 'required',
-                // 'no_kartu_pegawai' => 'required|between:7,10',
-                'no_bpjs' => 'required|digits:13',
-                'no_taspen' => 'max:50',
-                'npwp' => 'max:50',
-                'no_enroll' => 'max:50',
-                'media_kartu_pegawai' => 'nullable|mimes:jpg,png|max:1024',
-                'media_foto_pegawai' => 'nullable|mimes:jpg,png|max:1024',
-            ],
-            [
-                'nik.required' => 'Wajib diisi.',
-                'nik.digits' => 'Terdiri dari :digits digit angka.',
-                'nip.required' => 'Wajib diisi.',
-                'nip.digits' => 'Terdiri dari :digits digit angka.',
-                'nama_depan.required' => 'Wajib diisi.',
-                'nama_depan.max' => 'Maksimal 50 karakter.',
-                'nama_depan.regex' => 'Terdiri dari karakter huruf.',
-                'nama_belakang.required' => 'Wajib diisi.',
-                'nama_belakang.max' => 'Maksimal 50 karakter.',
-                'nama_belakang.regex' => 'Terdiri dari karakter huruf.',
-                'jenis_kelamin.required' => 'Wajib dipilih.',
-                'agama_id.required' => 'Wajib dipilih.',
-                'golongan_darah.required' => 'Wajib dipilih.',
-                'jenis_kawin_id.required' => 'Wajib dipilih.',
-                'tempat_lahir.required' => 'Wajib diisi.',
-                'tempat_lahir.max' => 'Maksimal 50 karakter.',
-                'tempat_lahir.regex' => 'Terdiri dari karakter huruf.',
-                'tanggal_lahir.required' => 'Wajib diisi.',
-                'email_kantor.required' => 'Wajib diisi.',
-                'email_kantor.email' => 'Email tidak valid.',
-                'email_pribadi.required' => 'Wajib diisi.',
-                'email_pribadi.email' => 'Email tidak valid.',
-                'no_telp.required' => 'Wajib diisi.',
-                'no_telp.numeric' => 'Hanya diperbolehkan angka.',
-                // 'no_telp.between' => 'Diantara 11-13 digit angka.',
-                'jenis_pegawai_id.required' => 'Wajib diisi.',
-                'status_pegawai_id.required' => 'Wajib diisi.',
-                'status_dinas.required' => 'Wajib diisi.',
-                'no_kartu_pegawai.required' => 'Wajib diisi.',
-                // 'no_kartu_pegawai.between' => 'Diantara 7-10 karakter.',
-                'no_bpjs.required' => 'Wajib diisi.',
-                'no_bpjs.digits' => 'Terdiri dari :digits digit angka.',
-                'no_taspen.max' => 'Maksimal Terdiri dari :max karakter.',
-                'npwp.max' => 'Maksimal Terdiri dari :max karakter.',
-                'no_enroll.max' => 'Maksimal Terdiri dari :max karakter.',
-                'media_kartu_pegawai.mimes' => 'Hanya mendukung tipe file :mimes.',
-                'media_kartu_pegawai.max' => 'Ukuran file maksimal 1 MB.',
-                'media_foto_pegawai.mimes' => 'Hanya mendukung tipe file :mimes.',
-                'media_foto_pegawai.max' => 'Ukuran file maksimal 1 MB.',
-            ]
-        );
+        $validated = $request->validated();
 
         Arr::pull($validated, 'media_kartu_pegawai');
         Arr::pull($validated, 'media_foto_pegawai');
@@ -143,12 +74,28 @@ class PegawaiController extends Controller
             'status_pegawai:id,nama',
         ])->where('id', $id)->first();
 
+        $fotoPegawai = $pegawai->getMedia("media_foto_pegawai");
+
+        if (count($fotoPegawai) == 0) {
+            $urlFotoPegawai = url(asset('assets/noPhotoFound.png'));
+        } else {
+            $urlFotoPegawai = $fotoPegawai[0]->getUrl();
+        }
+
+        $kartuPegawai = $pegawai->getMedia("media_kartu_pegawai");
+
+        if (count($kartuPegawai) == 0) {
+            $urlKartuPegawai = url(asset('assets/noPhotoFound.png'));
+        } else {
+            $urlKartuPegawai = $kartuPegawai[0]->getUrl();
+        }
+
         return inertia(
             'Pegawai/Show',
             [
                 'pegawai' => $pegawai,
-                'media_foto_pegawai' => $pegawai->getMedia("media_foto_pegawai")[0]->getUrl(),
-                'media_kartu_pegawai' => $pegawai->getMedia("media_kartu_pegawai"),
+                'media_foto_pegawai' => $urlFotoPegawai,
+                'media_kartu_pegawai' => $urlKartuPegawai,
             ]
         );
     }
@@ -158,10 +105,37 @@ class PegawaiController extends Controller
      */
     public function edit(Pegawai $pegawai)
     {
+        $agama = Agama::all();
+        $statusNikah = JenisKawin::all();
+        $jenisPegawai = JenisPegawai::all();
+        $statusPegawai = StatusPegawai::all();
+
+        $fotoPegawai = $pegawai->getMedia("media_foto_pegawai");
+
+        if (count($fotoPegawai) == 0) {
+            $urlFotoPegawai = url(asset('assets/noPhotoFound.png'));
+        } else {
+            $urlFotoPegawai = $fotoPegawai[0]->getUrl();
+        }
+
+        $kartuPegawai = $pegawai->getMedia("media_kartu_pegawai");
+
+        if (count($kartuPegawai) == 0) {
+            $urlKartuPegawai = url(asset('assets/noPhotoFound.png'));
+        } else {
+            $urlKartuPegawai = $kartuPegawai[0]->getUrl();
+        }
+
         return inertia(
             'Pegawai/Edit',
             [
                 'pegawai' => $pegawai,
+                'agama' => fn () => $agama,
+                'statusNikah' => fn () => $statusNikah,
+                'jenisPegawai' => fn () => $jenisPegawai,
+                'statusPegawai' => fn () => $statusPegawai,
+                'media_foto_pegawai' => $urlFotoPegawai,
+                'media_kartu_pegawai' => $urlKartuPegawai,
             ]
         );
     }
@@ -169,9 +143,64 @@ class PegawaiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PegawaiRequest $request, $id)
     {
-        //
+        $validated = $request->validated();
+
+        $validatedFotoPegawai = $validated['media_foto_pegawai'];
+        $validatedKartuPegawai = $validated['media_kartu_pegawai'];
+
+        Pegawai::where('id', $id)->update([
+            'nik' => $validated['nik'],
+            'nip' => $validated['nip'],
+            'nama_depan' => $validated['nama_depan'],
+            'nama_belakang' => $validated['nama_belakang'],
+            'jenis_kelamin' => $validated['jenis_kelamin'],
+            'agama_id' => $validated['agama_id'],
+            'golongan_darah' => $validated['golongan_darah'],
+            'jenis_kawin_id' => $validated['jenis_kawin_id'],
+            'tempat_lahir' => $validated['tempat_lahir'],
+            'tanggal_lahir' => $validated['tanggal_lahir'],
+            'email_kantor' => $validated['email_kantor'],
+            'email_pribadi' => $validated['email_pribadi'],
+            'no_telp' => $validated['no_telp'],
+            'jenis_pegawai_id' => $validated['jenis_pegawai_id'],
+            'status_pegawai_id' => $validated['status_pegawai_id'],
+            'status_dinas' => $validated['status_dinas'],
+            'no_kartu_pegawai' => $validated['no_kartu_pegawai'],
+            'tanggal_wafat' => $validated['tanggal_wafat'],
+            'tanggal_berhenti' => $validated['tanggal_berhenti'],
+            'no_bpjs' => $validated['no_bpjs'],
+            'no_taspen' => $validated['no_taspen'],
+            'npwp' => $validated['npwp'],
+            'no_enroll' => $validated['no_enroll'],
+        ]);
+
+        $pegawai = Pegawai::where('id', $id)->first();
+
+        $fotoPegawai = $pegawai->getMedia("media_foto_pegawai");
+
+        if (!empty($validatedFotoPegawai)) {
+            if (count($fotoPegawai) != 0) {
+                $fotoPegawai[0]->delete();
+                $pegawai->addMediaFromRequest('media_foto_pegawai')->toMediaCollection('media_foto_pegawai');
+            } elseif (count($fotoPegawai) == 0) {
+                $pegawai->addMediaFromRequest('media_foto_pegawai')->toMediaCollection('media_foto_pegawai');
+            }
+        }
+
+        $kartuPegawai = $pegawai->getMedia("media_kartu_pegawai");
+
+        if (!empty($validatedKartuPegawai)) {
+            if (count($kartuPegawai) != 0) {
+                $kartuPegawai[0]->delete();
+                $pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
+            } elseif (count($kartuPegawai) == 0) {
+                $pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
+            }
+        }
+
+        return redirect()->route('pegawai.index')->with('success', 'Data pegawai berhasil diubah!');
     }
 
     /**

@@ -35,7 +35,6 @@ Route::get('/dashboard', function () {
 
 Route::resource('tukin', TukinController::class)->only('index', 'store', 'update', 'destroy');
 Route::resource('umak', UangMakanController::class)->only('index', 'store', 'update', 'destroy');
-Route::resource('pegawai', PegawaiController::class);
 
 Route::prefix('pegawai')->group(function () {
     Route::resource('alamat', PegawaiAlamatController::class)->only('index', 'create', 'store');
@@ -43,6 +42,8 @@ Route::prefix('pegawai')->group(function () {
     Route::resource('alamat', PegawaiAlamatController::class)->only('index', 'create', 'store', 'edit', 'update', 'destroy');
     Route::post('alamat/getkota', [PegawaiAlamatController::class, 'getKota'])->name('alamat.getkota');
 });
+
+Route::resource('pegawai', PegawaiController::class);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

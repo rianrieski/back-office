@@ -210,11 +210,18 @@ const tanggalFormat = (dateString) => {
                         </td>
                     </tr>
                 </table>
-                <img
-                    :src="media_foto_pegawai"
-                    class="col-span-2 rounded-md"
-                    alt=""
-                />
+                <div class="col-span-2">
+                    <img
+                        :src="media_foto_pegawai"
+                        class="mb-4 rounded-md border-2"
+                        alt=""
+                    />
+                    <img
+                        :src="media_kartu_pegawai"
+                        class="rounded-md border-2"
+                        alt=""
+                    />
+                </div>
             </div>
         </MainCard>
     </div>
