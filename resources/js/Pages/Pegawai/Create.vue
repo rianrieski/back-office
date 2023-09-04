@@ -1,5 +1,6 @@
 <script setup>
-import { Link, router, useForm } from "@inertiajs/vue3";
+import { Link, useForm } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 import MainCard from "@/Components/MainCard.vue";
 
@@ -38,13 +39,24 @@ const form = useForm({
     media_kartu_pegawai: "",
 });
 
+const isLoading = ref(false);
+
 const simpanPegawai = () => {
     form.post(route("pegawai.store"), {
+        preserveScroll: true,
+        preserveState: true,
+        replace: true,
+        onBefore: () => {
+            isLoading.value = true;
+        },
         onSuccess: (response) => {
             Toast.fire({
                 icon: "success",
                 text: response.props.flash.success,
             });
+        },
+        onError: () => {
+            isLoading.value = false;
         },
     });
 };
@@ -163,7 +175,7 @@ const simpanPegawai = () => {
                             </option>
                         </select>
                         <div v-if="form.errors.agama_id" class="text-error">
-                            {{ form.errors.agama }}
+                            {{ form.errors.agama_id }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -229,7 +241,7 @@ const simpanPegawai = () => {
                             v-if="form.errors.jenis_kawin_id"
                             class="text-error"
                         >
-                            {{ form.errors.statusNikah }}
+                            {{ form.errors.jenis_kawin_id }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -327,8 +339,11 @@ const simpanPegawai = () => {
                                 {{ item.nama }}
                             </option>
                         </select>
-                        <div v-if="form.errors.jenisPegawai" class="text-error">
-                            {{ form.errors.jenisPegawai }}
+                        <div
+                            v-if="form.errors.jenis_pegawai_id"
+                            class="text-error"
+                        >
+                            {{ form.errors.jenis_pegawai_id }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -350,10 +365,10 @@ const simpanPegawai = () => {
                             </option>
                         </select>
                         <div
-                            v-if="form.errors.statusPegawai"
+                            v-if="form.errors.status_pegawai_id"
                             class="text-error"
                         >
-                            {{ form.errors.statusPegawai }}
+                            {{ form.errors.status_pegawai_id }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -515,7 +530,15 @@ const simpanPegawai = () => {
                     >
                         Batal
                     </Link>
-                    <button type="submit" class="btn btn-primary">
+                    <button
+                        :disabled="isLoading"
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        <div v-if="isLoading">
+                            <span class="loading loading-spinner loading-sm">
+                            </span>
+                        </div>
                         Simpan
                     </button>
                 </div>

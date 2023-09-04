@@ -7,14 +7,36 @@ import "datatables.net-responsive";
 
 DataTable.use(DataTablesCore);
 
+import { ref } from "vue";
+
 defineProps({
     pegawai: Array,
 });
 
-const showAlert = () => {
-    Toast.fire({
-        icon: "success",
-        text: "Hello Ridhal!!",
+const isLoading = ref(false);
+
+const hapusPegawai = (id) => {
+    router.delete(route("pegawai.destroy", { id }), {
+        preserveScroll: true,
+        preserveState: true,
+        replace: true,
+        onBefore: () => {
+            isLoading.value = true;
+        },
+
+        onSuccess: (response) => {
+            Toast.fire({
+                icon: "success",
+                html: response.props.flash.success,
+            });
+        },
+        onError: () => {
+            Toast.fire({
+                icon: "success",
+                html: "Gagal hapus pegawai.",
+            });
+            isLoading.value = false;
+        },
     });
 };
 </script>
@@ -76,8 +98,9 @@ const showAlert = () => {
                                     Edit
                                 </Link>
                                 <button
+                                    :disabled="isLoading"
                                     class="rounded-md bg-red-700 p-2 text-white hover:bg-red-600"
-                                    @click="showAlert"
+                                    @click="hapusPegawai(item.id)"
                                 >
                                     Hapus
                                 </button>

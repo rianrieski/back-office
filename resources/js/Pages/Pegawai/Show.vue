@@ -1,5 +1,6 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
+import { Link } from "@inertiajs/vue3";
 
 defineProps({
     pegawai: Object,
@@ -222,6 +223,18 @@ const tanggalFormat = (dateString) => {
                         alt=""
                     />
                 </div>
+            </div>
+            <div class="mt-4 grid justify-items-end">
+                <Link
+                    class="rounded-md bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-500"
+                    :href="
+                        route('pegawai.edit', {
+                            pegawai: pegawai.id,
+                        })
+                    "
+                >
+                    Edit
+                </Link>
             </div>
         </MainCard>
     </div>

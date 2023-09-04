@@ -1,10 +1,9 @@
 <script setup>
-import { Link, router, useForm } from "@inertiajs/vue3";
-import { computed, ref, watch } from "vue";
+import { Link, useForm } from "@inertiajs/vue3";
+import { ref } from "vue";
 import MainCard from "@/Components/MainCard.vue";
 
 const props = defineProps({
-    errors: Object,
     pegawai: Object,
     agama: Array,
     statusNikah: Array,
@@ -45,54 +44,23 @@ const form = useForm({
 const isLoading = ref(false);
 
 const updatePegawai = () => {
-    const buttonSubmit = document.getElementById("buttonSubmit");
-    isLoading.value = true;
-    buttonSubmit.disabled = true;
-
-    router.post(
+    form.transform((data) => ({ ...data, _method: "put" })).post(
         route("pegawai.update", { pegawai: props.pegawai.id }),
-        {
-            _method: "put",
-            nik: form.nik,
-            nip: form.nip,
-            nama_depan: form.nama_depan,
-            nama_belakang: form.nama_belakang,
-            jenis_kelamin: form.jenis_kelamin,
-            agama_id: form.agama_id,
-            golongan_darah: form.golongan_darah,
-            jenis_kawin_id: form.jenis_kawin_id,
-            tempat_lahir: form.tempat_lahir,
-            tanggal_lahir: form.tanggal_lahir,
-            email_kantor: form.email_kantor,
-            email_pribadi: form.email_pribadi,
-            no_telp: form.no_telp,
-            jenis_pegawai_id: form.jenis_pegawai_id,
-            status_pegawai_id: form.status_pegawai_id,
-            status_dinas: form.status_dinas,
-            no_kartu_pegawai: form.no_kartu_pegawai,
-            tanggal_berhenti: form.tanggal_berhenti,
-            tanggal_wafat: form.tanggal_wafat,
-            no_bpjs: form.no_bpjs,
-            no_taspen: form.no_taspen,
-            npwp: form.npwp,
-            no_enroll: form.no_enroll,
-            media_foto_pegawai: form.media_foto_pegawai,
-            media_kartu_pegawai: form.media_kartu_pegawai,
-            prevalidate: true,
-        },
         {
             preserveScroll: true,
             preserveState: true,
             replace: true,
+            onBefore: () => {
+                isLoading.value = true;
+            },
             onSuccess: (response) => {
                 Toast.fire({
                     icon: "success",
                     text: response.props.flash.success,
                 });
             },
-            onError: (response) => {
+            onError: () => {
                 isLoading.value = false;
-                buttonSubmit.disabled = false;
             },
         },
     );
@@ -121,8 +89,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.nik" class="text-error">
-                            {{ errors.nik }}
+                        <div v-if="form.errors.nik" class="text-error">
+                            {{ form.errors.nik }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -135,8 +103,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.nip" class="text-error">
-                            {{ errors.nip }}
+                        <div v-if="form.errors.nip" class="text-error">
+                            {{ form.errors.nip }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -149,8 +117,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.nama_depan" class="text-error">
-                            {{ errors.nama_depan }}
+                        <div v-if="form.errors.nama_depan" class="text-error">
+                            {{ form.errors.nama_depan }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -163,8 +131,11 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.nama_belakang" class="text-error">
-                            {{ errors.nama_belakang }}
+                        <div
+                            v-if="form.errors.nama_belakang"
+                            class="text-error"
+                        >
+                            {{ form.errors.nama_belakang }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -183,8 +154,11 @@ const updatePegawai = () => {
                                 Perempuan
                             </option>
                         </select>
-                        <div v-if="errors.jenis_kelamin" class="text-error">
-                            {{ errors.jenis_kelamin }}
+                        <div
+                            v-if="form.errors.jenis_kelamin"
+                            class="text-error"
+                        >
+                            {{ form.errors.jenis_kelamin }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -205,8 +179,8 @@ const updatePegawai = () => {
                                 {{ item.nama }}
                             </option>
                         </select>
-                        <div v-if="errors.agama_id" class="text-error">
-                            {{ errors.agama_id }}
+                        <div v-if="form.errors.agama_id" class="text-error">
+                            {{ form.errors.agama_id }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -243,8 +217,11 @@ const updatePegawai = () => {
                                 AB+
                             </option>
                         </select>
-                        <div v-if="errors.golongan_darah" class="text-error">
-                            {{ errors.golongan_darah }}
+                        <div
+                            v-if="form.errors.golongan_darah"
+                            class="text-error"
+                        >
+                            {{ form.errors.golongan_darah }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -265,8 +242,11 @@ const updatePegawai = () => {
                                 {{ item.nama }}
                             </option>
                         </select>
-                        <div v-if="errors.jenis_kawin_id" class="text-error">
-                            {{ errors.statusNikah }}
+                        <div
+                            v-if="form.errors.jenis_kawin_id"
+                            class="text-error"
+                        >
+                            {{ form.errors.jenis_kawin_id }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -279,8 +259,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.tempat_lahir" class="text-error">
-                            {{ errors.tempat_lahir }}
+                        <div v-if="form.errors.tempat_lahir" class="text-error">
+                            {{ form.errors.tempat_lahir }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -293,8 +273,11 @@ const updatePegawai = () => {
                             type="date"
                             class="input-date rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.tanggal_lahir" class="text-error">
-                            {{ errors.tanggal_lahir }}
+                        <div
+                            v-if="form.errors.tanggal_lahir"
+                            class="text-error"
+                        >
+                            {{ form.errors.tanggal_lahir }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -308,8 +291,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.email_kantor" class="text-error">
-                            {{ errors.email_kantor }}
+                        <div v-if="form.errors.email_kantor" class="text-error">
+                            {{ form.errors.email_kantor }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -322,8 +305,11 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.email_pribadi" class="text-error">
-                            {{ errors.email_pribadi }}
+                        <div
+                            v-if="form.errors.email_pribadi"
+                            class="text-error"
+                        >
+                            {{ form.errors.email_pribadi }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -336,8 +322,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.no_telp" class="text-error">
-                            {{ errors.no_telp }}
+                        <div v-if="form.errors.no_telp" class="text-error">
+                            {{ form.errors.no_telp }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -358,8 +344,11 @@ const updatePegawai = () => {
                                 {{ item.nama }}
                             </option>
                         </select>
-                        <div v-if="errors.jenisPegawai" class="text-error">
-                            {{ errors.jenisPegawai }}
+                        <div
+                            v-if="form.errors.jenis_pegawai_id"
+                            class="text-error"
+                        >
+                            {{ form.errors.jenis_pegawai_id }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -380,8 +369,11 @@ const updatePegawai = () => {
                                 {{ item.nama }}
                             </option>
                         </select>
-                        <div v-if="errors.statusPegawai" class="text-error">
-                            {{ errors.statusPegawai }}
+                        <div
+                            v-if="form.errors.status_pegawai_id"
+                            class="text-error"
+                        >
+                            {{ form.errors.status_pegawai_id }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -400,8 +392,8 @@ const updatePegawai = () => {
                                 Tidak Aktif
                             </option>
                         </select>
-                        <div v-if="errors.status_dinas" class="text-error">
-                            {{ errors.status_dinas }}
+                        <div v-if="form.errors.status_dinas" class="text-error">
+                            {{ form.errors.status_dinas }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -413,8 +405,11 @@ const updatePegawai = () => {
                             type="date"
                             class="input-date rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.tanggal_berhenti" class="text-error">
-                            {{ errors.tanggal_berhenti }}
+                        <div
+                            v-if="form.errors.tanggal_berhenti"
+                            class="text-error"
+                        >
+                            {{ form.errors.tanggal_berhenti }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -426,8 +421,11 @@ const updatePegawai = () => {
                             type="date"
                             class="input-date rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.tanggal_wafat" class="text-error">
-                            {{ errors.tanggal_wafat }}
+                        <div
+                            v-if="form.errors.tanggal_wafat"
+                            class="text-error"
+                        >
+                            {{ form.errors.tanggal_wafat }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -440,8 +438,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.no_bpjs" class="text-error">
-                            {{ errors.no_bpjs }}
+                        <div v-if="form.errors.no_bpjs" class="text-error">
+                            {{ form.errors.no_bpjs }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -451,8 +449,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.no_taspen" class="text-error">
-                            {{ errors.no_taspen }}
+                        <div v-if="form.errors.no_taspen" class="text-error">
+                            {{ form.errors.no_taspen }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -462,8 +460,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.npwp" class="text-error">
-                            {{ errors.npwp }}
+                        <div v-if="form.errors.npwp" class="text-error">
+                            {{ form.errors.npwp }}
                         </div>
                     </div>
                     <div class="form-control col-span-3">
@@ -475,8 +473,8 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.no_enroll" class="text-error">
-                            {{ errors.no_enroll }}
+                        <div v-if="form.errors.no_enroll" class="text-error">
+                            {{ form.errors.no_enroll }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -489,8 +487,11 @@ const updatePegawai = () => {
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="errors.no_kartu_pegawai" class="text-error">
-                            {{ errors.no_kartu_pegawai }}
+                        <div
+                            v-if="form.errors.no_kartu_pegawai"
+                            class="text-error"
+                        >
+                            {{ form.errors.no_kartu_pegawai }}
                         </div>
                     </div>
                     <div class="form-control col-span-2 flex items-stretch">
@@ -509,10 +510,10 @@ const updatePegawai = () => {
                             class="file-input file-input-bordered pb-8"
                         />
                         <div
-                            v-if="errors.media_kartu_pegawai"
+                            v-if="form.errors.media_kartu_pegawai"
                             class="text-error"
                         >
-                            {{ errors.media_kartu_pegawai }}
+                            {{ form.errors.media_kartu_pegawai }}
                         </div>
                     </div>
                     <div class="form-control col-span-2 flex items-stretch">
@@ -530,10 +531,10 @@ const updatePegawai = () => {
                             class="file-input file-input-bordered pb-8"
                         />
                         <div
-                            v-if="errors.media_foto_pegawai"
+                            v-if="form.errors.media_foto_pegawai"
                             class="text-error"
                         >
-                            {{ errors.media_foto_pegawai }}
+                            {{ form.errors.media_foto_pegawai }}
                         </div>
                     </div>
                 </div>
@@ -545,7 +546,7 @@ const updatePegawai = () => {
                         Batal
                     </Link>
                     <button
-                        id="buttonSubmit"
+                        :disabled="isLoading"
                         type="submit"
                         class="btn btn-primary"
                     >
