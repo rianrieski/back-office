@@ -4,7 +4,8 @@ import {
     ClipboardIcon,
     HomeIcon,
     UsersIcon,
-    MapPinIcon
+    MapPinIcon,
+    CubeTransparentIcon
 } from "@heroicons/vue/24/outline/index.js";
 
 const useRouteStore = defineStore("route-store", () => {
@@ -24,7 +25,12 @@ const useRouteStore = defineStore("route-store", () => {
                 {
                     icon: ClipboardIcon,
                     label: "Test",
-                    href:'#'
+                    href:"#"
+                },
+                {
+                    icon: CubeTransparentIcon,
+                    label: "Hirarki Unit Kerja",
+                    href:route('hirarki-unit-kerja.index')
                 },
             ],
         },
