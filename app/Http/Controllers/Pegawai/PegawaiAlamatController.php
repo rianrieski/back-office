@@ -81,10 +81,10 @@ class PegawaiAlamatController extends Controller
         $alamat->alamat = $request->alamat;
         try {
             $alamat->save();
-            return redirect()->back()->with('success','Data alamat berhasil disimpan');
+            return redirect()->back()->with('success','alamat berhasil disimpan');
         }catch (QueryException $e){
             Log::info('terjadi kesalahan pada query atau koneksi database');
-             return redirect()->back()->withErrors(['query' => 'data alamat gagal disimpan']);
+             return redirect()->back()->withErrors(['query' => 'alamat gagal disimpan']);
         }
     }
 

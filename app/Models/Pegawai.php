@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Pegawai extends Model
 {
@@ -55,5 +56,12 @@ class Pegawai extends Model
     public function pegawai_suami_istri()
     {
         return $this->hasMany(PegawaiSuamiIstri::class);
+    }
+    public static function getAllDataPegawai()
+    {
+        $pegawai = Pegawai::select('id','nama_depan','nama_belakang',
+            DB::raw('CONCAT(nama_depan," " ,nama_belakang) AS nama_lengkap'))
+            ->whereNull('tanggal_berhenti')->get();
+        return $pegawai;
     }
 }
