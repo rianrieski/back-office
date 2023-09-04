@@ -63,7 +63,7 @@ class SiasnService
             $data
         );
     }
-    public static function fetchAllPnsDataUtama(): void
+    public function fetchAllPnsDataUtama(): void
     {
         $nipList = Pegawai::select('nipp as nip')
             ->whereNotNull('nipp')
@@ -72,7 +72,7 @@ class SiasnService
 
         foreach ($nipList as $nip) {
             try {
-                self::fetchPnsDataUtama($nip);
+                $this->fetchPnsDataUtama($nip);
             } catch (NotFoundException $exception) {
                 continue;
             }
@@ -84,6 +84,7 @@ class SiasnService
         $response = $this->connector->sendAndRetry(new GetPnsDataPasangan($nip), 3, 10, $this->resetToken);
 
         return $response->json();
+
         $data = $response->json()['data'];
 
 //        return SiasnPnsDataUtama::updateOrCreate(

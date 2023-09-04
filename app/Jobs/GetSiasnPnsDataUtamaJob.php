@@ -19,6 +19,6 @@ class GetSiasnPnsDataUtamaJob implements ShouldQueue
 
     public function handle(): void
     {
-        SiasnService::fetchPnsDataUtama($this->nip);
+        (new SiasnService)->fetchPnsDataUtama($this->nip);
     }
 }

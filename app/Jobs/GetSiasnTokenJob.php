@@ -15,6 +15,6 @@ class GetSiasnTokenJob implements ShouldQueue
 
     public function handle(): void
     {
-        (new SiasnService)->createToken();
+        SiasnService::createToken();
     }
 }
