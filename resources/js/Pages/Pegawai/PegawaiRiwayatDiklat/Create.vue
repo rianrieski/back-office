@@ -30,6 +30,7 @@ const saveRiwayatDiklat = ()=>{
                 icon: 'success',
                 confirmButtonText: 'OK'
             })
+            router.get(route('riwayat-diklat.index'))
         },
         onError:(errors)=>{
             if(errors.query){
@@ -66,7 +67,9 @@ const compareTanggal = ()=>{
             form.tanggal_akhir = null
             form.errors.tanggal_akhir = 'tanggal akhir tidak boleh lebih kecil dari tanggal mulai'
             form.errors.tanggal_mulai = 'tanggal mulai tidak boleh lebih besar dari tanggal akhir'
-
+        }else{
+            form.errors.tanggal_akhir = null
+            form.errors.tanggal_mulai = null
         }
     }else{
         form.errors.tanggal_akhir = null

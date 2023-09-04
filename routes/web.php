@@ -40,6 +40,7 @@ Route::resource('umak', UangMakanController::class)->only('index', 'store', 'upd
 Route::prefix('pegawai')->group(function (){
     Route::get('alamat/getdata',[PegawaiAlamatController::class,'getDataPegawaiAlamat'])->name('alamat.getdata');
     Route::resource('alamat',PegawaiAlamatController::class)->only('index','create','store','edit','update','destroy','show');
+    Route::get('riwayat-diklat/getdata',[PegawaiRiwayatDiklatController::class,'getDataRiwayatDiklat'])->name('riwayat-diklat.getdata');
     Route::resource('riwayat-diklat',PegawaiRiwayatDiklatController::class);
 });
 Route::prefix('master')->group(function (){
