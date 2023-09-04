@@ -33,9 +33,9 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('pegawai_id')->references('id')->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('pendidikan_id')->references('id')->on('pendidikan')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('media_foto_pasangan_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
+            //$table->foreign('media_foto_pasangan_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('jenis_kawin_id')->references('id')->on('jenis_kawin')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('media_buku_nikah_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
+            //$table->foreign('media_buku_nikah_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
