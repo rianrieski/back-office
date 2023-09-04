@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use function Termwind\render;
 
 class PegawaiRiwayatDiklatController extends Controller
 {
@@ -90,15 +91,48 @@ class PegawaiRiwayatDiklatController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $pegawaiRiwayatDiklatDetail = PegawaiRiwayatDiklat::where('id',$id)->first();
+        return Inertia::render('Pegawai/PegawaiRiwayatDiklat/Edit',[
+            'title'=>'Edit Riwayat',
+            'pegawai' =>Pegawai::getAllDataPegawai(),
+            'jenis_diklat'=>JenisDiklat::select('id','nama')->get(),
+            'pegawaiRiwayatDiklatDetail' => $pegawaiRiwayatDiklatDetail
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PegawaiRiwayatDiklatRequest $request, string $id)
     {
-        //
+        try {
+            $diklat = PegawaiRiwayatDiklat::where('id',$id)->first();
+            if ($diklat != null){
+                $diklat->pegawai_id = $request->pegawai_id;
+                $diklat->jenis_diklat_id = $request->jenis_diklat_id;
+                $diklat->tanggal_mulai = $request->tanggal_mulai;
+                $diklat->tanggal_akhir = $request->tanggal_akhir;
+                $diklat->lokasi = $request->lokasi;
+                $diklat->jam_pelajaran = $request->jam_pelajaran;
+                $diklat->no_sertifikat = $request->no_sertifikat;
+                $diklat->tanggal_sertifikat = $request->tanggal_sertifikat;
+                $diklat->penyelenggaran = $request->penyelenggaran;
+                DB::transaction(function ()use($diklat, $request){
+                    $diklat->save();
+                    if ($request->file('media_sertifikat')) {
+                        $diklat->clearMediaCollection('media_sertifikat');
+                        $diklat->addMediaFromRequest('media_sertifikat')->toMediaCollection('media_sertifikat');
+                    }
+                });
+                return redirect()->back()->with('success','riwayat diklat berhasil diubah');
+            }else{
+                return redirect()->back()->withErrors(['query'=>'riwayat diklat gagal diubah']);
+            }
+        }catch (QueryException $e){
+            return redirect()->back()->withErrors(['query'=>'riwayat diklat gagal diubah']);
+        }
+
+
     }
 
     /**
@@ -106,7 +140,18 @@ class PegawaiRiwayatDiklatController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $diklat = PegawaiRiwayatDiklat::where('id',$id)->first();
+        if ($diklat ==null){
+            return redirect()->back()->withErrors([
+                'query' => 'riwayat diklat gagal dihapus atau tidak ditemukan'
+            ]);
+        }
+        try {
+        $diklat->delete();
+        return redirect()->back()->with('success','riwayat diklat berhasil dihapus');
+        }catch (QueryException $e){
+            return redirect()->withErrors(['queruy'=>'riwayat diklat gagal dihapus']);
+        }
     }
     public function getDataRiwayatDiklat(Request $request)
     {

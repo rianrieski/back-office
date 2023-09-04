@@ -7,22 +7,24 @@ import Swal from "sweetalert2";
 const props = defineProps({
     title:'',
     pegawai:'',
-    jenis_diklat:''
+    jenis_diklat:'',
+    pegawaiRiwayatDiklatDetail:''
 })
 const form = useForm({
-    pegawai_id:'',
-    jenis_diklat_id:'',
-    tanggal_mulai:'',
-    tanggal_akhir:'',
-    jam_pelajaran:'',
-    lokasi:'',
-    penyelenggaran:'',
-    no_sertifikat:'',
-    tanggal_sertifikat:'',
+    id:props.pegawaiRiwayatDiklatDetail.id,
+    pegawai_id:props.pegawaiRiwayatDiklatDetail.pegawai_id,
+    jenis_diklat_id:props.pegawaiRiwayatDiklatDetail.jenis_diklat_id,
+    tanggal_mulai:props.pegawaiRiwayatDiklatDetail.tanggal_mulai,
+    tanggal_akhir:props.pegawaiRiwayatDiklatDetail.tanggal_akhir,
+    jam_pelajaran:props.pegawaiRiwayatDiklatDetail.jam_pelajaran,
+    lokasi:props.pegawaiRiwayatDiklatDetail.lokasi,
+    penyelenggaran:props.pegawaiRiwayatDiklatDetail.penyelenggaran,
+    no_sertifikat:props.pegawaiRiwayatDiklatDetail.no_sertifikat,
+    tanggal_sertifikat:props.pegawaiRiwayatDiklatDetail.tanggal_sertifikat,
     media_sertifikat:''
 })
 const saveRiwayatDiklat = ()=>{
-    form.post(route('riwayat-diklat.store'),{
+    form.transform((data) => ({ ...data, _method: "put" })).post(route('riwayat-diklat.update',props.pegawaiRiwayatDiklatDetail.id),{
         onSuccess:(response)=>{
             Swal.fire({
                 title: 'Tersimpan!',

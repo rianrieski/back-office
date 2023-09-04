@@ -22,6 +22,7 @@ class PegawaiRiwayatDiklatRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id'=>['nullable'],
             'pegawai_id'=>['required','exists:pegawai,id'],
             'jenis_diklat_id'=>['required','exists:jenis_diklat,id'],
             'tanggal_mulai'=>['required','date_format:Y-m-d'],
@@ -31,7 +32,7 @@ class PegawaiRiwayatDiklatRequest extends FormRequest
             'penyelenggaran'=>['required','max:100'],
             'no_sertifikat'=>['required','max:100'],
             'tanggal_sertifikat'=>['required','date_format:Y-m-d'],
-            'media_sertifikat'=>['required','mimes:pdf,jpg,jpeg,png','file','max:1024',],
+            'media_sertifikat'=>['required_without:id','nullable','mimes:pdf,jpg,jpeg,png','file','max:1024',],
         ];
     }
     /**
@@ -59,9 +60,9 @@ class PegawaiRiwayatDiklatRequest extends FormRequest
             'no_sertifikat.max'=> 'penyelnggaran terlalu panjang',
             'tanggal_sertifikat.required'=> 'tanggal sertifikat harus diisi ',
             'tanggal_sertifikat.date_format'=> 'tanggal harus dalam bentuk format yang valid ',
-            'media_sertifikat.required'=> 'file sertifikat harus diisi',
+            'media_sertifikat.required_without'=> 'file sertifikat harus diisi',
             'media_sertifikat.mimes'=> 'format file sertifikat harus pdf, jpg, jpeg, png',
-            'media_sertifikat.size'=> 'ukuran file terlalu besar',
+            'media_sertifikat.max'=> 'ukuran file terlalu besar (maksimal file 1MB)',
         ];
     }
 }
