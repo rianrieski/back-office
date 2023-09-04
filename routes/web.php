@@ -33,8 +33,8 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::resource('tukin', TukinController::class)->only('index', 'store', 'update', 'destroy');
-Route::resource('umak', UangMakanController::class)->only('index', 'store', 'update', 'destroy');
+Route::resource('tukin', TukinController::class)->only('index','create','store','edit','update','destroy');
+Route::resource('umak', UangMakanController::class)->only('index','create','store','edit','update','destroy');
 
 Route::prefix('pegawai')->group(function (){
     Route::get('alamat/getdata',[PegawaiAlamatController::class,'getDataPegawaiAlamat'])->name('alamat.getdata');
