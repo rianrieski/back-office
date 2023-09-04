@@ -43,8 +43,8 @@ return new class extends Migration
             $table->foreign('jenis_kawin_id')->references('id')->on('jenis_kawin')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('jenis_pegawai_id')->references('id')->on('jenis_pegawai')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('status_pegawai_id')->references('id')->on('status_pegawai')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('media_kartu_pegawai_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('media_foto_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
+            //$table->foreign('media_kartu_pegawai_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
+            //$table->foreign('media_foto_id')->references('id')->on('media')->onUpdate('cascade')->onDelete('cascade');
 
         });
     }
