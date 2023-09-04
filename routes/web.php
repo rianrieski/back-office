@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
 use App\Http\Controllers\Pegawai\PegawaiAlamatController;
+use \App\Http\Controllers\Master\HirarkiUnitKerjaController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,12 +33,16 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::resource('tukin', TukinController::class)->only('index', 'store', 'update', 'destroy');
-Route::resource('umak', UangMakanController::class)->only('index', 'store', 'update', 'destroy');
+Route::resource('tukin', TukinController::class)->only('index','create','store','edit','update','destroy');
+Route::resource('umak', UangMakanController::class)->only('index','create','store','edit','update','destroy');
 
 Route::prefix('pegawai')->group(function (){
-    Route::resource('alamat',PegawaiAlamatController::class)->only('index','create','store');
-    Route::post('alamat/getkota',[PegawaiAlamatController::class,'getKota'])->name('alamat.getkota');
+    Route::get('alamat/getdata',[PegawaiAlamatController::class,'getDataPegawaiAlamat'])->name('alamat.getdata');
+    Route::resource('alamat',PegawaiAlamatController::class)->only('index','create','store','edit','update','destroy','show');
+});
+Route::prefix('master')->group(function (){
+    Route::get('hirarki-unit-kerja/getdata',[HirarkiUnitKerjaController::class,'getDataHirarkiUnitKerja'])->name('hirarki-unit-kerja.getdata');
+    Route::resource('hirarki-unit-kerja',HirarkiUnitKerjaController::class)->except('show');
 });
 
 Route::middleware('auth')->group(function () {
