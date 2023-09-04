@@ -79,7 +79,13 @@ class PegawaiRiwayatDiklatController extends Controller
             if($riwayatDiklat == null){
                 return response()->json(['status'=>404,'message'=>'data tidak ditemukan'],404);
             }else{
-                return response()->json(['status'=>200,'message'=>'OK','data'=>$riwayatDiklat],200);
+                $mediaSertifikat = $riwayatDiklat->getMedia("media_sertifikat");
+                if (count($mediaSertifikat) == 0) {
+                    $urlMedia_Sertifikat = url(asset('assets/noPhotoFound.png'));
+                } else {
+                    $urlMedia_Sertifikat = $mediaSertifikat[0]->getUrl();
+                }
+                return response()->json(['status'=>200,'message'=>'OK','data'=>[$riwayatDiklat,$mediaSertifikat]],200);
             }
         }catch (QueryException $e){
             return response()->json(['status'=>500,'message'=>'kesalahan pada server'],500);
