@@ -195,4 +195,7 @@ const minDate = ()=>{
         </div>
     </MainCard>
 </template>
+<style scoped>
+@import "vue-select/dist/vue-select.css";
+</style>
 

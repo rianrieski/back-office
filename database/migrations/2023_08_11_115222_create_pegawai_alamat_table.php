@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pegawai_alamat', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pegawai_id');
-            $table->enum('tipe_alamat',["D","K"]);
+            $table->enum('tipe_alamat',["Domisili","Asal"]);
             $table->unsignedInteger('propinsi_id');
             $table->unsignedBigInteger('kota_id');
             $table->unsignedBigInteger('kecamatan_id');

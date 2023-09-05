@@ -157,8 +157,8 @@ const selectedPegawai = computed({
                         </label>
                         <select v-model="form.tipe_alamat" class="select select-bordered" :class="{'select-error':form.errors.tipe_alamat}">
                             <option disabled selected>Pilih tipe</option>
-                            <option value="D">Domisili</option>
-                            <option value="K">Asal</option>
+                            <option value="Domisili">Domisili</option>
+                            <option value="Asal">Asal</option>
                         </select>
                         <label class="label">
                             <span v-if="form.errors.tipe_alamat" class="label-text-alt text-error">{{form.errors.tipe_alamat}}</span>
