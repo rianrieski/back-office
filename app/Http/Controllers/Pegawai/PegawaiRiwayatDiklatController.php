@@ -11,6 +11,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class PegawaiRiwayatDiklatController extends Controller
@@ -76,7 +77,7 @@ class PegawaiRiwayatDiklatController extends Controller
                 ->join('jenis_diklat','jenis_diklat.id','=','pegawai_riwayat_diklat.jenis_diklat_id')
                 ->select('pegawai_riwayat_diklat.id','tanggal_mulai','tanggal_akhir','lokasi','jam_pelajaran','penyelenggaran','tanggal_sertifikat','no_sertifikat',DB::raw('CONCAT(pegawai.nama_depan," " ,pegawai.nama_belakang) AS nama_lengkap'),'jenis_diklat.nama AS nama_diklat')
                 ->first();
-            $riwayatDiklat->media_sertifikat = $riwayatDiklat->getMedia("media_sertifikat")[0]->getURl();
+            $riwayatDiklat->media_sertifikat = $riwayatDiklat->getMedia("media_sertifikat")[0]->getUrl();
             if($riwayatDiklat == null){
                 return response()->json(['status'=>404,'message'=>'data tidak ditemukan'],404);
             }else{
