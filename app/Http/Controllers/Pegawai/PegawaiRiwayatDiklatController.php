@@ -75,7 +75,16 @@ class PegawaiRiwayatDiklatController extends Controller
             $riwayatDiklat = PegawaiRiwayatDiklat::where('pegawai_riwayat_diklat.id',$id)
                 ->join('pegawai','pegawai.id','=','pegawai_riwayat_diklat.pegawai_id')
                 ->join('jenis_diklat','jenis_diklat.id','=','pegawai_riwayat_diklat.jenis_diklat_id')
-                ->select('pegawai_riwayat_diklat.id','tanggal_mulai','tanggal_akhir','lokasi','jam_pelajaran','penyelenggaran','tanggal_sertifikat','no_sertifikat',DB::raw('CONCAT(pegawai.nama_depan," " ,pegawai.nama_belakang) AS nama_lengkap'),'jenis_diklat.nama AS nama_diklat')
+                ->select('pegawai_riwayat_diklat.id'
+                    ,DB::raw("DATE_FORMAT(tanggal_mulai, '%d %b %Y') AS tanggal_mulai")
+                    ,DB::raw("DATE_FORMAT(tanggal_akhir, '%d %b %Y') AS tanggal_akhir")
+                    ,'lokasi'
+                    ,'jam_pelajaran'
+                    ,'penyelenggaran'
+                    ,DB::raw("DATE_FORMAT(tanggal_sertifikat, '%d %b %Y') AS tanggal_sertifikat")
+                    ,'no_sertifikat'
+                    ,DB::raw('CONCAT(pegawai.nama_depan," " ,pegawai.nama_belakang) AS nama_lengkap')
+                    ,'jenis_diklat.nama AS nama_diklat')
                 ->first();
             $riwayatDiklat->media_sertifikat = $riwayatDiklat->getMedia("media_sertifikat")[0]->getUrl();
             if($riwayatDiklat == null){
@@ -165,18 +174,20 @@ class PegawaiRiwayatDiklatController extends Controller
     {
         $paginate = ($request->paginate) ? $request->paginate : 10;
         $riwayatDiklat = PegawaiRiwayatDiklat::query()->when($request->cari,function ($query,$cari){
-            $query->orWhereHas('pegawai', function($q) use ($cari) {
-                $q->where('nama_depan', 'like', "%{$cari}%");
-            });
-            $query->orWhereHas('jenis_diklat', function($q) use ($cari) {
-                $q->where('nama', 'like', "%{$cari}%");
-            });
+            $query->orWhere(DB::raw("DATE_FORMAT(tanggal_mulai, '%d %b %Y')"),'like',"%{$cari}%");
+            $query->orWhere(DB::raw("DATE_FORMAT(tanggal_akhir, '%d %b %Y')"),'like',"%{$cari}%");
+            $query->orWhere(DB::raw("CONCAT(nama_depan,' ',nama_belakang)"),'like',"%{$cari}%");
+            $query->orWhere('pegawai.nama_depan','like',"%{$cari}%");
+            $query->orWhere('jenis_diklat.nama','like',"%{$cari}%");
+            $query->orWhere('pegawai.nama_belakang','like',"%{$cari}%");
             $query->orWhere('tanggal_mulai','like',"%{$cari}%");
             $query->orWhere('tanggal_akhir','like',"%{$cari}%");
             $query->orWhere('jam_pelajaran','like',"%{$cari}%");
         })
-            ->with('pegawai:id,nama_depan,nama_belakang','jenis_diklat:id,nama')
-            ->select('id','pegawai_id','jenis_diklat_id','tanggal_mulai','tanggal_akhir','penyelenggaran','no_sertifikat')->paginate($paginate);
+            ->join('pegawai','pegawai.id','=','pegawai_riwayat_diklat.pegawai_id')
+            ->join('jenis_diklat','jenis_diklat.id','=','pegawai_riwayat_diklat.jenis_diklat_id')
+            ->select('pegawai_riwayat_diklat.id',DB::raw('CONCAT(nama_depan," " ,nama_belakang) AS nama_lengkap'),'jenis_diklat.nama'
+                ,DB::raw("DATE_FORMAT(tanggal_mulai, '%d %b %Y') AS tanggal_mulai"),DB::raw("DATE_FORMAT(tanggal_akhir, '%d %b %Y') AS tanggal_akhir"),'penyelenggaran','no_sertifikat')->paginate($paginate);
         return response()->json($riwayatDiklat);
     }
 }

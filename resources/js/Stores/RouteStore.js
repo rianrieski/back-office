@@ -50,6 +50,11 @@ const useRouteStore = defineStore("route-store", () => {
                     label: "Riwayat Diklat",
                     href: route("riwayat-diklat.index")
                 },
+                {
+                    icon: MapPinIcon,
+                    label: "Tmt Gaji",
+                    href: route("tmt-gaji.index")
+                },
             ],
         },
         {

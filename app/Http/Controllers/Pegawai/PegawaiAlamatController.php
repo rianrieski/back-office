@@ -64,11 +64,18 @@ class PegawaiAlamatController extends Controller
      */
     public function store(PegawaiAlamatRequest $request)
     {
-        $countPegawai = PegawaiAlamat::where('pegawai_id',$request->pegawai_id)->count();
-        if($countPegawai >= 2){
+        $pegawaiAlamat = PegawaiAlamat::where('pegawai_id',$request->pegawai_id)->get();
+        if(count($pegawaiAlamat) >= 2){
             return redirect()->back()->withErrors([
                 'pegawai_id' => 'Pegawai sudah memiliki dua alamat'
             ]);
+        }
+        foreach ($pegawaiAlamat as $alamat){
+            if ($alamat->tipe_alamat === $request->tipe_alamat){
+                return redirect()->back()->withErrors([
+                'tipe_alamat' => 'Pegawai sudah memiliki alamat '.$alamat->tipe_alamat
+            ]);
+            }
         }
         $alamat = new PegawaiAlamat();
         $alamat->pegawai_id = $request->pegawai_id;
@@ -100,7 +107,7 @@ class PegawaiAlamatController extends Controller
             ->join('desa','pegawai_alamat.desa_id', '=','desa.id')
             ->select('pegawai_alamat.id','pegawai_alamat.tipe_alamat',
                 'pegawai_alamat.kode_pos','pegawai_alamat.alamat',
-                'pegawai.nama_belakang','pegawai.nama_depan',
+                DB::raw('CONCAT(nama_depan," " ,nama_belakang) AS nama_lengkap'),
                 'propinsi.nama as nama_propinsi','kota.nama as nama_kota',
                 'kecamatan.nama as nama_kecamatan','desa.nama as nama_desa')
             ->where('pegawai_alamat.id',$id)->first();
@@ -198,8 +205,10 @@ class PegawaiAlamatController extends Controller
             $paginate = 10;
         }
         $pegawaiAlamat = PegawaiAlamat::query()->when($request->cari,function ($query,$cari){
+            $query->orWhere(DB::raw("CONCAT(nama_depan,' ',nama_belakang)"),'like',"%{$cari}%");
             $query->orWhere('nama_depan','like',"%{$cari}%");
             $query->orWhere('nama_belakang','like',"%{$cari}%");
+            $query->orWhere('tipe_alamat','like',"%{$cari}%");
             $query->orWhere('propinsi.nama','like',"%{$cari}%");
             $query->orWhere('kota.nama','like',"%{$cari}%");
             $query->orWhere('kecamatan.nama','like',"%{$cari}%");
@@ -211,7 +220,7 @@ class PegawaiAlamatController extends Controller
             ->join('kecamatan','pegawai_alamat.kecamatan_id', '=','kecamatan.id')
             ->join('desa','pegawai_alamat.desa_id', '=','desa.id')
             ->select('pegawai_alamat.id','pegawai_alamat.tipe_alamat','pegawai_alamat.kode_pos','pegawai_alamat.alamat',
-                'pegawai.nama_belakang','pegawai.nama_depan',
+                DB::raw('CONCAT(nama_depan," " ,nama_belakang) AS nama_lengkap'),
                 'propinsi.nama as nama_propinsi','kota.nama as nama_kota',
                 'kecamatan.nama as nama_kecamatan','desa.nama as nama_desa')
             ->paginate($paginate);

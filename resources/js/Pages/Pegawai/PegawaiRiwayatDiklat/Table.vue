@@ -86,6 +86,9 @@ const getRiwayatDiklatDetail = async (value)=>{
     }
 
 }
+const resetPegawaiRiwayatDetail = ()=>{
+    riwayatDiklatDetail.value = []
+}
 
 </script>
 
@@ -121,8 +124,8 @@ const getRiwayatDiklatDetail = async (value)=>{
             <tbody>
             <tr class="hover" v-for="(riwayat,index) in riwayatDiklat.data">
                 <th scope="col">{{index+1}}</th>
-                <td>{{riwayat.pegawai.nama_depan +' '+ riwayat.pegawai.nama_belakang}}</td>
-                <td>{{riwayat.jenis_diklat.nama}}</td>
+                <td>{{riwayat.nama_lengkap}}</td>
+                <td>{{riwayat.nama}}</td>
                 <td>{{riwayat.tanggal_mulai}}</td>
                 <td>{{riwayat.tanggal_akhir}}</td>
                 <td>{{riwayat.penyelenggaran}}</td>
@@ -213,7 +216,7 @@ const getRiwayatDiklatDetail = async (value)=>{
                     <tr>
                         <td>File Sertifikat</td>
                         <td>
-                            <a :href="'//'+riwayatDiklatDetail.media_sertifikat" target="_blank">
+                            <a :href="'//'+riwayatDiklatDetail.media_sertifikat" target="_blank" class="tooltip tooltip-right" data-tip="Unduh">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                             </svg>
@@ -223,7 +226,7 @@ const getRiwayatDiklatDetail = async (value)=>{
                 </table>
             </div>
             <div class="modal-action">
-                <button class="btn btn-sm btn-primary" @click="resetAlamatDetail">Tutup</button>
+                <button class="btn btn-sm btn-primary" @click="resetPegawaiRiwayatDetail">Tutup</button>
             </div>
         </form>
     </dialog>
