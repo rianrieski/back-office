@@ -11,8 +11,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use function Termwind\render;
 
 class PegawaiRiwayatDiklatController extends Controller
 {
@@ -75,7 +75,9 @@ class PegawaiRiwayatDiklatController extends Controller
             $riwayatDiklat = PegawaiRiwayatDiklat::where('pegawai_riwayat_diklat.id',$id)
                 ->join('pegawai','pegawai.id','=','pegawai_riwayat_diklat.pegawai_id')
                 ->join('jenis_diklat','jenis_diklat.id','=','pegawai_riwayat_diklat.jenis_diklat_id')
-                ->select('tanggal_mulai','tanggal_akhir','lokasi','jam_pelajaran','penyelenggaran','tanggal_sertifikat','no_sertifikat',DB::raw('CONCAT(pegawai.nama_depan," " ,pegawai.nama_belakang) AS nama_lengkap'),'jenis_diklat.nama AS nama_diklat')->first();
+                ->select('pegawai_riwayat_diklat.id','tanggal_mulai','tanggal_akhir','lokasi','jam_pelajaran','penyelenggaran','tanggal_sertifikat','no_sertifikat',DB::raw('CONCAT(pegawai.nama_depan," " ,pegawai.nama_belakang) AS nama_lengkap'),'jenis_diklat.nama AS nama_diklat')
+                ->first();
+            $riwayatDiklat->media_sertifikat = $riwayatDiklat->getMedia("media_sertifikat")[0]->getUrl();
             if($riwayatDiklat == null){
                 return response()->json(['status'=>404,'message'=>'data tidak ditemukan'],404);
             }else{
@@ -141,13 +143,19 @@ class PegawaiRiwayatDiklatController extends Controller
     public function destroy(string $id)
     {
         $diklat = PegawaiRiwayatDiklat::where('id',$id)->first();
+
         if ($diklat ==null){
             return redirect()->back()->withErrors([
                 'query' => 'riwayat diklat gagal dihapus atau tidak ditemukan'
             ]);
         }
         try {
-        $diklat->delete();
+            DB::transaction(function ()use($diklat){
+                if ($diklat->hasMedia("media_sertifikat")) {
+                    $diklat->getMedia("media_sertifikat")[0]->delete();
+                }
+                $diklat->delete();
+            });
         return redirect()->back()->with('success','riwayat diklat berhasil dihapus');
         }catch (QueryException $e){
             return redirect()->withErrors(['queruy'=>'riwayat diklat gagal dihapus']);
