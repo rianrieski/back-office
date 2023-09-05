@@ -5,8 +5,12 @@ use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
 use App\Http\Controllers\GajiController;
 use App\Http\Controllers\JabatanTukinController;
-
 use App\Http\Controllers\Pegawai\PegawaiAlamatController;
+
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\UserController;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -50,6 +54,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('gaji', GajiController::class)->only('index', 'create','edit','store', 'update', 'destroy');
     Route::resource('jabatan-tukin', JabatanTukinController::class)->only('index', 'create','edit','store', 'update', 'destroy');
+
+    Route::resource('role', RoleController::class);
+    Route::resource('permission', PermissionController::class);
+    Route::resource('user', UserController::class);
+
 
 });
 

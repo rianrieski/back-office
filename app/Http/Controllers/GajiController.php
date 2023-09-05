@@ -45,23 +45,23 @@ class GajiController extends Controller
         }
     }
 
-
     public function store(Request $request)
     {
         // dd($request->all());
         $data = $request->validate([
             'masa_kerja' => 'required|unique:gaji,masa_kerja,' . null . ',id,golongan_id,' . $request->input('golongan_id'),
             'golongan_id' => ['required', 'numeric'],
-            'nominal' => ['required', 'numeric']
+            'nominal' => ['required', 'numeric','min:1']
         ],[
             'golongan_id.required'=>'Golongan harus diisi',
             'masa_kerja.required' => 'Masa Kerja harus diisi',
+            'masa_kerja.unique' => 'Golongan dan Masa Kerja sudah',
             'nominal.required' => 'Nominal gaji harus diisi'
         ]);
 
         try {
             Gaji::create($data);
-            return redirect()->route('gaji.index')->with('toast', ['message', 'Data berhasil disimpan']);
+            // return redirect()->route('gaji.index')->with('toast', ['message', 'Data berhasil disimpan']);
         }catch (QueryException $e){
             Log::error('terjadi kesalahan pada koneksi database  ketika simpan data :' . $e->getMessage());
             return redirect()->back()->withErrors([
@@ -85,9 +85,6 @@ class GajiController extends Controller
                     'query' => 'Load data gagal'
                 ]);
         }
-
-
-
     }
 
     public function update(Request $request, Gaji $gaji)

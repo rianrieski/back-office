@@ -4,8 +4,9 @@ import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import InputError from "@/Components/InputError.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
+import Swal from 'sweetalert2';
 
 defineProps(['golongan']);
 
@@ -34,11 +35,44 @@ const goBack = () => {
     window.history.back();
 }
 
-const submit = () => {
-    form.post(route("gaji.store"));
-};
+const submit = ()=>{
+    Swal.fire({
+        title: 'Apakah Anda Yakin?',
+        text: "Simpan data gaji",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Batal',
+        confirmButtonText: 'Ya'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.post(route('gaji.store'),{
+                onSuccess:(response)=>{
+                    Swal.fire(
+                        'Tersimpan!',
+                        'Data gaji berhasil disimpan.',
+                        'success'
+                    )
+                    // form.reset(); // ini untuk reset inputan tanpa merefresh halaman atau tanpa balik ke index
+                    router.get(route('gaji.index'));
+                },
+                onError:(errors)=>{
+                    if(errors.query){
+                        Swal.fire({
+                            title: 'Gagal!',
+                            text: 'Simpan gaji gagal',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        })
+                    }
+                }
+            })
 
+        }
+    })
 
+}
 
 </script>
 
@@ -59,7 +93,7 @@ const submit = () => {
                             <div>
                                 <InputLabel for="golongan_id" value="Golongan" />
 
-                                <select v-model="form.golongan_id" @change="getGolongan" id="golongan_id" name="golongan_id">
+                                <select v-model="form.golongan_id" @change="getGolongan" id="golongan_id" name="golongan_id" required>
                                     <option value="" disabled>Pilih Golongan</option>
                                     <option v-for="data in golongan" :key="data.id" :value="data.id">{{ data.nama }}</option>
                                 </select>
@@ -115,7 +149,7 @@ const submit = () => {
 
                             <div class="flex justify-end">
                                 <button class="btn btn-error mx-2" @click="goBack" >Batal</button>
-                                <button class="btn btn-primary mx-2" :class="{ 'form.processing': isProcessing }" @click="goBack">Simpan</button>
+                                <button type="submit" class="btn btn-primary mx-2" :class="{ 'form.processing': isProcessing }">Simpan</button>
                             </div>
 
                         </form>

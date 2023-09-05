@@ -1,6 +1,7 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
 import { Link, useForm } from "@inertiajs/vue3";
+import Swal from 'sweetalert2';
 
 const props = defineProps({
     gaji: {
