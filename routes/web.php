@@ -7,6 +7,8 @@ use App\Http\Controllers\Pegawai\PegawaiAlamatController;
 use App\Http\Controllers\Pegawai\PegawaiRiwayatDiklatController;
 use \App\Http\Controllers\Master\HirarkiUnitKerjaController;
 use \App\Http\Controllers\Pegawai\PegawaiTmtGajiController;
+use \App\Http\Controllers\Pegawai\PegawaiRiwayatPendidikanController;
+use \App\Http\Controllers\Master\KotaController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -45,8 +47,11 @@ Route::prefix('pegawai')->group(function (){
     Route::resource('riwayat-diklat',PegawaiRiwayatDiklatController::class);
     Route::get('tmt-gaji/getdata',[PegawaiTmtGajiController::class,'getDataTmtGaji'])->name('tmt-gaji.getdata');
     Route::resource('tmt-gaji',PegawaiTmtGajiController::class)->except('show');
+    Route::get('riwayat-pendidikan/getdata',[PegawaiRiwayatPendidikanController::class,'getDataRiwayatPendidikan'])->name('riwayat-pendidikan.getdata');
+    Route::resource('riwayat-pendidikan',PegawaiRiwayatPendidikanController::class);
 });
 Route::prefix('master')->group(function (){
+    Route::post('kota/getdata',[KotaController::class,'getKota'])->name('kota.getdata');
     Route::get('hirarki-unit-kerja/getdata',[HirarkiUnitKerjaController::class,'getDataHirarkiUnitKerja'])->name('hirarki-unit-kerja.getdata');
     Route::resource('hirarki-unit-kerja',HirarkiUnitKerjaController::class)->except('show');
 });
