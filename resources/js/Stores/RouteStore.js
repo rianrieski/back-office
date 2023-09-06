@@ -60,6 +60,11 @@ const useRouteStore = defineStore("route-store", () => {
                     label: "Riwayat Pendidikan",
                     href: route("riwayat-pendidikan.index")
                 },
+                {
+                    icon: MapPinIcon,
+                    label: "Anak",
+                    href: route("anak.index")
+                },
             ],
         },
         {

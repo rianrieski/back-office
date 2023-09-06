@@ -9,6 +9,7 @@ use \App\Http\Controllers\Master\HirarkiUnitKerjaController;
 use \App\Http\Controllers\Pegawai\PegawaiTmtGajiController;
 use \App\Http\Controllers\Pegawai\PegawaiRiwayatPendidikanController;
 use \App\Http\Controllers\Master\KotaController;
+use \App\Http\Controllers\Pegawai\PegawaiAnakController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,6 +50,8 @@ Route::prefix('pegawai')->group(function (){
     Route::resource('tmt-gaji',PegawaiTmtGajiController::class)->except('show');
     Route::get('riwayat-pendidikan/getdata',[PegawaiRiwayatPendidikanController::class,'getDataRiwayatPendidikan'])->name('riwayat-pendidikan.getdata');
     Route::resource('riwayat-pendidikan',PegawaiRiwayatPendidikanController::class);
+    Route::get('anak/getdata',[PegawaiAnakController::class,'getDataPegawaiAnak'])->name('anak.getdata');
+    Route::resource('anak',PegawaiAnakController::class);
 });
 Route::prefix('master')->group(function (){
     Route::post('kota/getdata',[KotaController::class,'getKota'])->name('kota.getdata');
