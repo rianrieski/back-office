@@ -1,13 +1,8 @@
 <script setup>
-import { Link, router, useRemember } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
-import { debounce, throttle } from "lodash";
+import { debounce } from "lodash";
 import Swal from "sweetalert2";
-import {
-    PencilSquareIcon,
-    EyeIcon,
-    TrashIcon,
-} from "@heroicons/vue/24/outline/index.js";
 import MainCard from "@/Components/MainCard.vue";
 
 const props = defineProps({
@@ -36,7 +31,6 @@ const getPerPage = () => {
 watch(
     cari,
     debounce((value) => {
-        // console.log(value);
         router.get(
             route("pegawai.index"),
             { perPage: perPage.value, cari: value },
@@ -62,28 +56,57 @@ const editPegawai = (id) => {
 };
 
 const hapusPegawai = (id) => {
-    router.delete(route("pegawai.destroy", { pegawai: id }), {
-        preserveScroll: true,
-        preserveState: true,
-        replace: true,
-        onBefore: () => {
-            isLoading.value = true;
-        },
-
-        onSuccess: (response) => {
-            Toast.fire({
-                icon: "success",
-                html: response.props.flash.success,
+    Swal.fire({
+        title: "Apakah Anda Yakin?",
+        text: "hapus data pegawai",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Batal",
+        confirmButtonText: "Ya",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(route("pegawai.destroy", { pegawai: id }), {
+                onSuccess: (response) => {
+                    Toast.fire({
+                        icon: "success",
+                        html: response.props.flash.success,
+                    });
+                    router.get(route("pegawai.index"));
+                },
+                onError: () => {
+                    Toast.fire({
+                        icon: "error",
+                        html: "Gangguan koneksi internet!",
+                    });
+                },
             });
-        },
-        onError: () => {
-            Toast.fire({
-                icon: "success",
-                html: "Gagal hapus pegawai.",
-            });
-            isLoading.value = false;
-        },
+        }
     });
+
+    // router.delete(route("pegawai.destroy", { pegawai: id }), {
+    //     preserveScroll: true,
+    //     preserveState: true,
+    //     replace: true,
+    //     onBefore: () => {
+    //         isLoading.value = true;
+    //     },
+
+    //     onSuccess: (response) => {
+    //         Toast.fire({
+    //             icon: "success",
+    //             html: response.props.flash.success,
+    //         });
+    //     },
+    //     onError: () => {
+    //         Toast.fire({
+    //             icon: "success",
+    //             html: "Gagal hapus pegawai.",
+    //         });
+    //         isLoading.value = false;
+    //     },
+    // });
 };
 </script>
 
