@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
 use App\Http\Controllers\Pegawai\PegawaiAlamatController;
-use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\Pegawai\PegawaiController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
