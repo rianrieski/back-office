@@ -8,6 +8,7 @@ use App\Models\Agama;
 use App\Models\JenisKawin;
 use App\Models\JenisPegawai;
 use App\Models\StatusPegawai;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class PegawaiController extends Controller
@@ -15,12 +16,26 @@ class PegawaiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pegawai = Pegawai::orderBy('id', 'desc')->get();
+        if ($request->perPage) {
+            $perPage = $request->perPage;
+        } else {
+            $perPage = 10;
+        }
+
+        $queryPegawai = Pegawai::query()
+            ->when($request->cari, function ($query, $cari) {
+                $query->where('nip', 'like', '%' . $cari . '%')
+                    ->orWhere('nama_depan', 'like', '%' . $cari . '%')
+                    ->orWhere('nama_belakang', 'like', '%' . $cari . '%');
+            })->orderBy('id', 'desc');
 
         return inertia('Pegawai/Index', [
-            'pegawai' => $pegawai,
+            'pegawai' => $queryPegawai
+                ->paginate($perPage)
+                ->appends($request->only('cari')),
+            'filter' => $request->only(['cari', 'perPage']),
         ]);
     }
 
