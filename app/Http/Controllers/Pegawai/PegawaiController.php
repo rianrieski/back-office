@@ -32,7 +32,7 @@ class PegawaiController extends Controller
                     ->orWhere('nama_belakang', 'like', '%' . $cari . '%');
             })->orderBy('id', 'desc');
 
-        return inertia('Pegawai/Index', [
+        return inertia('Pegawai/PegawaiProfil/Index', [
             'pegawai' => $queryPegawai
                 ->paginate($perPage)
                 ->appends($request->only('cari')),
@@ -107,7 +107,7 @@ class PegawaiController extends Controller
         }
 
         return inertia(
-            'Pegawai/Show',
+            'Pegawai/PegawaiProfil/Show',
             [
                 'pegawai' => $pegawai,
                 'media_foto_pegawai' => $urlFotoPegawai,
@@ -143,7 +143,7 @@ class PegawaiController extends Controller
         }
 
         return inertia(
-            'Pegawai/Edit',
+            'Pegawai/PegawaiProfil/Edit',
             [
                 'pegawai' => $pegawai,
                 'agama' => fn () => $agama,
