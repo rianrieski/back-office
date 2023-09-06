@@ -55,6 +55,11 @@ const useRouteStore = defineStore("route-store", () => {
                     label: "Tmt Gaji",
                     href: route("tmt-gaji.index")
                 },
+                {
+                    icon: MapPinIcon,
+                    label: "Riwayat Pendidikan",
+                    href: route("riwayat-pendidikan.index")
+                },
             ],
         },
         {
