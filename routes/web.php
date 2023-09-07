@@ -10,6 +10,7 @@ use \App\Http\Controllers\Pegawai\PegawaiTmtGajiController;
 use \App\Http\Controllers\Pegawai\PegawaiRiwayatPendidikanController;
 use \App\Http\Controllers\Master\KotaController;
 use \App\Http\Controllers\Pegawai\PegawaiAnakController;
+use \App\Http\Controllers\Pegawai\PegawaiSuamiIstriController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,6 +53,8 @@ Route::prefix('pegawai')->group(function (){
     Route::resource('riwayat-pendidikan',PegawaiRiwayatPendidikanController::class);
     Route::get('anak/getdata',[PegawaiAnakController::class,'getDataPegawaiAnak'])->name('anak.getdata');
     Route::resource('anak',PegawaiAnakController::class);
+    Route::get('suami-istri/getdata',[PegawaiSuamiIstriController::class,'getDataPegawaiSuamiIstri'])->name('suami-istri.getdata');
+    Route::resource('suami-istri',PegawaiSuamiIstriController::class);
 });
 Route::prefix('master')->group(function (){
     Route::post('kota/getdata',[KotaController::class,'getKota'])->name('kota.getdata');
