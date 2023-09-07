@@ -14,20 +14,20 @@ return new class extends Migration
         Schema::create('pegawai_suami_istri', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pegawai_id');
-            $table->string('nama',100);
-            $table->string('nik',16);
-            $table->string('tempat_lahir',50);
+            $table->string('nama', 100);
+            $table->string('nik', 16);
+            $table->string('tempat_lahir', 50);
             $table->date('tanggal_lahir');
             $table->date('tanggal_kawin');
-            $table->string('no_kartu',50);
+            $table->string('no_kartu', 50);
             $table->boolean('is_pns');
             $table->unsignedBigInteger('pendidikan_id');
-            $table->string('pekerjaan',50);
+            $table->string('pekerjaan', 50);
             $table->boolean('status_tunjangan');
-            $table->string('no_sk_cerai',50)->nullable(true);
+            $table->string('no_sk_cerai', 50)->nullable(true);
             $table->date('tmt_sk_cerai')->nullable(true);
             $table->unsignedTinyInteger('jenis_kawin_id');
-            $table->string('no_buku_nikah',50);
+            $table->string('no_buku_nikah', 50);
             $table->timestamps();
             $table->foreign('pegawai_id')->references('id')->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('pendidikan_id')->references('id')->on('pendidikan')->onUpdate('cascade')->onDelete('cascade');
