@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pegawai;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PegawaiRiwayatJabatanController extends Controller
 {
@@ -12,7 +13,7 @@ class PegawaiRiwayatJabatanController extends Controller
      */
     public function index()
     {
-        return inertia('Pegawai/PegawaiRiwayatJabatan/Index');
+        return Inertia::render('Pegawai/PegawaiRiwayatJabatan/Index');
     }
 
     /**

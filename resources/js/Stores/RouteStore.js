@@ -43,7 +43,7 @@ const useRouteStore = defineStore("route-store", () => {
                 },
                 {
                     icon: UserIcon,
-                    label: "Data Pegawai",
+                    label: "Profil Pegawai",
                     href: route("profil_pegawai.index"),
                 },
                 {

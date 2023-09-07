@@ -6,7 +6,6 @@ use App\Http\Controllers\UangMakanController;
 use App\Http\Controllers\Pegawai\PegawaiAlamatController;
 use App\Http\Controllers\Pegawai\PegawaiController;
 use App\Http\Controllers\Pegawai\PegawaiRiwayatJabatanController;
-use App\Models\PegawaiRiwayatJabatan;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,7 +43,7 @@ Route::prefix('pegawai')->group(function () {
     Route::resource('alamat', PegawaiAlamatController::class)->only('index', 'create', 'store', 'edit', 'update', 'destroy');
     Route::post('alamat/getkota', [PegawaiAlamatController::class, 'getKota'])->name('alamat.getkota');
     Route::resource('profil_pegawai', PegawaiController::class);
-    Route::resource('riwayat_jabatan_pegawai', PegawaiRiwayatJabatanController::class);
+    Route::resource('riwayat_jabatan_pegawai', PegawaiRiwayatJabatanController::class)->only('index');
 });
 
 Route::middleware('auth')->group(function () {
