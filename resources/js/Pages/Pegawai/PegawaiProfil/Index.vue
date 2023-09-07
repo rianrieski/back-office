@@ -18,7 +18,7 @@ const cari = ref(props.filter.cari);
 
 const getPerPage = () => {
     router.get(
-        route("pegawai.index"),
+        route("profil_pegawai.index"),
         { perPage: perPage.value, cari: cari.value },
         {
             preserveState: true,
@@ -32,7 +32,7 @@ watch(
     cari,
     debounce((value) => {
         router.get(
-            route("pegawai.index"),
+            route("profil_pegawai.index"),
             { perPage: perPage.value, cari: value },
             {
                 preserveState: true,
@@ -44,15 +44,15 @@ watch(
 );
 
 const tambahPegawai = () => {
-    router.get(route("pegawai.create"));
+    router.get(route("profil_pegawai.create"));
 };
 
 const lihatPegawai = (id) => {
-    router.get(route("pegawai.show", { pegawai: id }));
+    router.get(route("profil_pegawai.show", { profil_pegawai: id }));
 };
 
 const editPegawai = (id) => {
-    router.get(route("pegawai.edit", { pegawai: id }));
+    router.get(route("profil_pegawai.edit", { profil_pegawai: id }));
 };
 
 const hapusPegawai = (id) => {
@@ -67,46 +67,26 @@ const hapusPegawai = (id) => {
         confirmButtonText: "Ya",
     }).then((result) => {
         if (result.isConfirmed) {
-            router.delete(route("pegawai.destroy", { pegawai: id }), {
-                onSuccess: (response) => {
-                    Toast.fire({
-                        icon: "success",
-                        html: response.props.flash.success,
-                    });
-                    router.get(route("pegawai.index"));
+            router.delete(
+                route("profil_pegawai.destroy", { profil_pegawai: id }),
+                {
+                    onSuccess: (response) => {
+                        Toast.fire({
+                            icon: "success",
+                            html: response.props.flash.success,
+                        });
+                        router.get(route("profil_pegawai.index"));
+                    },
+                    onError: () => {
+                        Toast.fire({
+                            icon: "error",
+                            html: "Gangguan koneksi internet!",
+                        });
+                    },
                 },
-                onError: () => {
-                    Toast.fire({
-                        icon: "error",
-                        html: "Gangguan koneksi internet!",
-                    });
-                },
-            });
+            );
         }
     });
-
-    // router.delete(route("pegawai.destroy", { pegawai: id }), {
-    //     preserveScroll: true,
-    //     preserveState: true,
-    //     replace: true,
-    //     onBefore: () => {
-    //         isLoading.value = true;
-    //     },
-
-    //     onSuccess: (response) => {
-    //         Toast.fire({
-    //             icon: "success",
-    //             html: response.props.flash.success,
-    //         });
-    //     },
-    //     onError: () => {
-    //         Toast.fire({
-    //             icon: "success",
-    //             html: "Gagal hapus pegawai.",
-    //         });
-    //         isLoading.value = false;
-    //     },
-    // });
 };
 </script>
 
@@ -117,7 +97,7 @@ const hapusPegawai = (id) => {
             <ul>
                 <li><a>Beranda</a></li>
                 <li>Pegawai</li>
-                <li><span class="text-info">Profil</span></li>
+                <li><span class="text-info">Profil Pegawai</span></li>
             </ul>
         </div>
         <MainCard>
@@ -269,9 +249,6 @@ const hapusPegawai = (id) => {
                         </template>
                     </div>
                 </div>
-                <!-- <div>
-                    {{ pegawai }}
-                </div> -->
             </div>
         </MainCard>
     </div>

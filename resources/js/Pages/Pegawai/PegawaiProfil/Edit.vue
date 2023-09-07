@@ -45,7 +45,7 @@ const isLoading = ref(false);
 
 const updatePegawai = () => {
     form.transform((data) => ({ ...data, _method: "put" })).post(
-        route("pegawai.update", { pegawai: props.pegawai.id }),
+        route("profil_pegawai.update", { profil_pegawai: props.pegawai.id }),
         {
             preserveScroll: true,
             preserveState: true,
@@ -70,13 +70,15 @@ const updatePegawai = () => {
 <template>
     <div>
         <Head title="Edit Pegawai" />
-
+        <div class="breadcrumbs text-sm">
+            <ul>
+                <li><a>Beranda</a></li>
+                <li>Pegawai</li>
+                <li>Profil Pegawai</li>
+                <li><span class="text-info">Edit Pegawai</span></li>
+            </ul>
+        </div>
         <MainCard>
-            <h2
-                class="mb-4 text-center text-2xl font-semibold text-gray-700 dark:text-gray-500"
-            >
-                Edit Pegawai
-            </h2>
             <form @submit.prevent="updatePegawai">
                 <div class="grid grid-cols-6 gap-4">
                     <div class="form-control col-span-3">
@@ -540,7 +542,7 @@ const updatePegawai = () => {
                 </div>
                 <div class="flex justify-between pt-4">
                     <Link
-                        :href="route('pegawai.index')"
+                        :href="route('profil_pegawai.index')"
                         class="btn btn-outline hover:btn-error"
                     >
                         Batal

@@ -6,6 +6,7 @@ import {
     UsersIcon,
     MapPinIcon,
     UserIcon,
+    Square3Stack3DIcon,
 } from "@heroicons/vue/24/outline/index.js";
 
 const useRouteStore = defineStore("route-store", () => {
@@ -43,7 +44,12 @@ const useRouteStore = defineStore("route-store", () => {
                 {
                     icon: UserIcon,
                     label: "Data Pegawai",
-                    href: route("pegawai.index"),
+                    href: route("profil_pegawai.index"),
+                },
+                {
+                    icon: Square3Stack3DIcon,
+                    label: "Riwayat Jabatan Pegawai",
+                    href: route("riwayat_jabatan_pegawai.index"),
                 },
             ],
         },

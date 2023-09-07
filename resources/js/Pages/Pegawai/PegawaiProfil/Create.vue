@@ -42,7 +42,7 @@ const form = useForm({
 const isLoading = ref(false);
 
 const simpanPegawai = () => {
-    form.post(route("pegawai.store"), {
+    form.post(route("profil_pegawai.store"), {
         preserveScroll: true,
         preserveState: true,
         replace: true,
@@ -65,13 +65,15 @@ const simpanPegawai = () => {
 <template>
     <div>
         <Head title="Tambah Pegawai" />
-
+        <div class="breadcrumbs text-sm">
+            <ul>
+                <li><a>Beranda</a></li>
+                <li>Pegawai</li>
+                <li>Profil Pegawai</li>
+                <li><span class="text-info">Tambah Pegawai</span></li>
+            </ul>
+        </div>
         <MainCard>
-            <h2
-                class="mb-4 text-center text-2xl font-semibold text-gray-700 dark:text-gray-500"
-            >
-                Tambah Pegawai
-            </h2>
             <form @submit.prevent="simpanPegawai">
                 <div class="grid grid-cols-6 gap-4">
                     <div class="form-control col-span-3">
@@ -525,7 +527,7 @@ const simpanPegawai = () => {
                 </div>
                 <div class="flex justify-between pt-4">
                     <Link
-                        :href="route('pegawai.index')"
+                        :href="route('profil_pegawai.index')"
                         class="btn btn-outline hover:btn-error"
                     >
                         Batal

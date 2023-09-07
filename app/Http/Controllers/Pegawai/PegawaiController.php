@@ -50,7 +50,7 @@ class PegawaiController extends Controller
         $jenisPegawai = JenisPegawai::all();
         $statusPegawai = StatusPegawai::all();
 
-        return inertia('Pegawai/Create', [
+        return inertia('Pegawai/PegawaiProfil/Create', [
             'agama' => $agama,
             'statusNikah' => $statusNikah,
             'jenisPegawai' => $jenisPegawai,
@@ -75,7 +75,7 @@ class PegawaiController extends Controller
         $pegawai->addMediaFromRequest('media_foto_pegawai')->toMediaCollection('media_foto_pegawai');
         $pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
 
-        return redirect()->route('pegawai.index')->with('success', 'Data pegawai berhasil dibuat!');
+        return redirect()->route('profil_pegawai.index')->with('success', 'Data pegawai berhasil dibuat!');
     }
 
     /**
@@ -119,8 +119,15 @@ class PegawaiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pegawai $pegawai)
+    public function edit($id)
     {
+        $pegawai = Pegawai::with([
+            'agama:id,nama',
+            'jenis_kawin:id,nama',
+            'jenis_pegawai:id,nama',
+            'status_pegawai:id,nama',
+        ])->where('id', $id)->first();
+
         $agama = Agama::all();
         $statusNikah = JenisKawin::all();
         $jenisPegawai = JenisPegawai::all();
@@ -159,12 +166,14 @@ class PegawaiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PegawaiRequest $request, Pegawai $pegawai)
+    public function update(PegawaiRequest $request, $id)
     {
         $validated = $request->validated();
 
         Arr::pull($validated, 'media_kartu_pegawai');
         Arr::pull($validated, 'media_foto_pegawai');
+
+        $pegawai = Pegawai::findOrFail($id);
 
         $pegawai->update($validated);
 
@@ -178,14 +187,16 @@ class PegawaiController extends Controller
             $pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
         }
 
-        return redirect()->route('pegawai.index')->with('success', 'Data pegawai berhasil diubah!');
+        return redirect()->route('profil_pegawai.index')->with('success', 'Data pegawai berhasil diubah!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pegawai $pegawai)
+    public function destroy($id)
     {
+        $pegawai = Pegawai::findOrFail($id);
+
         if ($pegawai->hasMedia("media_foto_pegawai")) {
             $pegawai->getMedia("media_foto_pegawai")[0]->delete();
         }
@@ -196,6 +207,6 @@ class PegawaiController extends Controller
 
         $pegawai->delete();
 
-        return redirect()->route('pegawai.index')->with('success', 'Data pegawai berhasil dihapus!');
+        return redirect()->route('profil_pegawai.index')->with('success', 'Data pegawai berhasil dihapus!');
     }
 }

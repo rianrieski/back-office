@@ -18,13 +18,15 @@ const tanggalFormat = (dateString) => {
 <template>
     <div>
         <Head title="Lihat Pegawai" />
-
+        <div class="breadcrumbs text-sm">
+            <ul>
+                <li><a>Beranda</a></li>
+                <li>Pegawai</li>
+                <li>Profil Pegawai</li>
+                <li><span class="text-info">Lihat Pegawai</span></li>
+            </ul>
+        </div>
         <MainCard>
-            <h2
-                class="mb-4 text-center text-2xl font-semibold text-gray-700 dark:text-gray-500"
-            >
-                Data Pegawai
-            </h2>
             <div class="grid grid-cols-6 gap-4">
                 <table class="col-span-4 text-left">
                     <tr>
@@ -228,8 +230,8 @@ const tanggalFormat = (dateString) => {
                 <Link
                     class="rounded-md bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-500"
                     :href="
-                        route('pegawai.edit', {
-                            pegawai: pegawai.id,
+                        route('profil_pegawai.edit', {
+                            profil_pegawai: pegawai.id,
                         })
                     "
                 >
