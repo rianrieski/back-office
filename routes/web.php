@@ -11,6 +11,7 @@ use \App\Http\Controllers\Pegawai\PegawaiRiwayatPendidikanController;
 use \App\Http\Controllers\Master\KotaController;
 use \App\Http\Controllers\Pegawai\PegawaiAnakController;
 use \App\Http\Controllers\Pegawai\PegawaiSuamiIstriController;
+use \App\Http\Controllers\Auth\LdapController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -63,9 +64,17 @@ Route::prefix('master')->group(function (){
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
+Route::middleware('guest')->group(function (){
+    Route::get('/login/ldap', [LdapController::class, 'showLoginForm'])->name('loginldap.show');
+    Route::post('/login/ldap', [LdapController::class, 'login'])->name('login.ldap');
+});
+Route::get('/logout/ldap', [LdapController::class, 'logout'])->name('logout.ldap');
+
+
+
