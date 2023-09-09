@@ -32,7 +32,7 @@ class PegawaiSuamiIstriController extends Controller
     public function create()
     {
         return Inertia::render('Pegawai/PegawaiSuamiIstri/Create', [
-            'title' => 'Tambah Anak',
+            'title' => 'Tambah Suami/Istri',
             'pegawai' => Pegawai::getAllDataPegawai(),
             'pendidikan' => Pendidikan::select('id', 'nama')->get(),
             'jenis_kawin' => JenisKawin::select('id', 'nama')->get()
@@ -72,7 +72,7 @@ class PegawaiSuamiIstriController extends Controller
             });
             return redirect()->back()->with('success', 'suami/istri pegawai berhasil disimpan');
         } catch (QueryException $e) {
-            return redirect()->back()->withErrors(['query' => 'anak pegawai gagal disimpan']);
+            return redirect()->back()->withErrors(['query' => 'suami/istri pegawai gagal disimpan']);
         }
     }
 
@@ -130,7 +130,7 @@ class PegawaiSuamiIstriController extends Controller
     {
         $suamiIstriDetail = PegawaiSuamiIstri::where('id', $id)->first();
         return Inertia::render('Pegawai/PegawaiSuamiIstri/Edit', [
-            'title' => 'Tambah Anak',
+            'title' => 'Edit Suami/Istri',
             'pegawai' => Pegawai::getAllDataPegawai(),
             'pendidikan' => Pendidikan::select('id', 'nama')->get(),
             'jenis_kawin' => JenisKawin::select('id', 'nama')->get(),

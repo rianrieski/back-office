@@ -98,7 +98,7 @@ class PegawaiAnakController extends Controller
     {
         $pegawaiAnakDetail = PegawaiAnak::where('id',$id)->first();
         return Inertia::render('Pegawai/PegawaiAnak/Edit',[
-            'title'=>'Tambah Anak',
+            'title'=>'Edit Anak',
             'pegawai'=>Pegawai::getAllDataPegawai(),
             'pendidikan'=>Pendidikan::select('id','nama')->get(),
             'pegawaiAnakDetail'=>$pegawaiAnakDetail

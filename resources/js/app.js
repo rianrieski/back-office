@@ -22,7 +22,7 @@ createInertiaApp({
     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
       const page = pages[`./Pages/${name}.vue`];
       // page.default.layout = page.default.layout || App
-      if (name.startsWith('Dashboard/')){
+      if (name.startsWith('Auth/')){
           page.default.layout ??= '';
     }else{
           page.default.layout ??= AuthenticatedLayout;

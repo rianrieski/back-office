@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('pendidikan', function (Blueprint $table) {
             $table->id();
-            $table->string('nama',100);
+            $table->string('nama', 100);
             $table->unsignedTinyInteger('tingkat_pendidikan_id');
-            $table->boolean('status')->default(true);
-            $table->string('bkn_id',32)->nullable(true);
+            $table->boolean('status')->default(true)->nullable();
+            $table->string('bkn_id', 32)->nullable(true);
             $table->timestamps();
             $table->foreign('tingkat_pendidikan_id')->references('id')->on('tingkat_pendidikan')->onUpdate('cascade')->onDelete('cascade');
         });
