@@ -28,6 +28,13 @@ return new class extends Migration
             $table->unsignedTinyInteger('status_pengajuan_cuti_id')->nullable(true);
             $table->string('alasan_penolakan_cuti')->nullable(true);
             $table->timestamps();
+
+            $table->foreign('pegawai_id')->references('id')->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('jenis_cuti_id')->references('id')->on('jenis_cuti')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('atasan_pertama_id')->references('id')->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('atasan_kedua_id')->references('id')->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('status_pengajuan_cuti_id')->references('id')->on('status_cuti')->onUpdate('cascade')->onDelete('cascade');
+
         });
     }
 

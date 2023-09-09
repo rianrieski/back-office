@@ -11,7 +11,9 @@ use \App\Http\Controllers\Pegawai\PegawaiRiwayatPendidikanController;
 use \App\Http\Controllers\Master\KotaController;
 use \App\Http\Controllers\Pegawai\PegawaiAnakController;
 use \App\Http\Controllers\Pegawai\PegawaiSuamiIstriController;
+use \App\Http\Controllers\Master\HariLiburController;
 use \App\Http\Controllers\Auth\LdapController;
+use \App\Http\Controllers\Pegawai\PegawaiSaldoCutiController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,16 +29,16 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+//Route::get('/', function () {
+//    return Inertia::render('Welcome', [
+//        'canLogin' => Route::has('login'),
+//        'canRegister' => Route::has('register'),
+//        'laravelVersion' => Application::VERSION,
+//        'phpVersion' => PHP_VERSION,
+//    ]);
+//});
 
-Route::get('/dashboard', function () {
+Route::get('/', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
@@ -56,18 +58,22 @@ Route::prefix('pegawai')->group(function (){
     Route::resource('anak',PegawaiAnakController::class);
     Route::get('suami-istri/getdata',[PegawaiSuamiIstriController::class,'getDataPegawaiSuamiIstri'])->name('suami-istri.getdata');
     Route::resource('suami-istri',PegawaiSuamiIstriController::class);
+    Route::get('saldo-cuti/getdata',[PegawaiSaldoCutiController::class,'getDataPegawaiSaldoCuti'])->name('saldo-cuti.getdata');
+    Route::resource('saldo-cuti',PegawaiSaldoCutiController::class)->except('show','destroy');
 });
 Route::prefix('master')->group(function (){
     Route::post('kota/getdata',[KotaController::class,'getKota'])->name('kota.getdata');
     Route::get('hirarki-unit-kerja/getdata',[HirarkiUnitKerjaController::class,'getDataHirarkiUnitKerja'])->name('hirarki-unit-kerja.getdata');
     Route::resource('hirarki-unit-kerja',HirarkiUnitKerjaController::class)->except('show');
+    Route::get('hari-libur/getdata',[HariLiburController::class,'getDataHariLibur'])->name('hari-libur.getdata');
+    Route::resource('hari-libur',HariLiburController::class)->except('show');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+//Route::middleware('auth')->group(function () {
+//    Route::get('', [ProfileController::class, 'edit'])->name('profile.edit');
+//    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//});
 
 require __DIR__.'/auth.php';
 Route::middleware('guest')->group(function (){

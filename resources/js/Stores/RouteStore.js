@@ -70,6 +70,11 @@ const useRouteStore = defineStore("route-store", () => {
                     label: "Suami Istri",
                     href: route("suami-istri.index")
                 },
+                {
+                    icon: MapPinIcon,
+                    label: "Saldo Cuti",
+                    href: route("saldo-cuti.index")
+                },
             ],
         },
         {
@@ -87,6 +92,11 @@ const useRouteStore = defineStore("route-store", () => {
                     icon: ClipboardIcon,
                     label: "Uang Makan",
                     href: route("umak.index")
+                },
+                {
+                    icon: ClipboardIcon,
+                    label: "Hari Libur",
+                    href: route("hari-libur.index")
                 },
             ],
         },
