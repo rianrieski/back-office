@@ -10,6 +10,7 @@ const props = defineProps({
 const kota = ref([]);
 const kecamatan = ref([]);
 const desa = ref([]);
+
 const form = useForm('createAlamat',{
     tipe_alamat:'',
     propinsi_id:'',

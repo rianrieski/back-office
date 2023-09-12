@@ -19,6 +19,7 @@ class RoleController extends Controller
         // $this->middleware('can:role create', ['only' => ['create', 'store']]);
         // $this->middleware('can:role edit', ['only' => ['edit', 'update']]);
         // $this->middleware('can:role delete', ['only' => ['destroy']]);
+        // $this->middleware('can:role get', ['only' => ['get']]);
     }
 
     /**
@@ -35,6 +36,7 @@ class RoleController extends Controller
                 'create' => Auth::user()->can('role create'),
                 'edit' => Auth::user()->can('role edit'),
                 'delete' => Auth::user()->can('role delete'),
+
             ]
         ]);
     }
@@ -47,17 +49,16 @@ class RoleController extends Controller
         $permission = Permission::get();
 
         try {
-            return Inertia::render('Role/Create',[
-                'title' => 'Tambah Gaji',
-                'permission' => fn () => Permission::all()
+            return Inertia::render('Role/Create', [
+                'title' => 'Tambah Role',
+                'permissions' => fn () => Permission::all()
             ]);
-        }catch (QueryException $e){
-            \Log::error('terjadi kesalahan pada koneksi database  ketika load create data :' . $e->getMessage());
-             return redirect()->back()->withErrors([
-                    'query' => 'Load data gagal'
-                ]);
+        } catch (QueryException $e) {
+            Log::error('terjadi kesalahan pada koneksi database  ketika load create data :' . $e->getMessage());
+            return redirect()->back()->withErrors([
+                'query' => 'Load data gagal'
+            ]);
         }
-
     }
 
     /**
@@ -65,7 +66,22 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|unique:roles',
+        ], [
+            'name.required' => 'Nama Role harus diisi',
+            'name.unique' => 'Role sudah ada di database',
+        ]);
+
+        try {
+            Permission::create($data);
+            // return redirect()->route('permission.index')->with('toast', ['message', 'Data berhasil disimpan']);
+        } catch (QueryException $e) {
+            Log::error('terjadi kesalahan pada koneksi database  ketika simpan data :' . $e->getMessage());
+            return redirect()->back()->withErrors([
+                'query' => 'data hak akses gagal disimpan'
+            ]);
+        }
     }
 
     /**
