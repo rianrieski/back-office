@@ -9,47 +9,32 @@ import { Head, useForm, router, usePage } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import Swal from "sweetalert2";
 
-const propsData = defineProps({
-    prop1: String,
-    prop2: Number,
-    prop3: Boolean,
-    permissions: ["permissions"],
-});
-
-// Loop through props using a for...in loop
-for (const propName in propsData) {
-    console.log(`con Prop name: ${propName}`);
-    console.log(`con Prop value: ${propsData[propName]}`);
-}
-
-// Alternatively, loop through props using Object.keys()
-Object.keys(propsData).forEach((propName) => {
-    console.log(`obj Prop name: ${propName}`);
-    console.log(`obj Prop value: ${propsData[propName]}`);
-});
-
 const page = usePage();
 const user = computed(() => page.props.auth.user);
 
-// defineProps(['permissions');
-// const { permissions } = defineProps(['permissions']); // Access permissions prop directly
+defineProps(['permissions']);
 
-const form = useForm({
+const checkAll = ref(false);
+// const permissions = ref([
+//   // Your list of permissions here
+// ]);
+
+const form = ref({
     name: "",
     guard_name: "-",
-    hak_akses: [],
+    hak_akses: [] // This will hold the selected permissions
 });
 
-let chkAll = false;
+const onChange = () => {
+  // Handle checkbox change if needed
+};
 
-const toggleAll = () => {
-    if (!chkAll) {
-        this.form.hak_akses = this.permissions.map((data) => data.id);
-        chkAll = true;
-    } else {
-        this.form.hak_akses = [];
-        chkAll = false;
-    }
+const checkAllPermissions = () => {
+  if (checkAll.value) {
+    form.hak_akses = true;
+  } else {
+    form.hak_akses = [];
+  }
 };
 
 const goBack = () => {
@@ -132,14 +117,19 @@ const submit = () => {
                             </div>
 
                             <div>
+                                <label>
+                                    <input type="checkbox" v-model="checkAll" @change="checkAllPermissions" />
+                                    Check All
+                                </label>
+                            </div>
+
+                            <div>
                                 <InputLabel
                                     for="hak_akses"
                                     value="Hak Akses :"
                                 />
                                 <div>
                                     <checkbox
-                                        v-model="selectAll"
-                                        @change="toggleAll"
                                     >
                                     </checkbox>
                                     Check All
@@ -158,7 +148,7 @@ const submit = () => {
 
                                 <InputError
                                     class="mt-2"
-                                    :message="form.errors.golongan_id"
+                                    :message="form.errors.hak_akses"
                                 />
                             </div>
 
