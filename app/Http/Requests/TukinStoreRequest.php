@@ -9,8 +9,9 @@ class TukinStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'grade' => ['required', 'numeric'],
-            'nominal' => ['required', 'numeric'],
+            'grade' => ['required', 'integer', 'min:1', 'max:9999'],
+            'nominal' => ['required', 'integer', 'min:1', 'max:999999999999999'],
+            'keterangan' => [],
         ];
     }
 }

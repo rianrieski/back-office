@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class PegawaiSuamiIstri extends Model
+class PegawaiSuamiIstri extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $table = 'pegawai_suami_istri';
     protected $guarded = [];
     protected $primaryKey = 'id';
@@ -20,13 +23,5 @@ class PegawaiSuamiIstri extends Model
     public function pendidikan()
     {
         return $this->belongsTo(Pendidikan::class);
-    }
-    public function media_foto_pasangan()
-    {
-        return $this->hasOne(Media::class,'media_foto_pasangan_id');
-    }
-    public function media_buku_nikah()
-    {
-        return $this->hasOne(Media::class,'media_buku_nikah_id');
     }
 }

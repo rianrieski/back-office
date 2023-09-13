@@ -25,9 +25,9 @@ class PropinsiSeeder extends Seeder
     public function run()
     {
         // Get Data
-        $provinces = RawDataGetter::getProvinces();
+        //$provinces = RawDataGetter::getProvinces();
 
         // Insert Data to Database
-        DB::table('propinsi')->insert($provinces);
+        //DB::table('propinsi')->insert($provinces);
     }
 }
