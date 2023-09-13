@@ -10,5 +10,6 @@ defineOptions({ layout: AuthenticatedLayout });
 
     <MainCard title="Test Judul">
         <div>test halaman</div>
+        <Link href="/toast">Toast</Link>
     </MainCard>
 </template>
