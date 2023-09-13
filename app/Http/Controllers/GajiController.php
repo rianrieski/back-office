@@ -12,6 +12,14 @@ use Inertia\Inertia;
 
 class GajiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:gaji list', ['only' => ['index', 'show']]);
+        $this->middleware('can:gaji create', ['only' => ['create', 'store']]);
+        $this->middleware('can:gaji edit', ['only' => ['edit', 'update']]);
+        $this->middleware('can:gaji delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         try {

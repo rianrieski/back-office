@@ -5,14 +5,12 @@ use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
 use App\Http\Controllers\GajiController;
 use App\Http\Controllers\JabatanTukinController;
+use App\Http\Controllers\JabatanUnitKerjaController;
 use App\Http\Controllers\Pegawai\PegawaiAlamatController;
-<<<<<<< HEAD
-
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
-
-=======
+use App\Models\JabatanTukin;
 use App\Http\Controllers\Pegawai\PegawaiRiwayatDiklatController;
 use \App\Http\Controllers\Master\HirarkiUnitKerjaController;
 use \App\Http\Controllers\Pegawai\PegawaiTmtGajiController;
@@ -23,7 +21,6 @@ use \App\Http\Controllers\Pegawai\PegawaiSuamiIstriController;
 use \App\Http\Controllers\Master\HariLiburController;
 use \App\Http\Controllers\Auth\LdapController;
 use \App\Http\Controllers\Pegawai\PegawaiSaldoCutiController;
->>>>>>> 8b6fcb5349fd42eab16eb3a096234a8fe445ec72
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -70,25 +67,28 @@ Route::prefix('pegawai')->group(function (){
     Route::resource('suami-istri',PegawaiSuamiIstriController::class);
     Route::get('saldo-cuti/getdata',[PegawaiSaldoCutiController::class,'getDataPegawaiSaldoCuti'])->name('saldo-cuti.getdata');
     Route::resource('saldo-cuti',PegawaiSaldoCutiController::class)->except('show','destroy');
+
 });
-<<<<<<< HEAD
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('gaji', GajiController::class)->only('index', 'create','edit','store', 'update', 'destroy');
-    Route::resource('jabatan-tukin', JabatanTukinController::class)->only('index', 'create','edit','store', 'update', 'destroy');
+    Route::resource('gaji', GajiController::class)->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+    Route::resource('jabatan-tukin', JabatanTukinController::class)->only('index', 'create', 'edit', 'store', 'update', 'destroy');
+    Route::get('/jabatan-tukin/getjabatan/{id}', [JabatanTukinController::class, 'getjabatan']);
+    Route::get('/jabatan-tukin/getjenisjabatan', [JabatanTukinController::class, 'getJenisJabatan']);
+    Route::get('/jabatan-tukin/gettukin', [JabatanTukinController::class, 'getTukin']);
+    Route::get('/jabatan-tukin/getnominal/{id}', [JabatanTukinController::class, 'getNominal']);
+
+    Route::resource('jabatan-unit-kerja', JabatanUnitKerjaController::class)->only('index', 'create', 'edit', 'store', 'update', 'destroy');
 
     Route::resource('role', RoleController::class);
     Route::resource('permission', PermissionController::class);
     Route::resource('user', UserController::class);
-
-
 });
 
-=======
 Route::prefix('master')->group(function (){
     Route::post('kota/getdata',[KotaController::class,'getKota'])->name('kota.getdata');
     Route::get('hirarki-unit-kerja/getdata',[HirarkiUnitKerjaController::class,'getDataHirarkiUnitKerja'])->name('hirarki-unit-kerja.getdata');
@@ -102,7 +102,6 @@ Route::prefix('master')->group(function (){
 //    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 //});
->>>>>>> 8b6fcb5349fd42eab16eb3a096234a8fe445ec72
 
 require __DIR__.'/auth.php';
 Route::middleware('guest')->group(function (){
@@ -110,6 +109,4 @@ Route::middleware('guest')->group(function (){
     Route::post('/login/ldap', [LdapController::class, 'login'])->name('login.ldap');
 });
 Route::get('/logout/ldap', [LdapController::class, 'logout'])->name('logout.ldap');
-
-
 

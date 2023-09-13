@@ -79,16 +79,23 @@ const submit = ()=>{
 <template>
 
     <MainCard>
-        <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Tambah Gaji
-            </h2>
-        </template>
+
+        <div class="text-sm breadcrumbs">
+            <ul>
+                <li><a href="/">Beranda</a></li>
+                <li><a href="/gaji">Gaji</a></li>
+
+            </ul>
+        </div>
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
+                    <div class="border-b border-gray-200 bg-white p-6">
+                        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                            Tambah Gaji
+                        </h2>
+
                         <form @submit.prevent="submit">
                             <div>
                                 <InputLabel for="golongan_id" value="Golongan" />
@@ -117,7 +124,7 @@ const submit = ()=>{
                                     required
                                     autofocus
                                     autocomplete=""
-                                />
+                                    />
 
                                 <InputError
                                     class="mt-2"
@@ -148,7 +155,7 @@ const submit = ()=>{
                             </div>
 
                             <div class="flex justify-end">
-                                <button class="btn btn-error mx-2" @click="goBack" >Batal</button>
+                                <button class="btn btn-error mx-2" @click.prevent="goBack" >Batal</button>
                                 <button type="submit" class="btn btn-primary mx-2" :class="{ 'form.processing': isProcessing }">Simpan</button>
                             </div>
 
