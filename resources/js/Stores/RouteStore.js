@@ -100,6 +100,29 @@ const useRouteStore = defineStore("route-store", () => {
                 },
             ],
         },
+        {
+            icon: BriefcaseIcon,
+            label: "Pengaturan",
+            href: "/",
+            name: "work-unit.*",
+            children: [
+                {
+                    icon: ClipboardIcon,
+                    label: "Role",
+                    href: route("role.index")
+                },
+                {
+                    icon: ClipboardIcon,
+                    label: "Users",
+                    href: route("user.index")
+                },
+                {
+                    icon: ClipboardIcon,
+                    label: "Hak Akses",
+                    href: route("permission.index")
+                },
+            ],
+        },
     ];
 
     const isHasAccess = (item) => {

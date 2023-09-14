@@ -80,20 +80,23 @@ class BasicAdminPermissionSeeder extends Seeder
         // // create demo users
         $user = \App\Models\User::factory()->create([
             'name' => 'Super Admin',
-            'email' => 'superadmin@gmail.com',
+            'email' => 'superadmin@mail.com',
+            'password' => bcrypt('12345678'),
         ]);
         $user->assignRole($role3);
 
 
         $user = \App\Models\User::factory()->create([
             'name' => 'Admin User',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@mail.com',
+            'password' => bcrypt('12345678'),
         ]);
         $user->assignRole($role1);
 
         $user = \App\Models\User::factory()->create([
             'name' => 'Example User',
-            'email' => 'test@gmail.com',
+            'email' => 'test@mail.com',
+            'password' => bcrypt('12345678'),
         ]);
         $user->assignRole($role2);
     }

@@ -49,6 +49,11 @@ Route::get('/', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+});
+
+
 Route::resource('tukin', TukinController::class)->only('index','create','store','edit','update','destroy');
 Route::resource('umak', UangMakanController::class)->only('index','create','store','edit','update','destroy');
 
