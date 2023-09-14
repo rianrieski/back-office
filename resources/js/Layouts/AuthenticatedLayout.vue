@@ -12,13 +12,13 @@ defineProps({
 
 <template>
     <Head :title="title" />
-    <div class="drawer min-h-screen">
+    <div class="drawer min-h-screen bg-base-200">
         <ToastList />
         <Sidebar class="hidden lg:block" />
         <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col">
             <!-- Navbar -->
-            <div class="navbar w-full border-b">
+            <div class="navbar w-full border-b bg-base-100">
                 <div class="flex-none lg:hidden">
                     <label for="my-drawer-3" class="btn btn-square btn-ghost">
                         <Bars3Icon class="w-8" />
@@ -37,7 +37,7 @@ defineProps({
             </div>
 
             <!-- Page content here -->
-            <div class="bg-base-200 p-4">
+            <div class="p-4">
                 <slot />
             </div>
         </div>

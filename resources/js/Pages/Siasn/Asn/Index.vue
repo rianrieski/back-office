@@ -4,7 +4,7 @@ import { DocumentMagnifyingGlassIcon } from "@heroicons/vue/24/outline/index.js"
 import Pagination from "@/Components/Pagination.vue";
 import ShowingResultTable from "@/Components/ShowingResultTable.vue";
 import SearchInput from "@/Components/SearchInput.vue";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import PerPageOption from "@/Components/PerPageOption.vue";
 import { router } from "@inertiajs/vue3";
 import { debounce } from "lodash";
@@ -12,26 +12,29 @@ import { debounce } from "lodash";
 defineProps(["asn"]);
 
 const keyword = ref("");
-const per_page = ref(15);
+const perPage = ref(15);
+const query = computed(() => {
+    return {
+        ...(keyword.value && {
+            filter: {
+                nama: keyword.value,
+            },
+        }),
+        ...(perPage.value && { per_page: perPage.value }),
+    };
+});
 
 watch(
     keyword,
-    debounce(() => {
-        fetchData();
-    }, 200),
+    debounce(() => fetchData(), 200),
 );
 
-watch(per_page, () => fetchData());
+watch(perPage, () => fetchData());
 
-const fetchData = () => {
+const fetchData = (additional) => {
     router.get(
         route("siasn.asn.index", {
-            _query: {
-                filter: {
-                    nama: keyword.value,
-                },
-                per_page: per_page.value,
-            },
+            _query: { ...query.value, ...additional },
         }),
         {},
         {
@@ -41,20 +44,18 @@ const fetchData = () => {
         },
     );
 };
-
-const goToPage = (page) => {};
 </script>
 
 <template>
     <Head title="SIASN - Data ASN" />
 
-    <MainCard>
-        <div>
+    <MainCard title="Data ASN berdasarkan SIASN">
+        <div class="mt-8">
             <div class="flex justify-between">
                 <button class="btn btn-primary">Sinkronisasi</button>
                 <div class="flex gap-2">
                     <SearchInput class="w-64" v-model="keyword" />
-                    <PerPageOption v-model="per_page" />
+                    <PerPageOption v-model="perPage" />
                 </div>
             </div>
             <table class="table mt-4">
@@ -96,7 +97,10 @@ const goToPage = (page) => {};
                     :total="asn.total"
                 />
 
-                <Pagination :links="asn.links" v-model="" />
+                <Pagination
+                    :links="asn.links"
+                    @goToPage="(page) => fetchData({ page })"
+                />
             </div>
         </div>
     </MainCard>

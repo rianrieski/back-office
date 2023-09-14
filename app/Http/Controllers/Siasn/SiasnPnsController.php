@@ -12,12 +12,13 @@ class SiasnPnsController extends Controller
     public function index()
     {
         return Inertia::render('Siasn/Asn/Index', [
-            'asn' => QueryBuilder::for(SiasnPnsDataUtama::class)
+            'asn' => fn() => QueryBuilder::for(SiasnPnsDataUtama::class)
+                ->select('id', 'nama', 'nipBaru', 'golRuangAkhir', 'jabatanNama', 'unorNama')
                 ->allowedFilters(['nama', 'nipBaru', 'jabatanNama', 'unorNama'])
                 ->allowedSorts(['nama', 'nipBaru', 'jabatanNama', 'unorNama'])
                 ->paginate(request('per_page', 15))
-                ->withQueryString()
-//                ->appends(request()->query())
+                ->onEachSide(1)
+                ->appends(request()->query())
         ]);
     }
 
