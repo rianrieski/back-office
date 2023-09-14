@@ -4,14 +4,14 @@ namespace App\Services;
 
 use App\Integration\Siasn\Authenticator\SiasnSimpegAuthenticator;
 use App\Integration\Siasn\Connector\SiasnSimpegConnector;
-use App\Integration\Siasn\Model\SiasnPnsDataUtama;
-use App\Integration\Siasn\Model\SiasnPnsRwPenghargaan;
 use App\Integration\Siasn\Request\CreateApimwsToken;
 use App\Integration\Siasn\Request\CreateSiasnTokenRequest;
 use App\Integration\Siasn\Request\GetPnsDataPasangan;
 use App\Integration\Siasn\Request\GetPnsDataUtama;
 use App\Integration\Siasn\Request\GetPnsRwPenghargaan;
 use App\Models\IntegrationToken;
+use App\Models\Siasn\SiasnPnsDataUtama;
+use App\Models\Siasn\SiasnPnsRwPenghargaan;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\Statuses\NotFoundException;
 
@@ -19,12 +19,13 @@ class SiasnService
 {
     public SiasnSimpegConnector $connector;
     private \Closure $resetToken;
+
     public function __construct()
     {
         $this->connector = new SiasnSimpegConnector();
 
         $this->resetToken = function ($exception, $pendingRequest) {
-            if (! $exception instanceof RequestException || $exception->getResponse()->status() !== 401) {
+            if (!$exception instanceof RequestException || $exception->getResponse()->status() !== 401) {
                 return false;
             }
 
@@ -64,6 +65,7 @@ class SiasnService
             $data
         );
     }
+
     public function fetchAllPnsDataUtama(): void
     {
         foreach (PresensiService::getAllNip() as $nip) {
@@ -101,7 +103,7 @@ class SiasnService
         }
 
         foreach ($data as $row) {
-            SiasnPnsRwPenghargaan::updateOrCreate(['ID' => $row['ID']],$row);
+            SiasnPnsRwPenghargaan::updateOrCreate(['ID' => $row['ID']], $row);
         }
 
         return count($data ?? []);

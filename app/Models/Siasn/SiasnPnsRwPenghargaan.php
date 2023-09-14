@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integration\Siasn\Model;
+namespace App\Models\Siasn;
 
 use Illuminate\Database\Eloquent\Model;
 

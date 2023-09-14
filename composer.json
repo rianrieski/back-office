@@ -14,8 +14,10 @@
         "laravel/tinker": "^2.8",
         "saloonphp/laravel-plugin": "^2.0",
         "saloonphp/saloon": "^2.0",
-        "spatie/laravel-permission": "^5.11",
+        "spatie/laravel-json-api-paginate": "^1.13",
         "spatie/laravel-medialibrary": "^10.0.0",
+        "spatie/laravel-permission": "^5.11",
+        "spatie/laravel-query-builder": "^5.5",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

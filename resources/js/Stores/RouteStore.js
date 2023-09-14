@@ -2,10 +2,11 @@ import { defineStore } from "pinia";
 import {
     BriefcaseIcon,
     ClipboardIcon,
+    CubeTransparentIcon,
     HomeIcon,
-    UsersIcon,
     MapPinIcon,
-    CubeTransparentIcon
+    Square3Stack3DIcon,
+    UsersIcon,
 } from "@heroicons/vue/24/outline/index.js";
 
 const useRouteStore = defineStore("route-store", () => {
@@ -25,12 +26,12 @@ const useRouteStore = defineStore("route-store", () => {
                 {
                     icon: ClipboardIcon,
                     label: "Test",
-                    href:"#"
+                    href: "#",
                 },
                 {
                     icon: CubeTransparentIcon,
                     label: "Hirarki Unit Kerja",
-                    href:route('hirarki-unit-kerja.index')
+                    href: route("hirarki-unit-kerja.index"),
                 },
             ],
         },
@@ -43,37 +44,49 @@ const useRouteStore = defineStore("route-store", () => {
                 {
                     icon: MapPinIcon,
                     label: "Alamat Pegawai",
-                    href: route("alamat.index")
+                    href: route("alamat.index"),
                 },
                 {
                     icon: MapPinIcon,
                     label: "Riwayat Diklat",
-                    href: route("riwayat-diklat.index")
+                    href: route("riwayat-diklat.index"),
                 },
                 {
                     icon: MapPinIcon,
                     label: "Tmt Gaji",
-                    href: route("tmt-gaji.index")
+                    href: route("tmt-gaji.index"),
                 },
                 {
                     icon: MapPinIcon,
                     label: "Riwayat Pendidikan",
-                    href: route("riwayat-pendidikan.index")
+                    href: route("riwayat-pendidikan.index"),
                 },
                 {
                     icon: MapPinIcon,
                     label: "Anak",
-                    href: route("anak.index")
+                    href: route("anak.index"),
                 },
                 {
                     icon: MapPinIcon,
                     label: "Suami Istri",
-                    href: route("suami-istri.index")
+                    href: route("suami-istri.index"),
                 },
                 {
                     icon: MapPinIcon,
                     label: "Saldo Cuti",
-                    href: route("saldo-cuti.index")
+                    href: route("saldo-cuti.index"),
+                },
+            ],
+        },
+        {
+            icon: Square3Stack3DIcon,
+            label: "SIASN",
+            name: "siasn.*",
+            children: [
+                {
+                    icon: UsersIcon,
+                    label: "Data ASN",
+                    href: route("siasn.asn.index"),
                 },
             ],
         },
@@ -86,17 +99,17 @@ const useRouteStore = defineStore("route-store", () => {
                 {
                     icon: ClipboardIcon,
                     label: "Tunjangan Kinerja",
-                    href: route("tukin.index")
+                    href: route("tukin.index"),
                 },
                 {
                     icon: ClipboardIcon,
                     label: "Uang Makan",
-                    href: route("umak.index")
+                    href: route("umak.index"),
                 },
                 {
                     icon: ClipboardIcon,
                     label: "Hari Libur",
-                    href: route("hari-libur.index")
+                    href: route("hari-libur.index"),
                 },
             ],
         },

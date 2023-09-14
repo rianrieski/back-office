@@ -37,7 +37,7 @@ defineProps({
             </div>
 
             <!-- Page content here -->
-            <div class="m-4">
+            <div class="bg-base-200 p-4">
                 <slot />
             </div>
         </div>
