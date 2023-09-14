@@ -45,6 +45,36 @@ const useRouteStore = defineStore("route-store", () => {
                     label: "Alamat Pegawai",
                     href: route("alamat.index")
                 },
+                {
+                    icon: MapPinIcon,
+                    label: "Riwayat Diklat",
+                    href: route("riwayat-diklat.index")
+                },
+                {
+                    icon: MapPinIcon,
+                    label: "Tmt Gaji",
+                    href: route("tmt-gaji.index")
+                },
+                {
+                    icon: MapPinIcon,
+                    label: "Riwayat Pendidikan",
+                    href: route("riwayat-pendidikan.index")
+                },
+                {
+                    icon: MapPinIcon,
+                    label: "Anak",
+                    href: route("anak.index")
+                },
+                {
+                    icon: MapPinIcon,
+                    label: "Suami Istri",
+                    href: route("suami-istri.index")
+                },
+                {
+                    icon: MapPinIcon,
+                    label: "Saldo Cuti",
+                    href: route("saldo-cuti.index")
+                },
             ],
         },
         {
@@ -62,6 +92,11 @@ const useRouteStore = defineStore("route-store", () => {
                     icon: ClipboardIcon,
                     label: "Uang Makan",
                     href: route("umak.index")
+                },
+                {
+                    icon: ClipboardIcon,
+                    label: "Hari Libur",
+                    href: route("hari-libur.index")
                 },
             ],
         },

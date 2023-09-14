@@ -25,7 +25,7 @@ class PegawaiAlamatRequest extends FormRequest
         return
             [
                 'pegawai_id' =>['required','max:20','exists:pegawai,id'],
-                'tipe_alamat' =>['required',Rule::in(["D","K"])],
+                'tipe_alamat' =>['required',Rule::in(["Domisili","Asal"])],
                 'propinsi_id' =>['required','max:10','exists:propinsi,id'],
                 'kota_id' =>['required','max:20','exists:kota,id'],
                 'kecamatan_id' =>['required','max:20','exists:kecamatan,id'],
