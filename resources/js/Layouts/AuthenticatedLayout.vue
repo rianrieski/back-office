@@ -37,7 +37,7 @@ defineProps({
             </div>
 
             <!-- Page content here -->
-            <div class="p-4">
+            <div class="flex-1 p-4">
                 <slot />
             </div>
         </div>
