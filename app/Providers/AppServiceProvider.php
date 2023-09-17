@@ -5,6 +5,7 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Saloon\Http\Senders\GuzzleSender;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
+
     /**
      * Register any authentication / authorization services.
      *
@@ -30,6 +32,11 @@ class AppServiceProvider extends ServiceProvider
                 return true;
             }
         });
+    }
+
+    public function register(): void
+    {
+        $this->app->singleton(GuzzleSender::class, fn() => new GuzzleSender());
     }
 
 }

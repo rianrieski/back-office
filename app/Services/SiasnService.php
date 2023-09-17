@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Integration\Siasn\Authenticator\SiasnSimpegAuthenticator;
 use App\Integration\Siasn\Connector\SiasnSimpegConnector;
-use App\Integration\Siasn\Request\CreateApimwsToken;
 use App\Integration\Siasn\Request\CreateSiasnTokenRequest;
+use App\Integration\Siasn\Request\GetApimwsTokenRequest;
 use App\Integration\Siasn\Request\GetPnsDataPasangan;
 use App\Integration\Siasn\Request\GetPnsDataUtama;
 use App\Integration\Siasn\Request\GetPnsRwPenghargaan;
@@ -46,7 +46,7 @@ class SiasnService
             ['access_token' => $siasnToken->accessToken, 'expires_in' => $siasnToken->expiresIn]
         );
 
-        $apimwsToken = (new CreateApimwsToken())->send()->dtoOrFail();
+        $apimwsToken = (new GetApimwsTokenRequest())->send()->dtoOrFail();
 
         IntegrationToken::updateOrCreate(
             ['token_type' => 'apimws-bkn'],
