@@ -2,12 +2,9 @@
 
 namespace App\Services;
 
-use App\Integration\Siasn\Authenticator\SiasnReferensiAuthenticator;
 use App\Integration\Siasn\Connector\SiasnReferensiConnector;
-use App\Integration\Siasn\Request\GetApimwsTokenRequest;
 use App\Integration\Siasn\Request\Referensi\GetAgamaRequest;
 use App\Integration\Siasn\Request\Referensi\GetAlasanHukDisRequest;
-use App\Models\IntegrationToken;
 use App\Models\Siasn\Referensi\Agama;
 use App\Models\Siasn\Referensi\AlasanHukDis;
 use Saloon\Exceptions\Request\RequestException;
@@ -27,22 +24,12 @@ class SiasnReferensiService
                 return false;
             }
 
-            self::createToken();
+            $authenticator = $this->connector->getAccessToken();
 
-            $pendingRequest->authenticate(new SiasnReferensiAuthenticator());
+            $pendingRequest->authenticate($authenticator);
 
             return true;
         };
-    }
-
-    public static function createToken(): void
-    {
-        $apimwsToken = (new GetApimwsTokenRequest())->send()->dtoOrFail();
-
-        IntegrationToken::updateOrCreate(
-            ['token_type' => 'apimws-bkn'],
-            ['access_token' => $apimwsToken->accessToken, 'expires_in' => $apimwsToken->expiresIn]
-        );
     }
 
     public function fetchAgama(): void

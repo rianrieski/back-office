@@ -3,9 +3,7 @@
 namespace App\Integration\Siasn\Connector;
 
 use App\Integration\Siasn\Request\GetApimwsTokenRequest;
-use Saloon\Contracts\OAuthAuthenticator;
 use Saloon\Contracts\Request;
-use Saloon\Contracts\Response;
 use Saloon\Contracts\Sender;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Http\Connector;
@@ -32,28 +30,11 @@ class SiasnReferensiConnector extends Connector
         return OAuthConfig::make()
             ->setClientId('client_id')
             ->setClientSecret('my-client-secret')
-            ->setDefaultScopes(['default'])
-            ->setTokenEndpoint('https://apimws.bkn.go.id/oauth2/token');
-//            ->setRequestModifier(function (GetApimwsTokenRequest $request) {
-//                $request->
-//            });
+            ->setDefaultScopes(['default']);
     }
 
     protected function resolveAccessTokenRequest(OAuthConfig $oauthConfig, array $scopes = [], string $scopeSeparator = ' '): Request
     {
         return new GetApimwsTokenRequest();
-    }
-
-    protected function createOAuthAuthenticatorFromResponse(Response $response, string $fallbackRefreshToken = null): OAuthAuthenticator
-    {
-        dd($response->object());
-    }
-
-    protected function defaultHeaders(): array
-    {
-        return [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ];
     }
 }

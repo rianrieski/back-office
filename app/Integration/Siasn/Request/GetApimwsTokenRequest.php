@@ -32,10 +32,4 @@ class GetApimwsTokenRequest extends SoloRequest implements HasBody
             'grant_type' => 'client_credentials'
         ];
     }
-
-//    public function createDtoFromResponse(Response $response): mixed
-//    {
-//        return ApimwsToken::fromResponse($response);
-//    }
-
 }

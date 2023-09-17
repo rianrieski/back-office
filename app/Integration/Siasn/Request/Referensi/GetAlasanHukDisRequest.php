@@ -13,4 +13,12 @@ class GetAlasanHukDisRequest extends Request
     {
         return '/alasan-hukuman-disiplin';
     }
+
+    protected function defaultHeaders(): array
+    {
+        return [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ];
+    }
 }
