@@ -2,7 +2,7 @@
 
 namespace App\Integration\Siasn\Connector;
 
-use App\Integration\Siasn\Request\GetApimwsTokenRequest;
+use App\Integration\Siasn\Request\Token\GetApimwsTokenRequest;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Sender;
 use Saloon\Helpers\OAuth2\OAuthConfig;

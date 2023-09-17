@@ -23,16 +23,8 @@ class SiasnSimpegConnector extends Connector
         return resolve(GuzzleSender::class);
     }
 
-    protected function defaultAuth(): ?Authenticator
+    protected function defaultAuth(): Authenticator
     {
-        return new SiasnSimpegAuthenticator;
-    }
-
-    protected function defaultHeaders(): array
-    {
-        return [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ];
+        return new SiasnSimpegAuthenticator();
     }
 }

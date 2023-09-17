@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integration\Siasn\Request;
+namespace App\Integration\Siasn\Request\Simpeg;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -15,6 +15,6 @@ class GetPnsDataUtama extends Request
 
     public function resolveEndpoint(): string
     {
-        return '/pns/data-utama/'. $this->nip;
+        return '/pns/data-utama/' . $this->nip;
     }
 }

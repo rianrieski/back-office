@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integration\Siasn\Request;
+namespace App\Integration\Siasn\Request\Token;
 
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;

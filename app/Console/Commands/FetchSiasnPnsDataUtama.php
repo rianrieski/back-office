@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\SiasnService;
+use App\Services\SiasnSimpegService;
 use Illuminate\Console\Command;
 
 class FetchSiasnPnsDataUtama extends Command
@@ -26,6 +26,6 @@ class FetchSiasnPnsDataUtama extends Command
      */
     public function handle(): void
     {
-        (new SiasnService())->fetchAllPnsDataUtama();
+        (new SiasnSimpegService())->fetchAllPnsDataUtama();
     }
 }

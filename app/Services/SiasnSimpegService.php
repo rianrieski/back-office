@@ -4,18 +4,15 @@ namespace App\Services;
 
 use App\Integration\Siasn\Authenticator\SiasnSimpegAuthenticator;
 use App\Integration\Siasn\Connector\SiasnSimpegConnector;
-use App\Integration\Siasn\Request\CreateSiasnTokenRequest;
-use App\Integration\Siasn\Request\GetApimwsTokenRequest;
-use App\Integration\Siasn\Request\GetPnsDataPasangan;
-use App\Integration\Siasn\Request\GetPnsDataUtama;
-use App\Integration\Siasn\Request\GetPnsRwPenghargaan;
-use App\Models\IntegrationToken;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasangan;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
+use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaan;
 use App\Models\Siasn\SiasnPnsDataUtama;
 use App\Models\Siasn\SiasnPnsRwPenghargaan;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\Statuses\NotFoundException;
 
-class SiasnService
+class SiasnSimpegService
 {
     public SiasnSimpegConnector $connector;
     private \Closure $resetToken;
@@ -24,12 +21,12 @@ class SiasnService
     {
         $this->connector = new SiasnSimpegConnector();
 
+        $this->connector->authenticate(new SiasnSimpegAuthenticator);
+
         $this->resetToken = function ($exception, $pendingRequest) {
             if (!$exception instanceof RequestException || $exception->getResponse()->status() !== 401) {
                 return false;
             }
-
-            self::createToken();
 
             $pendingRequest->authenticate(new SiasnSimpegAuthenticator);
 
@@ -37,26 +34,9 @@ class SiasnService
         };
     }
 
-    public static function createToken(): void
-    {
-        $siasnToken = (new CreateSiasnTokenRequest())->send()->dtoOrFail();
-
-        IntegrationToken::updateOrCreate(
-            ['token_type' => 'sso-siasn'],
-            ['access_token' => $siasnToken->accessToken, 'expires_in' => $siasnToken->expiresIn]
-        );
-
-        $apimwsToken = (new GetApimwsTokenRequest())->send()->dtoOrFail();
-
-        IntegrationToken::updateOrCreate(
-            ['token_type' => 'apimws-bkn'],
-            ['access_token' => $apimwsToken->accessToken, 'expires_in' => $apimwsToken->expiresIn]
-        );
-    }
-
     public function fetchPnsDataUtama(string|int $nip): SiasnPnsDataUtama
     {
-        $response = $this->connector->sendAndRetry(new GetPnsDataUtama($nip), 3, 10000, $this->resetToken);
+        $response = $this->connector->sendAndRetry(new GetPnsDataUtama($nip), 3, 100, $this->resetToken);
 
         $data = $response->json()['data'];
 

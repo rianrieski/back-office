@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integration\Siasn\Request;
+namespace App\Integration\Siasn\Request\Simpeg;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -12,8 +12,9 @@ class GetPnsRwPenghargaan extends Request
     public function __construct(protected string $nip)
     {
     }
+
     public function resolveEndpoint(): string
     {
-        return '/pns/rw-penghargaan/'. $this->nip;
+        return '/pns/rw-penghargaan/' . $this->nip;
     }
 }
