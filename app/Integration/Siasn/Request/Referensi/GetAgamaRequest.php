@@ -13,12 +13,4 @@ class GetAgamaRequest extends Request
     {
         return '/agama';
     }
-
-    protected function defaultHeaders(): array
-    {
-        return [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ];
-    }
 }

@@ -2,8 +2,11 @@
 
 use App\Integration\Siasn\Request\Referensi\GetAgamaRequest;
 use App\Integration\Siasn\Request\Referensi\GetAlasanHukDisRequest;
+use App\Integration\Siasn\Request\Referensi\GetAsnJenisJabatanRequest;
+use App\Integration\Siasn\Request\Referensi\GetKedudukanHukumRequest;
 use App\Models\Siasn\Referensi\Agama;
 use App\Models\Siasn\Referensi\AlasanHukDis;
+use App\Models\Siasn\Referensi\KedudukanHukum;
 use App\Services\SiasnReferensiService;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
@@ -12,15 +15,10 @@ describe('fetch referensi from siasn', function () {
 
     beforeEach(function () {
         \Saloon\Laravel\Facades\Saloon::fake([
-            '*' => function (PendingRequest $pendingRequest) {
-                $name = implode('/', array_filter([
-                    parse_url($pendingRequest->getUrl(), PHP_URL_HOST),
-                    mb_strtoupper($pendingRequest->getMethod()->value ?? 'GET'),
-                    parse_url($pendingRequest->getUrl(), PHP_URL_PATH),
-                    http_build_query(array_diff_key($pendingRequest->query()->all(), array_flip(['key', 'format']))),
-                ]));
+            '*' => function (PendingRequest $request) {
+                $reflection = new ReflectionClass($request->getRequest());
 
-                return MockResponse::fixture($name);
+                return MockResponse::fixture('Referensi/' . $reflection->getShortName());
             },
         ]);
     });
@@ -43,5 +41,23 @@ describe('fetch referensi from siasn', function () {
         \Saloon\Laravel\Facades\Saloon::assertSent(GetAlasanHukDisRequest::class);
 
         expect(AlasanHukDis::count())->not->toBeEmpty();
+    });
+
+    it('can fetch asn jenis jabatan', function () {
+        $service = new SiasnReferensiService();
+
+        $service->fetchAsnJenisJabatan();
+
+        \Saloon\Laravel\Facades\Saloon::assertSent(GetAsnJenisJabatanRequest::class);
+    });
+
+    it('can fetch kedudukan hukum and store to database', function () {
+        $service = new SiasnReferensiService();
+
+        $service->fetchKedudukanHukum();
+
+        \Saloon\Laravel\Facades\Saloon::assertSent(GetKedudukanHukumRequest::class);
+
+        expect(KedudukanHukum::count())->not->toBeEmpty();
     });
 });
