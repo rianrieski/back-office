@@ -11,7 +11,7 @@ use App\Services\SiasnReferensiService;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
 
-describe('fetch referensi from siasn', function () {
+describe('siasn referensi data', function () {
 
     beforeEach(function () {
         \Saloon\Laravel\Facades\Saloon::fake([

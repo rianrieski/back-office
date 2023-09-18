@@ -9,7 +9,8 @@ return new class extends Migration {
     {
         Schema::create('siasn_pns_data_pasangan', function (Blueprint $table) {
             $table->id();
-            $table->string('pnsId', 50);
+            $table->unique(['idPns', 'orangId']);
+            $table->string('idPns', 50);
             $table->string('orangId', 50);
             $table->string('ayahId', 50)->nullable();
             $table->string('ibuId', 50)->nullable();
@@ -23,8 +24,9 @@ return new class extends Migration {
             $table->string('tglMeninggal', 10)->nullable();
             $table->string('jenisKelamin')->nullable();
             $table->string('jenisAnak')->nullable();
-            $table->string('statusHidup')->nullable();
-            $table->string('jenisKawinId')->nullable();
+            $table->string('statusHidup', 5)->nullable();
+            $table->string('jenisKawinId', 5)->nullable();
+            $table->string('karisKarsu')->nullable();
             $table->string('statusNikah')->nullable();
             $table->string('dataPernikahanId', 50)->nullable();
             $table->string('tglMenikah', 10)->nullable();

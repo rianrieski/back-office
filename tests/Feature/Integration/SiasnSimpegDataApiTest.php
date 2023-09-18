@@ -1,6 +1,8 @@
 <?php
 
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasangan;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
+use App\Models\Siasn\SiasnPnsDataPasangan;
 use App\Models\Siasn\SiasnPnsDataUtama;
 use App\Services\SiasnSimpegService;
 use Saloon\Http\Faking\MockResponse;
@@ -20,10 +22,20 @@ describe('siasn simpeg data transaction', function () {
     it('can fetch siasn pns data utama', function () {
         $service = new SiasnSimpegService();
 
-        $service->fetchPnsDataUtama(198808042015021001);
+        $service->fetchPnsDataUtama(199111182019031005);
 
         \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataUtama::class);
 
-        expect(SiasnPnsDataUtama::first()->nipBaru)->toEqual(198808042015021001);
+        expect(SiasnPnsDataUtama::first()->nipBaru)->toEqual(199111182019031005);
+    });
+
+    it('can fetch siasn pns data pasangan', function () {
+        $service = new SiasnSimpegService();
+
+        $service->fetchPnsDataPasangan(199111182019031005);
+
+        \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataPasangan::class);
+
+        expect(SiasnPnsDataPasangan::count())->not->toBeEmpty();
     });
 });
