@@ -2,16 +2,20 @@
 
 namespace App\Services;
 
+use App\Data\SiasnPnsDataOrtuData;
 use App\Data\SiasnPnsDataPasanganData;
 use App\Integration\Siasn\Authenticator\SiasnSimpegAuthenticator;
 use App\Integration\Siasn\Connector\SiasnSimpegConnector;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtu;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasangan;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
 use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaan;
+use App\Models\Siasn\SiasnPnsDataOrtu;
 use App\Models\Siasn\SiasnPnsDataPasangan;
 use App\Models\Siasn\SiasnPnsDataUtama;
 use App\Models\Siasn\SiasnPnsRwPenghargaan;
 use Illuminate\Support\Arr;
+use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\Statuses\NotFoundException;
 
@@ -110,6 +114,29 @@ class SiasnSimpegService
             try {
                 $this->fetchPnsRwPenghargaan($nip);
             } catch (NotFoundException $exception) {
+                continue;
+            }
+        }
+    }
+
+    public function fetchPnsDataOrtu(string|int $nip): void
+    {
+        $response = $this->connector->sendAndRetry(new GetPnsDataOrtu($nip), 3, 5000, $this->resetToken);
+
+        $object = SiasnPnsDataOrtuData::fromResponse($response->json('data'));
+
+        SiasnPnsDataOrtu::updateOrCreate(
+            ['idPns' => $object->idPns, 'ayahId' => $object->ayahId, 'ibuId' => $object->ibuId],
+            $object->toArray()
+        );
+    }
+
+    public function fetchAllPnsDataOrtu(): void
+    {
+        foreach (SiapService::getAllNip() as $nip) {
+            try {
+                $this->fetchPnsDataOrtu($nip);
+            } catch (ClientException $exception) {
                 continue;
             }
         }
