@@ -21,6 +21,7 @@ class BasicAdminPermissionSeeder extends Seeder
             'pegawai',
             'unit_kerja',
             'pengaturan',
+            'master',
             'hirarki_unit_kerja_list',
             'hirarki_unit_kerja_create',
             'hirarki_unit_kerja_edit',
@@ -29,6 +30,14 @@ class BasicAdminPermissionSeeder extends Seeder
             'gaji_create',
             'gaji_edit',
             'gaji_delete',
+            'jabatan_tukin_list',
+            'jabatan_tukin_create',
+            'jabatan_tukin_edit',
+            'jabatan_tukin_delete',
+            'jabatan_unit_kerja_list',
+            'jabatan_unit_kerja_create',
+            'jabatan_unit_kerja_edit',
+            'jabatan_unit_kerja_delete',
             'pegawai_list',
             'pegawai_create',
             'pegawai_edit',
@@ -91,6 +100,11 @@ class BasicAdminPermissionSeeder extends Seeder
         }
         // create roles and assign existing permissions
         $role1 = Role::create(['name' => 'admin']);
+        $role1->givePermissionTo('dashboard');
+        $role1->givePermissionTo('pegawai');
+        $role1->givePermissionTo('unit_kerja');
+        $role1->givePermissionTo('master');
+        $role1->givePermissionTo('pengaturan');
         $role1->givePermissionTo('hak_akses_list');
         $role1->givePermissionTo('hak_akses_create');
         $role1->givePermissionTo('hak_akses_edit');
@@ -108,6 +122,8 @@ class BasicAdminPermissionSeeder extends Seeder
 
 
         $role2 = Role::create(['name' => 'pegawai']);
+        $role2->givePermissionTo('dashboard');
+        $role2->givePermissionTo('pegawai');
         $role2->givePermissionTo('gaji_list');
         $role2->givePermissionTo('gaji_create');
         $role2->givePermissionTo('gaji_edit');
