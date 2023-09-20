@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Siasn;
 
 use App\Http\Controllers\Controller;
+use App\Integration\Siap\Model\Satker;
 use App\Models\Siasn\SiasnPnsDataUtama;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -22,10 +23,13 @@ class SiasnPnsController extends Controller
         ]);
     }
 
-    public function show($asn)
+    public function show(SiasnPnsDataUtama $asn)
     {
         return Inertia::render('Siasn/Asn/Show', [
-            'asn' => SiasnPnsDataUtama::find($asn),
+            'siasn' => $asn,
+            'siap' => $asn->siap?->load(['agama', 'pangkatTerakhir', 'riwayatPangkatTerakhir', 'riwayatJabatanTerakhir', 'statusPegawai', 'kedudukan', 'jenisPegawai', 'tipePegawai']),
+            'unorInduk' => Satker::find(substr($asn->siap->SatkerID, 0, 6)),
+            'unor' => Satker::find(substr($asn->siap->SatkerID, 0, 8)),
         ]);
     }
 }

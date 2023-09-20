@@ -22,5 +22,9 @@ it('can render a pns siasn page', function () {
     $this->actingAs($user)
         ->get(route('siasn.asn.show', $pns->id))
         ->assertInertia(fn(AssertableInertia $page) => $page
-            ->component('Siasn/Asn/Show'));
+            ->component('Siasn/Asn/Show')
+            ->has('siasn')
+            ->has('siap.pangkatTerakhir')
+            ->has('siap.agama')
+        );
 });

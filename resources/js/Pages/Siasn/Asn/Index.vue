@@ -126,13 +126,18 @@ const sort = (column) => {
                                 {{ row[col.column] }}
                             </td>
                             <td>
-                                <Link :href="route('siasn.asn.show', row.id)">
-                                    <div class="tooltip" data-tip="Lihat detil">
+                                <div
+                                    class="tooltip tooltip-left"
+                                    data-tip="Lihat detil"
+                                >
+                                    <Link
+                                        :href="route('siasn.asn.show', row.id)"
+                                    >
                                         <DocumentMagnifyingGlassIcon
                                             class="w-5 text-primary"
                                         />
-                                    </div>
-                                </Link>
+                                    </Link>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
