@@ -28,8 +28,8 @@ class SiasnPnsController extends Controller
         return Inertia::render('Siasn/Asn/Show', [
             'siasn' => $asn,
             'siap' => $asn->siap?->load(['agama', 'pangkatTerakhir', 'riwayatPangkatTerakhir', 'riwayatJabatanTerakhir', 'statusPegawai', 'kedudukan', 'jenisPegawai', 'tipePegawai']),
-            'unorInduk' => Satker::find(substr($asn->siap->SatkerID, 0, 6)),
-            'unor' => Satker::find(substr($asn->siap->SatkerID, 0, 8)),
+            'unorInduk' => Satker::find(substr($asn->siap?->SatkerID, 0, 4)),
+            'unor' => Satker::find(substr($asn->siap?->SatkerID, 0, 6)),
         ]);
     }
 }

@@ -1,7 +1,8 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
+
 const props = defineProps({
     propinsi: "",
     desa: "",
@@ -20,79 +21,97 @@ const form = useForm("createAlamat", {
     alamat: "",
 });
 
-const simpanAlamat = ()=>{
-    form.post('/pegawai/alamat',{
-        preserveScroll:true,
-        preserveState:true,
-        replace:true,
-        onSuccess:(response)=>{
+const simpanAlamat = () => {
+    form.post("/pegawai/alamat", {
+        preserveScroll: true,
+        preserveState: true,
+        replace: true,
+        onSuccess: (response) => {
             Swal.fire({
-                title: 'Tersimpan!',
+                title: "Tersimpan!",
                 text: response.props.success,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            })
-            router.get(route('alamat.index'));
+                icon: "success",
+                confirmButtonText: "OK",
+            });
+            router.get(route("alamat.index"));
         },
-        onError:(errors)=>{
-            if(errors.query){
+        onError: (errors) => {
+            if (errors.query) {
                 Swal.fire({
-                    title: 'Gagal!',
+                    title: "Gagal!",
                     text: errors.query,
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                })
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
             }
-        }
-    })
-}
-watch(()=>form.propinsi_id,(value)=>{
-    router.get(route('alamat.create'),{propinsi_id:value},{
-        preserveState:true,
-        preserveScroll:true,
-        onSuccess:(response)=>{
-            form.kota_id = null;
-            form.kecamatan_id = null;
-            form.desa_id = null;
-            kota.value = response.props.kota
-        }
-    });
-});
-const selectedPropinsi = computed({
-    get(){
-        return props.propinsi.find(prop => prop.id === form.propinsi_id)
-    },
-    set(propinsi){
-        form.propinsi_id = propinsi.id
-    }
-})
-watch(()=>form.kota_id,(value)=>{
-    router.get(route('alamat.create'),{kota_id:value},{
-        preserveState:true,
-        preserveScroll:true,
-        onSuccess:(response)=>{
-            kecamatan.value = response.props.kecamatan
-        }
-    });
-});
-const selectedKota = computed({
-    get(){
-        return kota.value?.find(kot => kot.id === form.kota_id)
-    },
-    set(kota){
-        form.kota_id = kota.id
-    }
-})
-watch(()=>form.kecamatan_id,(value)=>{
-    router.get(route('alamat.create'),{kecamatan_id:value},{
-        preserveState:true,
-        preserveScroll:true,
-        onSuccess:(response)=>
-        {
-            desa.value = response.props.desa
         },
-    );
+    });
 };
+watch(
+    () => form.propinsi_id,
+    (value) => {
+        router.get(
+            route("alamat.create"),
+            { propinsi_id: value },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (response) => {
+                    form.kota_id = null;
+                    form.kecamatan_id = null;
+                    form.desa_id = null;
+                    kota.value = response.props.kota;
+                },
+            },
+        );
+    },
+);
+const selectedPropinsi = computed({
+    get() {
+        return props.propinsi.find((prop) => prop.id === form.propinsi_id);
+    },
+    set(propinsi) {
+        form.propinsi_id = propinsi.id;
+    },
+});
+watch(
+    () => form.kota_id,
+    (value) => {
+        router.get(
+            route("alamat.create"),
+            { kota_id: value },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (response) => {
+                    kecamatan.value = response.props.kecamatan;
+                },
+            },
+        );
+    },
+);
+const selectedKota = computed({
+    get() {
+        return kota.value?.find((kot) => kot.id === form.kota_id);
+    },
+    set(kota) {
+        form.kota_id = kota.id;
+    },
+});
+watch(
+    () => form.kecamatan_id,
+    (value) => {
+        router.get(
+            route("alamat.create"),
+            { kecamatan_id: value },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (response) => (desa.value = response.props.desa),
+            },
+        );
+    },
+);
 </script>
 
 <template>

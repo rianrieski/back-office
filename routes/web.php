@@ -9,7 +9,9 @@ use App\Http\Controllers\Master\HirarkiUnitKerjaController;
 use App\Http\Controllers\Master\KotaController;
 use App\Http\Controllers\Pegawai\PegawaiAlamatController;
 use App\Http\Controllers\Pegawai\PegawaiAnakController;
+use App\Http\Controllers\Pegawai\PegawaiController;
 use App\Http\Controllers\Pegawai\PegawaiRiwayatDiklatController;
+use App\Http\Controllers\Pegawai\PegawaiRiwayatJabatanController;
 use App\Http\Controllers\Pegawai\PegawaiRiwayatPendidikanController;
 use App\Http\Controllers\Pegawai\PegawaiSaldoCutiController;
 use App\Http\Controllers\Pegawai\PegawaiSuamiIstriController;
@@ -19,9 +21,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
-use App\Http\Controllers\Pegawai\PegawaiController;
-use App\Http\Controllers\Pegawai\PegawaiRiwayatJabatanController;
-use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -62,6 +61,7 @@ Route::prefix('pegawai')->group(function () {
     Route::resource('suami-istri', PegawaiSuamiIstriController::class);
     Route::get('saldo-cuti/getdata', [PegawaiSaldoCutiController::class, 'getDataPegawaiSaldoCuti'])->name('saldo-cuti.getdata');
     Route::resource('saldo-cuti', PegawaiSaldoCutiController::class)->except('show', 'destroy');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -99,9 +99,9 @@ Route::prefix('master')->group(function () {
 require __DIR__ . '/siasn.php';
 
 require __DIR__ . '/auth.php';
+
 Route::middleware('guest')->group(function () {
     Route::get('/login/ldap', [LdapController::class, 'showLoginForm'])->name('loginldap.show');
     Route::post('/login/ldap', [LdapController::class, 'login'])->name('login.ldap');
 });
 Route::get('/logout/ldap', [LdapController::class, 'logout'])->name('logout.ldap');
-

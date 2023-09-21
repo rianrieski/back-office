@@ -40,10 +40,12 @@ const goToPage = (link) => {
             :key="link.label"
             @click="goToPage(link)"
         >
-            <template v-if="link.label.includes('previous')">
+            <template v-if="link.label.toLowerCase().includes('sebelumnya')">
                 <ChevronDoubleLeftIcon class="w-4" />
             </template>
-            <template v-else-if="link.label.includes('next')">
+            <template
+                v-else-if="link.label.toLowerCase().includes('berikutnya')"
+            >
                 <ChevronDoubleRightIcon class="w-4" />
             </template>
             <template v-else>
