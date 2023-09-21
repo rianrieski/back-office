@@ -17,7 +17,6 @@ use App\Http\Controllers\Pegawai\PegawaiTmtGajiController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\Siasn\SiasnPnsController;
 use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
 use App\Http\Controllers\UserController;
@@ -59,11 +58,6 @@ Route::prefix('pegawai')->group(function () {
     Route::resource('saldo-cuti', PegawaiSaldoCutiController::class)->except('show', 'destroy');
 });
 
-Route::prefix('siasn')->group(function () {
-    Route::get('asn', [SiasnPnsController::class, 'index'])->name('siasn.asn.index');
-    Route::get('asn/{asn}', [SiasnPnsController::class, 'show'])->name('siasn.asn.show');
-});
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -96,6 +90,8 @@ Route::prefix('master')->group(function () {
 //    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 //    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 //});
+
+require __DIR__ . '/siasn.php';
 
 require __DIR__ . '/auth.php';
 Route::middleware('guest')->group(function () {
