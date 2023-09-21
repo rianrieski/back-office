@@ -18,4 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 /tests/Fixtures/Saloon
+/storage/debugbar
 
