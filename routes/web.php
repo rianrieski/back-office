@@ -19,6 +19,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
+use App\Http\Controllers\Pegawai\PegawaiController;
+use App\Http\Controllers\Pegawai\PegawaiRiwayatJabatanController;
+use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,6 +47,9 @@ Route::resource('umak', UangMakanController::class)->only('index', 'create', 'st
 Route::prefix('pegawai')->group(function () {
     Route::get('alamat/getdata', [PegawaiAlamatController::class, 'getDataPegawaiAlamat'])->name('alamat.getdata');
     Route::resource('alamat', PegawaiAlamatController::class)->only('index', 'create', 'store', 'edit', 'update', 'destroy', 'show');
+    Route::post('alamat/getkota', [PegawaiAlamatController::class, 'getKota'])->name('alamat.getkota');
+    Route::resource('profil_pegawai', PegawaiController::class);
+    Route::resource('riwayat_jabatan_pegawai', PegawaiRiwayatJabatanController::class)->only('index');
     Route::get('riwayat-diklat/getdata', [PegawaiRiwayatDiklatController::class, 'getDataRiwayatDiklat'])->name('riwayat-diklat.getdata');
     Route::resource('riwayat-diklat', PegawaiRiwayatDiklatController::class);
     Route::get('tmt-gaji/getdata', [PegawaiTmtGajiController::class, 'getDataTmtGaji'])->name('tmt-gaji.getdata');
@@ -56,7 +62,6 @@ Route::prefix('pegawai')->group(function () {
     Route::resource('suami-istri', PegawaiSuamiIstriController::class);
     Route::get('saldo-cuti/getdata', [PegawaiSaldoCutiController::class, 'getDataPegawaiSaldoCuti'])->name('saldo-cuti.getdata');
     Route::resource('saldo-cuti', PegawaiSaldoCutiController::class)->except('show', 'destroy');
-});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

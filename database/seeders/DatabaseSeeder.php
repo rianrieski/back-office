@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Pegawai;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -72,27 +74,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(InstansiSeeder::class);
         // $this->call(PropinsiSeeder::class);
 
-        // $this->call(LatihanStrukturalSeeder::class);
-        // $this->call(SatuanKerjaSeeder::class);
-        // $this->call(ProfesiSeeder::class);
-        // $this->call(EselonSeeder::class);
-        // $this->call(AlasanHukumanDisiplinSeeder::class);
-        // $this->call(JenisRiwayatSeeder::class);
-        // $this->call(JenisPemberhentianSeeder::class);
-        // $this->call(KpknSeeder::class);
-        // $this->call(KedudukanHukumSeeder::class);
-        // $this->call(JenisHukumanSeeder::class);
-        // $this->call(CltnSeeder::class);
-        // $this->call(JenisKompetensiSeeder::class);
-        // $this->call(JenisPengadaanSeeder::class);
-        // $this->call(JenisPensiunSeeder::class);
-        // $this->call(KelJabatanSeeder::class);
-//        $this->call(PendidikanSeeder::class);
-        // $this->call(StatusPegawaiSeeder::class);
-        // $this->call(JenisUnitKerjaSeeder::class);
-        // $this->call(UnitKerjaSeeder::class);
-        // $this->call(HirarkiUnitKerjaSeeder::class);
-        // $this->call(BankSeeder::class);
+        Pegawai::factory(100)->create();
         $this->call(JenisCutiSeeder::class);
     }
 }

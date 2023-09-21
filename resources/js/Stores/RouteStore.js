@@ -1,20 +1,17 @@
 import { defineStore } from "pinia";
 import {
     BriefcaseIcon,
-    ClipboardIcon,
     HomeIcon,
-    MapPinIcon,
     Square3Stack3DIcon,
     UsersIcon,
     CubeTransparentIcon,
     ArrowRightIcon,
-    LockClosedIcon
+    LockClosedIcon,
+    UserIcon,
 } from "@heroicons/vue/24/outline/index.js";
 import { usePage } from '@inertiajs/vue3';
 import { computed } from "vue";
 const page = usePage()
-
-const akses = computed(() => page.props.auth.akses)
 
 
 const useRouteStore = defineStore("route-store", () => {
@@ -118,10 +115,15 @@ const useRouteStore = defineStore("route-store", () => {
             permission: "master",
             children: [
                 {
-                    icon: ArrowRightIcon,
-                    label: "Tunjangan Kinerja",
-                    href: route("tukin.index"),
-                    permission: "tunjangan_kinerja_list",
+                  icon: UserIcon,
+                  label: "Profil Pegawai",
+                  href: route("profil_pegawai.index"),
+                },
+                {
+                  icon: ArrowRightIcon,
+                  label: "Tunjangan Kinerja",
+                  href: route("tukin.index"),
+                  permission: "tunjangan_kinerja_list",
                 },
                 {
                     icon: ArrowRightIcon,
@@ -135,8 +137,13 @@ const useRouteStore = defineStore("route-store", () => {
                     href: route("jabatan-unit-kerja.index"),
                     permission: "jabatan_unit_kerja_list",
                 },
-                {
-                    icon: ArrowRightIcon,
+              {
+                icon: Square3Stack3DIcon,
+                label: "Riwayat Jabatan Pegawai",
+                href: route("riwayat_jabatan_pegawai.index"),
+              },
+              {
+                  icon: ArrowRightIcon,
                     label: "Gaji",
                     href: route("gaji.index"),
                     permission: "gaji_list",

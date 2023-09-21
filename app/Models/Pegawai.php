@@ -4,15 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Pegawai extends Model
+class Pegawai extends Model implements HasMedia
 {
+    use HasFactory, InteractsWithMedia;
+
     protected $table = 'pegawai';
     protected $guarded = [];
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+    public function agama()
+    {
+        return $this->belongsTo(Agama::class);
+    }
+    public function jenis_kawin()
+    {
+        return $this->belongsTo(JenisKawin::class);
+    }
+    public function jenis_pegawai()
+    {
+        return $this->belongsTo(JenisPegawai::class);
+    }
+    public function status_pegawai()
+    {
+        return $this->belongsTo(StatusPegawai::class);
+    }
     public function pegawai_riwayat_jabatan()
     {
         return $this->hasMany(PegawaiRiwayatJabatan::class);
@@ -56,12 +75,5 @@ class Pegawai extends Model
     public function pegawai_suami_istri()
     {
         return $this->hasMany(PegawaiSuamiIstri::class);
-    }
-    public static function getAllDataPegawai()
-    {
-        $pegawai = Pegawai::select('id','nama_depan','nama_belakang',
-            DB::raw('CONCAT(nama_depan," " ,nama_belakang) AS nama_lengkap'))
-            ->whereNull('tanggal_berhenti')->get();
-        return $pegawai;
     }
 }

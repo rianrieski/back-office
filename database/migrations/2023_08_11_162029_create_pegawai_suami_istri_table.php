@@ -24,8 +24,8 @@ return new class extends Migration
             $table->unsignedBigInteger('pendidikan_id');
             $table->string('pekerjaan', 50);
             $table->boolean('status_tunjangan');
-            $table->string('no_sk_cerai', 50)->nullable();
-            $table->date('tmt_sk_cerai')->nullable();
+            $table->string('no_sk_cerai', 50)->nullable(true);
+            $table->date('tmt_sk_cerai')->nullable(true);
             $table->unsignedTinyInteger('jenis_kawin_id');
             $table->string('no_buku_nikah', 50);
             $table->timestamps();

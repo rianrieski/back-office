@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('pegawai_id');
             $table->unsignedBigInteger('jabatan_unit_kerja_id');
-            $table->string('no_sk',50);
-            $table->string('no_pelantikan',50)->nullable(true);
+            $table->string('no_sk', 50);
+            $table->string('no_pelantikan', 50)->nullable(true);
             $table->date('tanggal_sk')->nullable(true);
             $table->date('tanggal_pelantikan')->nullable(true);
             $table->date('tmt_jabatan');
-            $table->string('pejabat_penetap',50);
+            $table->string('pejabat_penetap', 50);
             $table->boolean('is_plt');
             $table->timestamps();
             $table->foreign('pegawai_id')->references('id')->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
