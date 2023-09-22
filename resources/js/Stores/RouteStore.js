@@ -48,6 +48,16 @@ const useRouteStore = defineStore("route-store", () => {
             permission: "pegawai",
             children: [
                 {
+                    icon: UserIcon,
+                    label: "Profil Pegawai",
+                    href: route("profil_pegawai.index"),
+                },
+                {
+                    icon: Square3Stack3DIcon,
+                    label: "Riwayat Jabatan Pegawai",
+                    href: route("riwayat_jabatan_pegawai.index"),
+                },
+                {
                     icon: ArrowRightIcon,
                     label: "Alamat Pegawai",
                     href: route("alamat.index"),
@@ -111,11 +121,6 @@ const useRouteStore = defineStore("route-store", () => {
             permission: "master",
             children: [
                 {
-                    icon: UserIcon,
-                    label: "Profil Pegawai",
-                    href: route("profil_pegawai.index"),
-                },
-                {
                     icon: ArrowRightIcon,
                     label: "Tunjangan Kinerja",
                     href: route("tukin.index"),
@@ -132,11 +137,6 @@ const useRouteStore = defineStore("route-store", () => {
                     label: "Jabatan Unit Kerja",
                     href: route("jabatan-unit-kerja.index"),
                     permission: "jabatan_unit_kerja_list",
-                },
-                {
-                    icon: Square3Stack3DIcon,
-                    label: "Riwayat Jabatan Pegawai",
-                    href: route("riwayat_jabatan_pegawai.index"),
                 },
                 {
                     icon: ArrowRightIcon,
