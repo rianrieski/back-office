@@ -2,18 +2,34 @@
 import { Bars3Icon } from "@heroicons/vue/24/outline/index.js";
 import useRouteStore from "@/Stores/RouteStore.js";
 import Sidebar from "@/Layouts/components/Sidebar.vue";
-import ToastList from "@/Components/ToastList.vue";
+import { router, usePage } from "@inertiajs/vue3";
 
 const routes = useRouteStore();
 defineProps({
     title: "",
 });
+
+router.on("finish", () => {
+    const toast = usePage().props.toast;
+    if (toast) {
+        Toast.fire({
+            text: toast.message || "Sukses",
+            toast: true,
+            icon: toast.icon || "success",
+            showCloseButton: true,
+            timer: toast.timer || 2500,
+            position: toast.position || "top-right",
+        }).finally(() => (usePage().props.toast = null));
+    }
+});
 </script>
 
 <template>
-    <Head :title="title" />
+    <Head>
+        <title>{{ title }}</title>
+    </Head>
+
     <div class="drawer min-h-screen bg-base-200">
-        <ToastList />
         <Sidebar class="hidden lg:block" />
         <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col">
