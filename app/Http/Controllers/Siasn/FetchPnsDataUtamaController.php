@@ -13,7 +13,9 @@ class FetchPnsDataUtamaController extends Controller
         $validated = $request->validate(['nip' => ['required', 'numeric']]);
 
         (new SiasnSimpegService())->fetchPnsDataUtama($validated['nip']);
-        
-        return back();
+
+        return back()->with('toast', [
+            'message' => 'Sinkronisasi Data SIASN berhasil'
+        ]);
     }
 }

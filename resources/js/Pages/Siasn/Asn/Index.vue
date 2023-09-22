@@ -11,6 +11,7 @@ import PerPageOption from "@/Components/PerPageOption.vue";
 import { router } from "@inertiajs/vue3";
 import { debounce } from "lodash";
 import SearchInputColumn from "@/Components/SearchInputColumn.vue";
+import { useLocaleDateTime } from "@/Composables/filters.ts";
 
 defineProps(["asn"]);
 
@@ -21,11 +22,17 @@ const columns = [
     { label: "Jabatan", column: "jabatanNama" },
     { label: "Unit Kerja", column: "unorNama" },
     { label: "Status", column: "kedudukanPnsNama" },
+    {
+        label: "Terkahir Update",
+        column: "updated_at",
+        cell: (val) => useLocaleDateTime(new Date(val)),
+    },
 ];
 const filterBy = ref({ label: "Nama ASN", column: "nama" });
 const keyword = ref("");
 const perPage = ref(15);
 const sortBy = ref(null);
+const isLoading = ref(false);
 const query = computed(() => {
     return {
         ...(keyword.value && {
@@ -60,6 +67,21 @@ const fetchData = (additional) => {
     );
 };
 
+const syncAllData = () => {
+    router.post(
+        route("fetch-all-pns-data-utama"),
+        {},
+        {
+            only: ["asn", "toast"],
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+            onStart: () => (isLoading.value = true),
+            onFinish: () => (isLoading.value = false),
+        },
+    );
+};
+
 const sort = (column) => {
     if (sortBy.value === column.column) {
         sortBy.value = "-" + column.column;
@@ -74,14 +96,21 @@ const sort = (column) => {
 </script>
 
 <template>
-    <Head title="Data ASN - SIASN" />
+    <Head>
+        <title>Data ASN - SIASN</title>
+    </Head>
 
     <MainCard title="Data ASN berdasarkan SIASN">
         <!-- TODO: fix responsive mobile view-->
         <div class="mt-8">
             <div class="grid gap-2 md:grid-cols-2 md:justify-items-end">
-                <button class="btn btn-primary justify-self-start">
+                <button
+                    :disabled="isLoading"
+                    class="btn btn-primary btn-outline btn-sm justify-self-start"
+                    @click="syncAllData"
+                >
                     Sinkronisasi
+                    <span class="loading loading-spinner" v-if="isLoading" />
                 </button>
                 <div class="flex gap-2">
                     <!-- Use this if doesnt need filter by column-->
@@ -123,7 +152,12 @@ const sort = (column) => {
                         <tr v-for="(row, i) in asn.data" :key="row.id">
                             <td>{{ asn.from + i }}</td>
                             <td v-for="col in columns" :key="col.label">
-                                {{ row[col.column] }}
+                                <template v-if="col.cell">
+                                    {{ col.cell(row[col.column]) }}
+                                </template>
+                                <template v-else>
+                                    {{ row[col.column] }}
+                                </template>
                             </td>
                             <td>
                                 <div

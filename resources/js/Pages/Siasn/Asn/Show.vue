@@ -2,6 +2,7 @@
 import MainCard from "@/Components/MainCard.vue";
 import { computed, ref } from "vue";
 import { router } from "@inertiajs/vue3";
+import { useLocaleDateTime } from "@/Composables/filters.ts";
 
 const props = defineProps(["siasn", "siap", "unorInduk", "unor"]);
 
@@ -146,6 +147,9 @@ const rows = computed(() => {
 });
 
 const loading = ref(false);
+const updatedAt = computed(() =>
+    useLocaleDateTime(new Date(props.siasn.updated_at)),
+);
 
 const updateSiasn = () => {
     router.post(
@@ -175,6 +179,9 @@ const updateSiasn = () => {
                     Update Data SIASN
                     <span class="loading loading-spinner" v-if="loading" />
                 </button>
+                <div class="mt-1 text-xs italic text-gray-800">
+                    Terakhir diupdate: {{ updatedAt }}
+                </div>
             </div>
             <table class="table mt-4 w-full">
                 <tr class="bg-base-300">

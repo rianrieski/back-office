@@ -10,6 +10,7 @@ use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtu;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasangan;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
 use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaan;
+use App\Jobs\GetSiasnPnsDataUtamaJob;
 use App\Models\Siasn\SiasnPnsDataOrtu;
 use App\Models\Siasn\SiasnPnsDataPasangan;
 use App\Models\Siasn\SiasnPnsDataUtama;
@@ -53,13 +54,18 @@ class SiasnSimpegService
         );
     }
 
-    public function fetchAllPnsDataUtama(): void
+    public function fetchAllPnsDataUtama(bool $sync = true): void
     {
         foreach (SiapService::getAllNip() as $nip) {
-            try {
-                $this->fetchPnsDataUtama($nip);
-            } catch (NotFoundException $exception) {
-                continue;
+
+            if (!$sync) {
+                GetSiasnPnsDataUtamaJob::dispatch($nip);
+            } else {
+                try {
+                    $this->fetchPnsDataUtama($nip);
+                } catch (NotFoundException $exception) {
+                    continue;
+                }
             }
         }
     }
