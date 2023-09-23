@@ -3,6 +3,7 @@ import { Bars3Icon } from "@heroicons/vue/24/outline/index.js";
 import useRouteStore from "@/Stores/RouteStore.js";
 import Sidebar from "@/Layouts/components/Sidebar.vue";
 import { router, usePage } from "@inertiajs/vue3";
+import { useToast } from "@/Composables/sweetalert.ts";
 
 const routes = useRouteStore();
 defineProps({
@@ -12,14 +13,9 @@ defineProps({
 router.on("finish", () => {
     const toast = usePage().props.toast;
     if (toast) {
-        Toast.fire({
-            text: toast.message || "Sukses",
-            toast: true,
-            icon: toast.icon || "success",
-            showCloseButton: true,
-            timer: toast.timer || 2500,
-            position: toast.position || "top-right",
-        }).finally(() => (usePage().props.toast = null));
+        useToast({ text: toast.message, icon: toast.icon }).finally(
+            () => (usePage().props.toast = null),
+        );
     }
 });
 </script>
