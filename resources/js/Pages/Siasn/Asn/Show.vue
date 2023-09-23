@@ -1,10 +1,13 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
 import { computed, ref } from "vue";
-import { router } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import { useLocaleDateTime } from "@/Composables/filters.ts";
+import { ArrowRightIcon } from "@heroicons/vue/24/outline/index.js";
+import { useConfirm, useToast } from "@/Composables/sweetalert.ts";
 
 const props = defineProps(["siasn", "siap", "unorInduk", "unor"]);
+const errors = computed(() => usePage().props.errors);
 
 const rows = computed(() => {
     return [
@@ -22,6 +25,7 @@ const rows = computed(() => {
             label: "NIK",
             siasn: props.siasn.nik,
             siap: props.siap?.NIK,
+            action: () => updateDataSiap("NIK", props.siasn.nik),
         },
         {
             label: "Kedudukan Hukum",
@@ -72,11 +76,13 @@ const rows = computed(() => {
             label: "Alamat",
             siasn: props.siasn.alamat,
             siap: props.siap?.Alamat,
+            action: () => updateDataSiap("Alamat", props.siasn.alamat),
         },
         {
             label: "Nomor Handphone",
             siasn: props.siasn.noHp,
             siap: props.siap?.hp,
+            action: () => updateDataSiap("hp", props.siasn.noHp),
         },
         {
             label: "Email",
@@ -146,7 +152,29 @@ const rows = computed(() => {
     ];
 });
 
-const loading = ref(false);
+const updateDataSiap = async (attribute, value) => {
+    const isConfirmed = await useConfirm({
+        text: "Sinkronisasi Data SIAP dengan Data SIASN?",
+    });
+
+    router.put(
+        route("siap.pegawai.update", props.siap.PegawaiID),
+        { attribute, value },
+        {
+            replace: true,
+            preserveScroll: true,
+            preserveState: true,
+            onBefore: () => isConfirmed,
+            onError: (errors) => {
+                useToast({ text: Object.values(errors)[0], icon: "error" });
+            },
+            onStart: () => (isLoading.value = true),
+            onFinish: () => (isLoading.value = false),
+        },
+    );
+};
+
+const isLoading = ref(false);
 const updatedAt = computed(() =>
     useLocaleDateTime(new Date(props.siasn.updated_at)),
 );
@@ -158,8 +186,8 @@ const updateSiasn = () => {
         {
             replace: true,
             preserveScroll: true,
-            onStart: () => (loading.value = true),
-            onFinish: () => (loading.value = false),
+            onStart: () => (isLoading.value = true),
+            onFinish: () => (isLoading.value = false),
         },
     );
 };
@@ -174,10 +202,10 @@ const updateSiasn = () => {
                 <button
                     class="btn btn-primary btn-outline btn-sm"
                     @click="updateSiasn"
-                    :disabled="loading"
+                    :disabled="isLoading"
                 >
                     Update Data SIASN
-                    <span class="loading loading-spinner" v-if="loading" />
+                    <span class="loading loading-spinner" v-if="isLoading" />
                 </button>
                 <div class="mt-1 text-xs italic text-gray-800">
                     Terakhir diupdate: {{ updatedAt }}
@@ -187,12 +215,23 @@ const updateSiasn = () => {
                 <tr class="bg-base-300">
                     <th class="w-1/5"></th>
                     <th class="w-2/5">Data SIASN</th>
+                    <th class="w-12"></th>
                     <th class="w-2/5">Data Simpeg/SIAP BSN</th>
                 </tr>
                 <tbody>
                     <tr v-for="(row, i) in rows" :key="i" class="hover">
                         <th>{{ row.label }}</th>
                         <td>{{ row.siasn }}</td>
+                        <td>
+                            <button
+                                :disabled="isLoading"
+                                v-if="row.action"
+                                class="btn btn-square btn-success btn-outline btn-xs"
+                                @click="row.action()"
+                            >
+                                <ArrowRightIcon class="w-5" />
+                            </button>
+                        </td>
                         <td>{{ row.siap }}</td>
                     </tr>
                 </tbody>

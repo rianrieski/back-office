@@ -90,11 +90,7 @@ Route::prefix('master')->group(function () {
     Route::resource('hari-libur', HariLiburController::class)->except('show');
 });
 
-//Route::middleware('auth')->group(function () {
-//    Route::get('', [ProfileController::class, 'edit'])->name('profile.edit');
-//    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-//});
+require __DIR__ . '/siap.php';
 
 require __DIR__ . '/siasn.php';
 

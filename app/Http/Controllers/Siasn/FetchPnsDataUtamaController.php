@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Siasn;
 
+use App\Enums\ToastIcon;
 use App\Http\Controllers\Controller;
 use App\Services\SiasnSimpegService;
 use Illuminate\Http\Request;
@@ -12,10 +13,11 @@ class FetchPnsDataUtamaController extends Controller
     {
         $validated = $request->validate(['nip' => ['required', 'numeric']]);
 
-        (new SiasnSimpegService())->fetchPnsDataUtama($validated['nip']);
+        $siasn = (new SiasnSimpegService())->fetchPnsDataUtama($validated['nip']);
 
         return back()->with('toast', [
-            'message' => 'Sinkronisasi Data SIASN berhasil'
+            'icon' => ToastIcon::SUCCESS,
+            'message' => "Sinkronisasi Data $siasn->nama berhasil"
         ]);
     }
 }

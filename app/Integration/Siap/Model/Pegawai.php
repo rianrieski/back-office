@@ -11,6 +11,7 @@ class Pegawai extends BaseSiapModel
     protected $table = 'Pegawai';
     protected $primaryKey = 'PegawaiID';
     protected $keyType = 'string';
+    protected $guarded = [];
     protected $casts = [
         'TglLahir' => 'date:d-m-Y',
         'TglPensiun' => 'date:d-m-Y'

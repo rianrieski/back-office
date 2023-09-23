@@ -14,7 +14,7 @@ class FetchAllPnsDataUtamaController extends Controller
 
         return back()->with('toast', [
             'icon' => ToastIcon::SUCCESS,
-            'message' => 'Data sedang proses updating',
+            'message' => 'Sinkronisasi data sedang diproses',
         ]);
     }
 }
