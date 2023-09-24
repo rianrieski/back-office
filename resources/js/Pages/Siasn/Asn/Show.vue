@@ -165,9 +165,8 @@ const updateDataSiap = async (attribute, value) => {
             preserveScroll: true,
             preserveState: true,
             onBefore: () => isConfirmed,
-            onError: (errors) => {
-                useToast({ text: Object.values(errors)[0], icon: "error" });
-            },
+            onError: (errors) =>
+                useToast({ text: Object.values(errors)[0], icon: "error" }),
             onStart: () => (isLoading.value = true),
             onFinish: () => (isLoading.value = false),
         },

@@ -6,25 +6,17 @@ import { router, usePage } from "@inertiajs/vue3";
 import { useToast } from "@/Composables/sweetalert.ts";
 
 const routes = useRouteStore();
-defineProps({
-    title: "",
-});
 
 router.on("finish", () => {
     const toast = usePage().props.toast;
     if (toast) {
-        useToast({ text: toast.message, icon: toast.icon }).finally(
-            () => (usePage().props.toast = null),
-        );
+        useToast({ text: toast.message, icon: toast.icon });
+        usePage().props.toast = null;
     }
 });
 </script>
 
 <template>
-    <Head>
-        <title>{{ title }}</title>
-    </Head>
-
     <div class="drawer min-h-screen bg-base-200">
         <Sidebar class="hidden lg:block" />
         <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
