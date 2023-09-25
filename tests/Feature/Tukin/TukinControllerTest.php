@@ -10,9 +10,9 @@ it('can render tukin list page', function () {
 
     $this->actingAs($user)
         ->get(route('tukin.index'))
-        ->assertInertia(fn (AssertableInertia $page) => $page
+        ->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Tukin/Index')
-            ->has('tukin_list')
+            ->has('list_tukin')
         );
 });
 
