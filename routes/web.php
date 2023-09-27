@@ -43,7 +43,7 @@ Route::prefix('pegawai')->group(function () {
     Route::resource('alamat', PegawaiAlamatController::class)->only('index', 'create', 'store', 'edit', 'update', 'destroy');
     Route::post('alamat/getkota', [PegawaiAlamatController::class, 'getKota'])->name('alamat.getkota');
     Route::resource('profil_pegawai', PegawaiController::class);
-    Route::resource('riwayat_jabatan_pegawai', PegawaiRiwayatJabatanController::class)->only('index');
+    Route::resource('riwayat_jabatan_pegawai', PegawaiRiwayatJabatanController::class);
 });
 
 Route::middleware('auth')->group(function () {

@@ -35,7 +35,7 @@ class PegawaiController extends Controller
         return inertia('Pegawai/PegawaiProfil/Index', [
             'pegawai' => $queryPegawai
                 ->paginate($perPage)
-                ->appends($request->only('cari')),
+                ->appends($request->only(['cari', 'perPage'])),
             'filter' => $request->only(['cari', 'perPage']),
         ]);
     }

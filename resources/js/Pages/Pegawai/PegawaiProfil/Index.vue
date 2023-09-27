@@ -10,8 +10,6 @@ const props = defineProps({
     filter: Object,
 });
 
-const isLoading = ref(false);
-
 const perPage = ref(props.pegawai.per_page);
 
 const cari = ref(props.filter.cari);
