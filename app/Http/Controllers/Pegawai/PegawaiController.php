@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pegawai;
 
+use App\Enums\GolonganDarah;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PegawaiRequest;
 use App\Models\Agama;
@@ -35,11 +36,12 @@ class PegawaiController extends Controller
         $jenisPegawai = JenisPegawai::all();
         $statusPegawai = StatusPegawai::all();
 
-        return inertia('Pegawai/PegawaiProfil/Create', [
+        return inertia('Pegawai/Create', [
             'agama' => $agama,
             'statusNikah' => $statusNikah,
             'jenisPegawai' => $jenisPegawai,
             'statusPegawai' => $statusPegawai,
+            'golonganDarah' => GolonganDarah::cases()
         ]);
     }
 
@@ -127,11 +129,9 @@ class PegawaiController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Pegawai $pegawai)
     {
+        // Semua files terkait pegawai akan otomatis terhapus
         $pegawai->delete();
 
         return redirect()->route('pegawai.index')->with('toast', [

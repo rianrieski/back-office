@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GolonganDarah;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class PegawaiRequest extends FormRequest
 {
@@ -14,11 +16,6 @@ class PegawaiRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
         return [
@@ -27,12 +24,12 @@ class PegawaiRequest extends FormRequest
             'nama' => 'required|string',
             'jenis_kelamin' => 'required',
             'agama_id' => 'required',
-            'golongan_darah' => 'required',
+            'golongan_darah' => new Enum(GolonganDarah::class),
             'jenis_kawin_id' => 'required',
             'tempat_lahir' => 'required|max:50|regex:/^[\pL\s\-]+$/u',
             'tanggal_lahir' => 'required',
             'email_kantor' => 'required|email:rfc,dns',
-            'email_pribadi' => 'required|email:rfc,dns',
+            'email_pribadi' => 'nullable|email:rfc,dns',
             'no_telp' => 'required|digits_between:11,13',
             'jenis_pegawai_id' => 'required',
             'status_pegawai_id' => 'required',
