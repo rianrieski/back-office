@@ -1,7 +1,8 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
+
 const props = defineProps({
     propinsi: "",
     desa: "",
@@ -19,73 +20,98 @@ const form = useForm("createAlamat", {
     kode_pos: "",
     alamat: "",
 });
+
 const simpanAlamat = () => {
     form.post("/pegawai/alamat", {
         preserveScroll: true,
         preserveState: true,
         replace: true,
         onSuccess: (response) => {
+            Swal.fire({
+                title: "Tersimpan!",
+                text: response.props.success,
+                icon: "success",
+                confirmButtonText: "OK",
+            });
             router.get(route("alamat.index"));
-            console.log("SUKSES");
         },
         onError: (errors) => {
-            console.log(errors.query);
+            if (errors.query) {
+                Swal.fire({
+                    title: "Gagal!",
+                    text: errors.query,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
         },
     });
 };
-
-const getKota = (propinsi_id) => {
-    form.clearErrors();
-    router.get(
-        route("alamat.create"),
-        {
-            propinsi_id: propinsi_id,
-        },
-        {
-            only: ["kota"],
-            onSuccess: (response) => {
-                kota.value = response.props.kota;
+watch(
+    () => form.propinsi_id,
+    (value) => {
+        router.get(
+            route("alamat.create"),
+            { propinsi_id: value },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (response) => {
+                    form.kota_id = null;
+                    form.kecamatan_id = null;
+                    form.desa_id = null;
+                    kota.value = response.props.kota;
+                },
             },
-            preserveState: true,
-            preserveScroll: true,
-            replace: true,
-        },
-    );
-};
-const getKecamatan = (kota_id) => {
-    router.get(
-        route("alamat.create"),
-        {
-            kota_id: kota_id,
-        },
-        {
-            only: ["kecamatan"],
-            onSuccess: (response) => {
-                kecamatan.value = response.props.kecamatan;
+        );
+    },
+);
+const selectedPropinsi = computed({
+    get() {
+        return props.propinsi.find((prop) => prop.id === form.propinsi_id);
+    },
+    set(propinsi) {
+        form.propinsi_id = propinsi.id;
+    },
+});
+watch(
+    () => form.kota_id,
+    (value) => {
+        router.get(
+            route("alamat.create"),
+            { kota_id: value },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (response) => {
+                    kecamatan.value = response.props.kecamatan;
+                },
             },
-            preserveState: true,
-            preserveScroll: true,
-            replace: true,
-        },
-    );
-};
-const getDesa = (kecamatan_id) => {
-    router.get(
-        route("alamat.create"),
-        {
-            kecamatan_id: kecamatan_id,
-        },
-        {
-            only: ["desa"],
-            onSuccess: (response) => {
-                desa.value = response.props.desa;
+        );
+    },
+);
+const selectedKota = computed({
+    get() {
+        return kota.value?.find((kot) => kot.id === form.kota_id);
+    },
+    set(kota) {
+        form.kota_id = kota.id;
+    },
+});
+watch(
+    () => form.kecamatan_id,
+    (value) => {
+        router.get(
+            route("alamat.create"),
+            { kecamatan_id: value },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (response) => (desa.value = response.props.desa),
             },
-            preserveScroll: true,
-            preserveState: true,
-            replace: true,
-        },
-    );
-};
+        );
+    },
+);
 </script>
 
 <template>

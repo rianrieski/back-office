@@ -29,7 +29,6 @@
         "flowbite": "^1.8.1",
         "flowbite-vue": "^0.0.17-next.2",
         "lodash": "^4.17.21",
-        "pinia": "^2.1.6",
         "sweetalert2": "^11.7.27",
         "vue-select": "^4.0.0-beta.6"
     }

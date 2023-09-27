@@ -6,6 +6,7 @@ import { computed, ref, watch } from "vue";
 import Swal from "sweetalert2";
 import vSelect from 'vue-select'
 const props = defineProps({
+    title:String,
     pegawaiAlamat : '',
     pegawai:'',
     propinsi:'',
@@ -65,32 +66,6 @@ watch(()=>form.propinsi_id,(value)=>{
         }
     });
 });
-watch(()=>form.kota_id,(value)=>{
-    router.get(route('alamat.edit',props.pegawaiAlamat.id),{kota_id:value},{
-        preserveState:true,
-        preserveScroll:true,
-        onSuccess:(response)=>{
-            form.kecamatan_id = null;
-            form.desa_id = null;
-            kecamatan.value = response.props.kecamatan
-        }
-    });
-});
-
-watch(()=>form.kecamatan_id,(value)=>{
-    router.get(route('alamat.edit',props.pegawaiAlamat.id),{kecamatan_id:value},{
-        preserveState:true,
-        preserveScroll:true,
-        onSuccess:(response)=>
-        {
-            form.desa_id = null;
-            desa.value = response.props.desa
-        }
-    });
-});
-const back = ()=>{
-    router.get(route('alamat.index'));
-}
 const selectedPropinsi = computed({
     get(){
         return props.propinsi.find(prop => prop.id === form.propinsi_id)
@@ -99,18 +74,36 @@ const selectedPropinsi = computed({
         form.propinsi_id = propinsi.id
     }
 })
+watch(()=>form.kota_id,(value)=>{
+    router.get(route('alamat.edit',props.pegawaiAlamat.id),{kota_id:value},{
+        preserveState:true,
+        preserveScroll:true,
+        onSuccess:(response)=>{
+            kecamatan.value = response.props.kecamatan
+        }
+    });
+});
 const selectedKota = computed({
     get(){
-        return props.kota?.find(kot => kot.id === form.kota_id)
+        return kota.value?.find(kot => kot.id === form.kota_id)
     },
     set(kota){
         form.kota_id = kota.id
     }
 })
+watch(()=>form.kecamatan_id,(value)=>{
+    router.get(route('alamat.edit',props.pegawaiAlamat.id),{kecamatan_id:value},{
+        preserveState:true,
+        preserveScroll:true,
+        onSuccess:(response)=>
+        {
+            desa.value = response.props.desa
+        },
+    });
+});
 const selectedKecamatan = computed({
     get(){
-        console.log(form.kecamatan_id);
-        return props.kecamatan.find(kec => kec.id === form.kecamatan_id)
+        return kecamatan.value.find(kec => kec.id === form.kecamatan_id)
     },
     set(kecamatan){
         form.kecamatan_id = kecamatan.id
@@ -118,12 +111,17 @@ const selectedKecamatan = computed({
 })
 const selectedDesa = computed({
     get(){
-        return  props.desa?.find(des => des.id === form.desa_id)
+        console.log(form.desa_id);
+        return  desa.value?.find(des => des.id === form.desa_id)
     },
     set(desa){
         form.desa_id = desa.id
     }
 })
+const back = ()=>{
+    router.get(route('alamat.index'));
+}
+
 
 </script>
 
@@ -133,12 +131,12 @@ const selectedDesa = computed({
             <li><a>Beranda</a></li>
             <li>Pegawai</li>
             <li><Link href="/pegawai/alamat">Alamat</Link></li>
-            <li><span class="text-info">Edit Alamat</span></li>
+            <li><span class="text-info">{{title}}</span></li>
         </ul>
     </div>
     <MainCard>
         <div class="w-full p-6 m-auto lg:max-w-xl">
-            <h2 class="text-2xl font-semibold text-center text-gray-700">Tambah Alamat</h2>
+            <h2 class="text-2xl font-semibold text-center text-gray-700">{{title}}</h2>
             <form class="space-y-4" @submit.prevent="simpanAlamat">
                 <div class="form-control">
                     <label class="label">
@@ -156,8 +154,8 @@ const selectedDesa = computed({
 
                     <select v-model="form.tipe_alamat" class="select select-bordered" :class="{'select-error':form.errors.tipe_alamat}">
                         <option disabled selected>Pilih tipe</option>
-                        <option value="D">Domisili</option>
-                        <option value="K">Asal</option>
+                        <option value="Domisili">Domisili</option>
+                        <option value="Asal">Asal</option>
                     </select>
                     <label class="label">
                         <span v-if="form.errors.tipe_alamat" class="label-text-alt text-error">{{form.errors.tipe_alamat}}</span>
