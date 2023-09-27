@@ -24,8 +24,7 @@ class PegawaiRequest extends FormRequest
         return [
             'nik' => 'required|digits:16',
             'nip' => 'required|digits:18',
-            'nama_depan' => 'required|max:50|regex:/^[\pL\s\-]+$/u',
-            'nama_belakang' => 'required|max:50|regex:/^[\pL\s\-]+$/u',
+            'nama' => 'required|string',
             'jenis_kelamin' => 'required',
             'agama_id' => 'required',
             'golongan_darah' => 'required',

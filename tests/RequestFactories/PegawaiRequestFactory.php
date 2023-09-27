@@ -1,23 +1,16 @@
 <?php
 
-namespace Database\Factories;
+namespace Tests\RequestFactories;
 
 use App\Models\Agama;
 use App\Models\JenisKawin;
 use App\Models\JenisPegawai;
 use App\Models\StatusPegawai;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
+use Worksome\RequestFactories\RequestFactory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pegawai>
- */
-class PegawaiFactory extends Factory
+class PegawaiRequestFactory extends RequestFactory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
@@ -32,12 +25,14 @@ class PegawaiFactory extends Factory
             'golongan_darah' => fake()->randomElement(['O', 'A', 'B', 'AB']),
             'tempat_lahir' => fake()->city(),
             'tanggal_lahir' => fake()->dateTimeBetween('1990-01-01', '2012-12-31')->format('Y-m-d'),
-            'email_kantor' => fake()->email(),
-            'email_pribadi' => fake()->email(),
+            'email_kantor' => fake()->word() . '@office.com',
+            'email_pribadi' => fake()->word() . '@google.com',
             'no_telp' => fake()->numerify('#############'),
             'status_dinas' => fake()->boolean(),
             'no_bpjs' => fake()->numerify('#############'),
             'no_kartu_pegawai' => fake()->numerify('#########'),
+            'media_kartu_pegawai' => UploadedFile::fake()->image('kartu_pegawai.jpg'),
+            'media_foto_pegawai' => UploadedFile::fake()->image('foto_pegawai.jpg'),
         ];
     }
 }

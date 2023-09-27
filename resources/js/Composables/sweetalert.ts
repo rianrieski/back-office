@@ -39,7 +39,7 @@ export function useToast({
     Swal.fire({
         toast: true,
         text,
-        icon,
+        icon: icon || "success",
         position: "top-end",
         timer: 2500,
         timerProgressBar: true,
