@@ -13,6 +13,7 @@ import ShowingResultTable from "@/Components/ShowingResultTable.vue";
 import { useQuery } from "@/Composables/tablequery.ts";
 import { useConfirm } from "@/Composables/sweetalert.ts";
 import PerPageOption from "@/Components/PerPageOption.vue";
+import HeadColumn from "@/Components/HeadColumn.vue";
 
 const props = defineProps({
     pegawai: Object,
@@ -21,7 +22,7 @@ const props = defineProps({
 const columns = [
     { label: "Nama", column: "nama" },
     { label: "NIP", column: "nip" },
-    { label: "Status", column: "status" },
+    { label: "Status", column: "status_dinas" },
 ];
 
 const filterBy = ref({ label: "Nama", column: "nama" });
@@ -31,7 +32,7 @@ const perPage = ref(15);
 const keyword = ref("");
 const query = useQuery({ keyword, filterBy, sortBy, perPage });
 
-const fetchData = (params) => {
+const fetchData = (params = {}) => {
     router.get(
         route("pegawai.index", {
             _query: { ...query.value, ...params },
@@ -78,9 +79,9 @@ const hapusPegawai = async (id) => {
                     <div>
                         <Link
                             :href="route('pegawai.create')"
-                            class="btn btn-primary"
+                            class="btn btn-primary btn-outline"
                         >
-                            Tambah
+                            Rekam Pegawai Baru
                         </Link>
                     </div>
                     <div class="flex gap-2">
@@ -88,25 +89,33 @@ const hapusPegawai = async (id) => {
                             :options="columns"
                             v-model:keyword="keyword"
                             v-model:selected="filterBy"
-                            :search="fetchData"
+                            :search="() => fetchData()"
                         />
-                        <PerPageOption v-model="perPage" @change="fetchData" />
+                        <PerPageOption
+                            v-model="perPage"
+                            @change="() => fetchData()"
+                        />
                     </div>
                 </div>
                 <table class="table" aria-describedby="Tabel Profil Pegawai">
                     <thead>
                         <tr>
                             <th scope="col">No</th>
-                            <th scope="col">Nama</th>
-                            <th scope="col">NIP</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Aksi</th>
+
+                            <HeadColumn
+                                v-for="col in columns"
+                                :key="col.label"
+                                v-model="sortBy"
+                                :content="col"
+                                @click="() => fetchData()"
+                            />
+                            <th scope="col" class="w-16">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-if="pegawai.data.length < 1">
                             <td colspan="5" class="text-center">
-                                data tidak ditemukan
+                                Data tidak ditemukan
                             </td>
                         </tr>
                         <tr

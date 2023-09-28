@@ -2,7 +2,9 @@ import { computed, Ref, UnwrapRef } from "vue";
 
 type QueryParams = {
     keyword: Ref<UnwrapRef<string>>;
-    filterBy: Ref<UnwrapRef<{ label: string; column: string }>>;
+    filterBy: Ref<
+        UnwrapRef<{ label: string; column: string; cell?: Function }>
+    >;
     sortBy: Ref<UnwrapRef<string>>;
     perPage: Ref<UnwrapRef<number>>;
 };
