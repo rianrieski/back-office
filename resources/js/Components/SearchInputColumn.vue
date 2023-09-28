@@ -14,7 +14,10 @@ const props = defineProps({
     options: Array,
     keyword: String,
     selected: Object,
-    search: Function,
+    search: {
+        type: Function,
+        required: true,
+    },
 });
 
 const emit = defineEmits(["update:keyword", "update:selected"]);
