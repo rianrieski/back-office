@@ -28,6 +28,7 @@ const columns = [
         cell: (val) => useLocaleDateTime(new Date(val)),
     },
 ];
+
 const filterBy = ref({ label: "Nama ASN", column: "nama" });
 const keyword = ref("");
 const perPage = ref(15);

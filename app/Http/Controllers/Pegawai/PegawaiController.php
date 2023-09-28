@@ -101,6 +101,7 @@ class PegawaiController extends Controller
                 'statusPegawai' => fn() => $statusPegawai,
                 'media_foto_pegawai' => fn() => $pegawai->getFirstMediaUrl('media_foto_pegawai'),
                 'media_kartu_pegawai' => fn() => $pegawai->getFirstMediaUrl('media_kartu_pegawai'),
+                'golonganDarah' => fn() => GolonganDarah::cases()
             ]
         );
     }

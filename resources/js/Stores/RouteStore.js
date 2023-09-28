@@ -49,8 +49,8 @@ const useRouteStore = defineStore("route-store", () => {
             children: [
                 {
                     icon: UserIcon,
-                    label: "Profil Pegawai",
-                    href: route("profil_pegawai.index"),
+                    label: "Data Pegawai",
+                    href: route("pegawai.index"),
                 },
                 {
                     icon: Square3Stack3DIcon,

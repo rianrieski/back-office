@@ -90,6 +90,7 @@ describe('handling crud pegawai', function () {
                 ->has('statusPegawai', 5)
                 ->has('media_foto_pegawai')
                 ->has('media_kartu_pegawai')
+                ->has('golonganDarah', GolonganDarah::count())
             );
     });
 

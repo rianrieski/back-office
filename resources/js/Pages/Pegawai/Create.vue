@@ -42,7 +42,7 @@ const form = useForm({
 const isLoading = ref(false);
 
 const simpanPegawai = () => {
-    form.post(route("profil_pegawai.store"), {
+    form.post(route("pegawai.store"), {
         preserveScroll: true,
         preserveState: true,
         replace: true,

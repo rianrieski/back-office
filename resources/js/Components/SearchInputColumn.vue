@@ -3,7 +3,8 @@ import {
     MagnifyingGlassIcon,
     XMarkIcon,
 } from "@heroicons/vue/24/outline/index.js";
-import { computed } from "vue";
+import { computed, watch } from "vue";
+import { debounce } from "lodash";
 
 const props = defineProps({
     placeholder: {
@@ -13,6 +14,7 @@ const props = defineProps({
     options: Array,
     keyword: String,
     selected: Object,
+    search: Function,
 });
 
 const emit = defineEmits(["update:keyword", "update:selected"]);
@@ -25,13 +27,18 @@ const selectedColumn = computed({
         return emit("update:selected", value);
     },
 });
+
+watch(
+    () => props.keyword,
+    debounce(() => props.search(), 300),
+);
 </script>
 
 <template>
     <div class="join">
         <select
             v-model="selectedColumn"
-            class="select join-item select-bordered"
+            class="join-item select select-bordered"
         >
             <option :value="opt" :key="opt.label" v-for="opt in options">
                 {{ opt.label }}
