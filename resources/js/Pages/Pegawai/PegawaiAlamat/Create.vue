@@ -18,11 +18,11 @@ const form = useForm("createAlamat", {
     kecamatan_id: "",
     desa_id: "",
     kode_pos: "",
-    alamat: "",
+    row: "",
 });
 
 const simpanAlamat = () => {
-    form.post("/pegawai/alamat", {
+    form.post("/pegawai/row", {
         preserveScroll: true,
         preserveState: true,
         replace: true,
@@ -33,7 +33,7 @@ const simpanAlamat = () => {
                 icon: "success",
                 confirmButtonText: "OK",
             });
-            router.get(route("alamat.index"));
+            router.get(route("row.index"));
         },
         onError: (errors) => {
             if (errors.query) {
@@ -51,7 +51,7 @@ watch(
     () => form.propinsi_id,
     (value) => {
         router.get(
-            route("alamat.create"),
+            route("row.create"),
             { propinsi_id: value },
             {
                 preserveState: true,
@@ -78,7 +78,7 @@ watch(
     () => form.kota_id,
     (value) => {
         router.get(
-            route("alamat.create"),
+            route("row.create"),
             { kota_id: value },
             {
                 preserveState: true,
@@ -102,7 +102,7 @@ watch(
     () => form.kecamatan_id,
     (value) => {
         router.get(
-            route("alamat.create"),
+            route("row.create"),
             { kecamatan_id: value },
             {
                 preserveState: true,
@@ -265,16 +265,16 @@ watch(
                         <span class="label-text">Alamat Lengkap</span>
                     </label>
                     <textarea
-                        v-model="form.alamat"
+                        v-model="form.row"
                         class="textarea textarea-bordered h-24"
-                        :class="{ 'textarea-error': form.errors.alamat }"
-                        placeholder="Masukkan alamat lengkap"
+                        :class="{ 'textarea-error': form.errors.row }"
+                        placeholder="Masukkan row lengkap"
                     ></textarea>
                     <label class="label">
                         <span
-                            v-if="form.errors.alamat"
+                            v-if="form.errors.row"
                             class="label-text-alt text-error"
-                            >{{ form.errors.alamat }}</span
+                            >{{ form.errors.row }}</span
                         >
                     </label>
                 </div>

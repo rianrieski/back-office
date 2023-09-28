@@ -1,9 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
 
-defineProps({
-    lists: [Object],
-});
+type BreadCrumbItem = {
+    label: String;
+    url?: String;
+};
+
+defineProps<{
+    lists: Array<BreadCrumbItem>;
+}>();
 </script>
 
 <template>

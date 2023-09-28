@@ -4,7 +4,7 @@ import { computed, ref } from "vue";
 
 type Column = {
     label: string;
-    column: string;
+    column?: string;
 };
 
 const props = defineProps<{

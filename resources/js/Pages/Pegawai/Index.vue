@@ -65,117 +65,115 @@ const hapusPegawai = async (id) => {
 </script>
 
 <template>
-    <div>
-        <Head title="Pegawai" />
-        <div class="breadcrumbs text-sm">
-            <ul>
-                <li><a>Beranda</a></li>
-                <li><span class="text-info">Pegawai</span></li>
-            </ul>
-        </div>
-        <MainCard>
-            <div class="overflow-x-auto">
-                <div class="flex justify-between py-4">
-                    <div>
-                        <Link
-                            :href="route('pegawai.create')"
-                            class="btn btn-primary btn-outline"
-                        >
-                            Rekam Pegawai Baru
-                        </Link>
-                    </div>
-                    <div class="flex gap-2">
-                        <SearchInputColumn
-                            :options="columns"
-                            v-model:keyword="keyword"
-                            v-model:selected="filterBy"
-                            :search="() => fetchData()"
-                        />
-                        <PerPageOption
-                            v-model="perPage"
-                            @change="() => fetchData()"
-                        />
-                    </div>
+    <Head title="Pegawai" />
+
+    <div class="breadcrumbs text-sm">
+        <ul>
+            <li><a>Beranda</a></li>
+            <li><span class="text-info">Pegawai</span></li>
+        </ul>
+    </div>
+
+    <MainCard>
+        <div class="overflow-x-auto">
+            <div class="flex justify-between py-4">
+                <div>
+                    <Link
+                        :href="route('pegawai.create')"
+                        class="btn btn-primary btn-outline"
+                    >
+                        Rekam Pegawai Baru
+                    </Link>
                 </div>
-                <table class="table" aria-describedby="Tabel Profil Pegawai">
-                    <thead>
-                        <tr>
-                            <th scope="col">No</th>
-
-                            <HeadColumn
-                                v-for="col in columns"
-                                :key="col.label"
-                                v-model="sortBy"
-                                :content="col"
-                                @click="() => fetchData()"
-                            />
-                            <th scope="col" class="w-16">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-if="pegawai.data.length < 1">
-                            <td colspan="5" class="text-center">
-                                Data tidak ditemukan
-                            </td>
-                        </tr>
-                        <tr
-                            v-else
-                            class="hover"
-                            v-for="(item, index) in pegawai.data"
-                        >
-                            <td>{{ pegawai.from + index }}</td>
-                            <td>{{ item.nama }}</td>
-                            <td>{{ item.nip }}</td>
-                            <td>
-                                <span v-if="item.status_dinas === 0">
-                                    Aktif
-                                </span>
-                                <span v-else-if="item.status_dinas === 1">
-                                    Tidak Aktif
-                                </span>
-                            </td>
-                            <td>
-                                <div class="flex items-center justify-center">
-                                    <button
-                                        class="tooltip btn-primary btn-outline btn-xs tooltip-bottom hover:rounded-lg"
-                                        data-tip="Edit"
-                                        @click="editPegawai(item.id)"
-                                    >
-                                        <PencilSquareIcon class="h-4 w-4" />
-                                    </button>
-                                    <button
-                                        class="tooltip btn-info btn-outline btn-xs tooltip-bottom hover:rounded-lg"
-                                        data-tip="Detail"
-                                        @click="lihatPegawai(item.id)"
-                                    >
-                                        <EyeIcon class="h-4 w-4" />
-                                    </button>
-                                    <button
-                                        class="tooltip btn-error btn-outline btn-xs tooltip-bottom rounded"
-                                        data-tip="Hapus"
-                                        @click="hapusPegawai(item.id)"
-                                    >
-                                        <TrashIcon class="h-4 w-4" />
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="mt-4 flex justify-between">
-                    <ShowingResultTable
-                        :from="pegawai.from"
-                        :to="pegawai.to"
-                        :total="pegawai.total"
-                        class="justify-self-start"
+                <div class="flex gap-2">
+                    <SearchInputColumn
+                        :options="columns"
+                        v-model:keyword="keyword"
+                        v-model:selected="filterBy"
+                        :search="() => fetchData()"
                     />
-                    <Pagination
-                        :links="pegawai.links"
-                        @goToPage="(page) => fetchData({ page })"
+                    <PerPageOption
+                        v-model="perPage"
+                        @change="() => fetchData()"
                     />
                 </div>
             </div>
-        </MainCard>
-    </div>
+            <table class="table" aria-describedby="Tabel Profil Pegawai">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+
+                        <HeadColumn
+                            v-for="col in columns"
+                            :key="col.label"
+                            v-model="sortBy"
+                            :content="col"
+                            @click="() => fetchData()"
+                        />
+                        <th scope="col" class="w-16">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-if="pegawai.data.length < 1">
+                        <td colspan="5" class="text-center">
+                            Data tidak ditemukan
+                        </td>
+                    </tr>
+                    <tr
+                        v-else
+                        class="hover"
+                        v-for="(item, index) in pegawai.data"
+                    >
+                        <td>{{ pegawai.from + index }}</td>
+                        <td>{{ item.nama }}</td>
+                        <td>{{ item.nip }}</td>
+                        <td>
+                            <span v-if="item.status_dinas === 0"> Aktif </span>
+                            <span v-else-if="item.status_dinas === 1">
+                                Tidak Aktif
+                            </span>
+                        </td>
+                        <td>
+                            <div class="flex items-center justify-center">
+                                <button
+                                    class="tooltip btn-primary btn-outline btn-xs tooltip-bottom hover:rounded-lg"
+                                    data-tip="Edit"
+                                    @click="editPegawai(item.id)"
+                                >
+                                    <PencilSquareIcon class="h-4 w-4" />
+                                </button>
+                                <button
+                                    class="tooltip btn-info btn-outline btn-xs tooltip-bottom hover:rounded-lg"
+                                    data-tip="Detail"
+                                    @click="lihatPegawai(item.id)"
+                                >
+                                    <EyeIcon class="h-4 w-4" />
+                                </button>
+                                <button
+                                    class="tooltip btn-error btn-outline btn-xs tooltip-bottom rounded"
+                                    data-tip="Hapus"
+                                    @click="hapusPegawai(item.id)"
+                                >
+                                    <TrashIcon class="h-4 w-4" />
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mt-4 flex justify-between">
+                <ShowingResultTable
+                    :from="pegawai.from"
+                    :to="pegawai.to"
+                    :total="pegawai.total"
+                    class="justify-self-start"
+                />
+                <Pagination
+                    :links="pegawai.links"
+                    @goToPage="(page) => fetchData({ page })"
+                />
+            </div>
+        </div>
+    </MainCard>
 </template>
