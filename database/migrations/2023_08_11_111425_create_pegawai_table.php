@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('pegawai', function (Blueprint $table) {
             $table->id();
-            $table->string('nik', 16);
-            $table->string('nip', 18);
+            $table->string('nik', 16)->unique();
+            $table->string('nip', 18)->unique();
             $table->string('nama');
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->unsignedTinyInteger('agama_id');

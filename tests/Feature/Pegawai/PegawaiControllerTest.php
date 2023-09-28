@@ -144,7 +144,7 @@ describe('validate attribute pegawai form request', function () {
             ->assertSessionHasErrors([$attribute]);
     })->with([
         'nik', 'nip', 'nama', 'jenis_kelamin', 'agama_id', 'jenis_kawin_id', 'jenis_pegawai_id', 'status_pegawai_id',
-        'tempat_lahir', 'tanggal_lahir', 'email_kantor', 'no_telp', 'status_dinas', 'no_bpjs', 'no_kartu_pegawai',
+        'tempat_lahir', 'tanggal_lahir', 'email_kantor', 'no_telp', 'status_dinas', 'no_bpjs'
     ]);
 
     it('can process pegawai store request with missing attribute', function ($attribute) {
@@ -155,7 +155,7 @@ describe('validate attribute pegawai form request', function () {
             ->assertSessionDoesntHaveErrors($attribute);
     })->with([
         'email_pribadi', 'golongan_darah', 'tanggal_wafat', 'tanggal_berhenti', 'no_taspen', 'npwp',
-        'no_enroll', 'media_kartu_pegawai', 'media_foto_pegawai'
+        'no_enroll', 'no_kartu_pegawai', 'media_kartu_pegawai', 'media_foto_pegawai'
     ]);
 
     it('can validate missing attribute in pegawai update request ', function ($attribute) {

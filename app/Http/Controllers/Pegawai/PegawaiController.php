@@ -49,13 +49,17 @@ class PegawaiController extends Controller
     {
         $validated = $request->validated();
 
-        Arr::pull($validated, 'media_kartu_pegawai');
-        Arr::pull($validated, 'media_foto_pegawai');
+        Arr::forget($validated, ['media_kartu_pegawai', 'media_foto_pegawai']);
 
         $pegawai = Pegawai::create($validated);
 
-        $pegawai->addMediaFromRequest('media_foto_pegawai')->toMediaCollection('media_foto_pegawai');
-        $pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
+        if ($request->validated('media_foto_pegawai')) {
+            $pegawai->addMediaFromRequest('media_foto_pegawai')->toMediaCollection('media_foto_pegawai');
+        }
+
+        if ($request->validated('media_kartu_pegawai')) {
+            $pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
+        }
 
         return redirect()->route('pegawai.show', $pegawai)->with('toast', [
             'message' => 'Data pegawai berhasil disimpan'
@@ -110,8 +114,7 @@ class PegawaiController extends Controller
     {
         $validated = $request->validated();
 
-        Arr::pull($validated, 'media_kartu_pegawai');
-        Arr::pull($validated, 'media_foto_pegawai');
+        Arr::forget($validated, ['media_kartu_pegawai', 'media_foto_pegawai']);
 
         $pegawai->update($validated);
 

@@ -3,19 +3,20 @@ import { Link, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 import MainCard from "@/Components/MainCard.vue";
+import { useConfirm } from "@/Composables/sweetalert.ts";
 
 defineProps({
     agama: Array,
     statusNikah: Array,
     jenisPegawai: Array,
     statusPegawai: Array,
+    golonganDarah: Array,
 });
 
 const form = useForm({
     nik: "",
     nip: "",
-    nama_depan: "",
-    nama_belakang: "",
+    nama: "",
     jenis_kelamin: "",
     agama_id: "",
     golongan_darah: "",
@@ -35,29 +36,22 @@ const form = useForm({
     no_taspen: "",
     npwp: "",
     no_enroll: "",
-    media_foto_pegawai: "",
-    media_kartu_pegawai: "",
+    media_foto_pegawai: null,
+    media_kartu_pegawai: null,
 });
 
 const isLoading = ref(false);
 
-const simpanPegawai = () => {
+const simpanPegawai = async () => {
+    const confirmed = await useConfirm({ text: "Simpan data pegawai baru" });
+
     form.post(route("pegawai.store"), {
         preserveScroll: true,
         preserveState: true,
         replace: true,
-        onBefore: () => {
-            isLoading.value = true;
-        },
-        onSuccess: (response) => {
-            Toast.fire({
-                icon: "success",
-                text: response.props.flash.success,
-            });
-        },
-        onError: () => {
-            isLoading.value = false;
-        },
+        onBefore: () => confirmed,
+        onStart: () => (isLoading.value = true),
+        onFinish: () => (isLoading.value = false),
     });
 };
 </script>
@@ -104,35 +98,18 @@ const simpanPegawai = () => {
                             {{ form.errors.nip }}
                         </div>
                     </div>
-                    <div class="form-control col-span-3">
+                    <div class="form-control col-span-6">
                         <label class="label justify-start">
-                            Nama Depan
+                            Nama Lengkap
                             <span class="ml-1 text-sm text-red-700">*)</span>
                         </label>
                         <input
-                            v-model="form.nama_depan"
+                            v-model="form.nama"
                             type="text"
                             class="input-text rounded-md dark:text-gray-500"
                         />
-                        <div v-if="form.errors.nama_depan" class="text-error">
-                            {{ form.errors.nama_depan }}
-                        </div>
-                    </div>
-                    <div class="form-control col-span-3">
-                        <label class="label justify-start">
-                            Nama Belakang
-                            <span class="ml-1 text-sm text-red-700">*)</span>
-                        </label>
-                        <input
-                            v-model="form.nama_belakang"
-                            type="text"
-                            class="input-text rounded-md dark:text-gray-500"
-                        />
-                        <div
-                            v-if="form.errors.nama_belakang"
-                            class="text-error"
-                        >
-                            {{ form.errors.nama_belakang }}
+                        <div v-if="form.errors.nama" class="text-error">
+                            {{ form.errors.nama }}
                         </div>
                     </div>
                     <div class="form-control col-span-2">
@@ -189,29 +166,13 @@ const simpanPegawai = () => {
                             v-model="form.golongan_darah"
                             class="rounded-md dark:bg-white"
                         >
-                            <option class="dark:text-gray-500" value="O-">
-                                O-
-                            </option>
-                            <option class="dark:text-gray-500" value="O+">
-                                O+
-                            </option>
-                            <option class="dark:text-gray-500" value="A-">
-                                A-
-                            </option>
-                            <option class="dark:text-gray-500" value="A+">
-                                A+
-                            </option>
-                            <option class="dark:text-gray-500" value="B-">
-                                B-
-                            </option>
-                            <option class="dark:text-gray-500" value="B+">
-                                B+
-                            </option>
-                            <option class="dark:text-gray-500" value="AB-">
-                                AB-
-                            </option>
-                            <option class="dark:text-gray-500" value="AB+">
-                                AB+
+                            <option
+                                v-for="gol in golonganDarah"
+                                :key="gol"
+                                class="dark:text-gray-500"
+                                :value="gol"
+                            >
+                                {{ gol }}
                             </option>
                         </select>
                         <div
@@ -295,7 +256,6 @@ const simpanPegawai = () => {
                     <div class="form-control col-span-2">
                         <label class="label justify-start">
                             Email Pribadi
-                            <span class="ml-1 text-sm text-red-700">*)</span>
                         </label>
                         <input
                             v-model="form.email_pribadi"
@@ -477,7 +437,6 @@ const simpanPegawai = () => {
                     <div class="form-control col-span-2">
                         <label class="label justify-start">
                             No Kartu Pegawai
-                            <span class="ml-1 text-sm text-red-700">*)</span>
                         </label>
                         <input
                             v-model="form.no_kartu_pegawai"
@@ -527,7 +486,7 @@ const simpanPegawai = () => {
                 </div>
                 <div class="flex justify-between pt-4">
                     <Link
-                        :href="route('profil_pegawai.index')"
+                        :href="route('pegawai.index')"
                         class="btn btn-outline hover:btn-error"
                     >
                         Batal
