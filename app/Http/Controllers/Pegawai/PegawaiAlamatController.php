@@ -84,7 +84,7 @@ class PegawaiAlamatController extends Controller
             'kota_id' => 'numeric',
             'kecamatan_id' => 'numeric',
         ]);
-        
+
         return Inertia::render('Pegawai/PegawaiAlamat/Edit', [
             'pegawaiAlamat' => $alamat,
             'pegawai' => fn() => Pegawai::select('id', 'nama')->whereNull('tanggal_berhenti')->get(),
@@ -114,7 +114,7 @@ class PegawaiAlamatController extends Controller
     {
         $alamat->delete();
 
-        return back()->with('toast', [
+        return to_route('alamat.index')->with('toast', [
             'message' => 'Data alamat berhasil dihapus'
         ]);
     }
