@@ -14,10 +14,12 @@ const props = defineProps({
     modelValue: {
         type: [Object, String],
         required: true,
+        default: (raw) => raw || {},
     },
     options: {
         type: Array,
         required: true,
+        default: (raw) => raw || [],
     },
     label: {
         type: String,
@@ -61,7 +63,10 @@ const filteredOptions = computed(() => {
             >
                 <ComboboxInput
                     class="input w-full text-sm leading-5 text-gray-900"
-                    :displayValue="(option) => option[label]"
+                    :displayValue="
+                        (option) =>
+                            typeof option === 'string' ? option : option[label]
+                    "
                     @change="query = $event.target.value"
                     :placeholder="placeholder"
                 />
