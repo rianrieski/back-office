@@ -71,8 +71,11 @@ const showDetail = (alamat) => {
     <MainCard title="Daftar Alamat Pegawai">
         <div class="flex justify-between py-4">
             <div>
-                <button class="btn btn-primary" @click="tambahAlamat">
-                    Tambah
+                <button
+                    class="btn btn-primary btn-outline"
+                    @click="tambahAlamat"
+                >
+                    Rekam Alamat Baru
                 </button>
             </div>
             <div class="flex gap-2">

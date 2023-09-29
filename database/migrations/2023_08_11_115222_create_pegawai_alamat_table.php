@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,8 +12,9 @@ return new class extends Migration
     {
         Schema::create('pegawai_alamat', function (Blueprint $table) {
             $table->id();
+            $table->unique(['pegawai_id', 'tipe_alamat']);
             $table->unsignedBigInteger('pegawai_id');
-            $table->enum('tipe_alamat',["Domisili","Asal"]);
+            $table->enum('tipe_alamat', ["Domisili", "Asal"]);
             $table->unsignedInteger('propinsi_id');
             $table->unsignedBigInteger('kota_id');
             $table->unsignedBigInteger('kecamatan_id');
@@ -27,7 +27,6 @@ return new class extends Migration
             $table->foreign('kota_id')->references('id')->on('kota')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('kecamatan_id')->references('id')->on('kecamatan')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('desa_id')->references('id')->on('desa')->onUpdate('cascade')->onDelete('cascade');
-
         });
     }
 
