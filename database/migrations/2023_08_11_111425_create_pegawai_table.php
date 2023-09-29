@@ -37,10 +37,10 @@ return new class extends Migration {
             $table->string('no_enroll', 50)->nullable()->comment('no_urut_finger');
 
             $table->timestamps();
-            $table->foreign('agama_id')->references('id')->on('agama')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('jenis_kawin_id')->references('id')->on('jenis_kawin')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('jenis_pegawai_id')->references('id')->on('jenis_pegawai')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('status_pegawai_id')->references('id')->on('status_pegawai')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('agama_id')->references('id')->on('agama')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('jenis_kawin_id')->references('id')->on('jenis_kawin')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('jenis_pegawai_id')->references('id')->on('jenis_pegawai')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('status_pegawai_id')->references('id')->on('status_pegawai')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 

@@ -13,20 +13,15 @@ return new class extends Migration {
         Schema::create('pegawai_alamat', function (Blueprint $table) {
             $table->id();
             $table->unique(['pegawai_id', 'tipe_alamat']);
-            $table->unsignedBigInteger('pegawai_id');
+            $table->foreignId('pegawai_id')->constrained('pegawai')->cascadeOnDelete()->cascadeOnUpdate();
             $table->enum('tipe_alamat', ["Domisili", "Asal"]);
-            $table->unsignedInteger('propinsi_id');
-            $table->unsignedBigInteger('kota_id');
-            $table->unsignedBigInteger('kecamatan_id');
-            $table->unsignedBigInteger('desa_id');
+            $table->foreignId('propinsi_id')->constrained('propinsi')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('kota_id')->constrained('kota')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('kecamatan_id')->constrained('kecamatan')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('desa_id')->constrained('desa')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('kode_pos', 5);
             $table->text('alamat');
             $table->timestamps();
-            $table->foreign('pegawai_id')->references('id')->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('propinsi_id')->references('id')->on('propinsi')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('kota_id')->references('id')->on('kota')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('kecamatan_id')->references('id')->on('kecamatan')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('desa_id')->references('id')->on('desa')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
