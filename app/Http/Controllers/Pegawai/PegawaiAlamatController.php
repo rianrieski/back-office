@@ -11,9 +11,8 @@ use App\Models\Kota;
 use App\Models\Pegawai;
 use App\Models\PegawaiAlamat;
 use App\Models\Propinsi;
-use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -27,6 +26,7 @@ class PegawaiAlamatController extends Controller
                 ->allowedFilters([
                     AllowedFilter::custom('keyword', new FilterPegawaiAlamat)
                 ])
+                ->orderByDesc('id')
                 ->with(['pegawai:id,nama', 'propinsi', 'kota', 'kecamatan', 'desa'])
                 ->paginate(request('per_page', 15))
                 ->onEachSide(1)
@@ -73,62 +73,41 @@ class PegawaiAlamatController extends Controller
         PegawaiAlamat::create($request->validated());
 
         return to_route('alamat.index')->with('toast', [
-            'message' => 'Alamat berhasil disimpan',
+            'message' => 'Data alamat berhasil disimpan',
         ]);
     }
 
-    public function edit(Request $request, string $alamat)
+    public function edit(Request $request, PegawaiAlamat $alamat)
     {
-        $pegawaiAlamat = PegawaiAlamat::where('id', $alamat)->first();
-        if ($pegawaiAlamat == null) {
-            return redirect()->back()->withErrors(['query' => 'alamat pegawai tidak valid atau tidak ditemukan']);
-            return redirect()->back()->withErrors(['query' => 'tidak dapat menampilkan form edit']);
-        }
-        $kota = Kota::select('id', 'nama', 'propinsi_id')->where('propinsi_id', $pegawaiAlamat->propinsi_id)->get();
-        $kecamatan = Kecamatan::select('id', 'nama', 'kota_id')->where('kota_id', $pegawaiAlamat->kota_id)->get();
-        $desa = Desa::select('id', 'nama', 'kecamatan_id')->where('kecamatan_id', $pegawaiAlamat->kecamatan_id)->get();
-        $pegawai = Pegawai::where('id', $pegawaiAlamat->pegawai_id)->select('nama_depan', 'nama_belakang')->first();
-        $propinsi = Propinsi::select('id', 'nama')->get();
-        if ($request->propinsi_id) {
-            $kota = Kota::select('id', 'nama', 'propinsi_id')->where('propinsi_id', $request->propinsi_id)->get();
-        }
-        if ($request->kota_id) {
-            $kecamatan = Kecamatan::select('id', 'nama', 'kota_id')->where('kota_id', $request->kota_id)->get();
-        }
-        if ($request->kecamatan_id) {
-            $desa = Desa::select('id', 'nama', 'kecamatan_id')->where('kecamatan_id', $request->kecamatan_id)->get();
-        }
+        $request->validate([
+            'propinsi_id' => 'numeric',
+            'kota_id' => 'numeric',
+            'kecamatan_id' => 'numeric',
+        ]);
+        
         return Inertia::render('Pegawai/PegawaiAlamat/Edit', [
-            'pegawaiAlamat' => $pegawaiAlamat,
-            'title' => 'Ubah Alamat',
-            'pegawai' => fn() => $pegawai,
-            'propinsi' => fn() => $propinsi,
-            'kota' => fn() => $kota,
-            'kecamatan' => fn() => $kecamatan,
-            'desa' => fn() => $desa
+            'pegawaiAlamat' => $alamat,
+            'pegawai' => fn() => Pegawai::select('id', 'nama')->whereNull('tanggal_berhenti')->get(),
+            'propinsi' => fn() => Propinsi::all(),
+            'kota' => fn() => Kota::when($propinsi_id = $request->get('propinsi_id'), fn(Builder $builder) => $builder
+                ->where('propinsi_id', $propinsi_id), fn(Builder $builder) => $builder
+                ->where('propinsi_id', $alamat->propinsi_id))->get(),
+            'kecamatan' => fn() => Kecamatan::when($kota_id = $request->get('kota_id'), fn(Builder $builder) => $builder
+                ->where('kota_id', $kota_id), fn(Builder $builder) => $builder
+                ->where('kota_id', $alamat->kota_id))->get(),
+            'desa' => fn() => Desa::when($kecamatan_id = $request->get('kecamatan_id'), fn(Builder $builder) => $builder
+                ->where('kecamatan_id', $kecamatan_id), fn(Builder $builder) => $builder
+                ->where('kecamatan_id', $alamat->kecamatan_id))->get()
         ]);
     }
 
-    public function update(PegawaiAlamatRequest $request, string $id)
+    public function update(PegawaiAlamatRequest $request, PegawaiAlamat $alamat)
     {
-        $alamat = PegawaiAlamat::where('id', $id)->first();
-        $alamat->pegawai_id = $request->pegawai_id;
-        $alamat->tipe_alamat = $request->tipe_alamat;
-        $alamat->propinsi_id = $request->propinsi_id;
-        $alamat->kota_id = $request->kota_id;
-        $alamat->kecamatan_id = $request->kecamatan_id;
-        $alamat->desa_id = $request->desa_id;
-        $alamat->kode_pos = $request->kode_pos;
-        $alamat->alamat = $request->alamat;
-        try {
-            $alamat->save();
-            return redirect()->back()->with('success', 'Data alamat berhasil diubah');
-        } catch (QueryException $e) {
-            Log::error('terjadi kesalahan pada koneksi database');
-            return redirect()->back()->withErrors([
-                'query' => 'data alamat gagal disimpan'
-            ]);
-        }
+        $alamat->update($request->validated());
+
+        return to_route('alamat.index')->with('toast', [
+            'message' => 'Data alamat berhasil diubah'
+        ]);
     }
 
     public function destroy(PegawaiAlamat $alamat)

@@ -91,7 +91,13 @@ const selectedDesa = computed({
 });
 
 const fetchData = (label, params) => {
-    router.get(route(route().current()), params, {
+    const existingAlamat = usePage().props.pegawaiAlamat;
+
+    const url = route().current("alamat.create")
+        ? route("alamat.create")
+        : route("alamat.edit", existingAlamat.id);
+
+    router.get(url, params, {
         only: [label],
         preserveScroll: true,
         preserveState: true,

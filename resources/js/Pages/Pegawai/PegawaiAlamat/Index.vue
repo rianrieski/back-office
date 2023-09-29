@@ -188,7 +188,9 @@ const showDetail = (alamat) => {
                 </div>
             </div>
             <div class="modal-action">
-                <button class="btn btn-primary btn-sm">Tutup</button>
+                <button class="btn btn-neutral btn-outline btn-sm">
+                    Tutup
+                </button>
             </div>
         </form>
     </dialog>

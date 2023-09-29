@@ -51,7 +51,12 @@ const submit = () => {
                     v-model:alamat="form.alamat"
                 />
                 <div class="flex justify-end gap-2">
-                    <button class="btn btn-neutral btn-outline">Batal</button>
+                    <button
+                        class="btn btn-neutral btn-outline"
+                        onclick="window.history.back()"
+                    >
+                        Batal
+                    </button>
                     <button type="submit" class="btn btn-primary">
                         Simpan
                     </button>

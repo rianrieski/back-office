@@ -1,8 +1,8 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
-import { router, useForm } from "@inertiajs/vue3";
-import { computed, ref, watch } from "vue";
-import Swal from "sweetalert2";
+import { useForm } from "@inertiajs/vue3";
+import FormBody from "@/Pages/Pegawai/PegawaiAlamat/components/FormBody.vue";
+import { useToast } from "@/Composables/sweetalert.ts";
 
 const props = defineProps({
     title: String,
@@ -22,123 +22,16 @@ const form = useForm({
     kode_pos: props.pegawaiAlamat.kode_pos,
     row: props.pegawaiAlamat.row,
     pegawai_id: props.pegawaiAlamat.pegawai_id,
+    alamat: props.pegawaiAlamat.alamat,
 });
-const simpanAlamat = () => {
-    form.put(route("row.update", props.pegawaiAlamat.id), {
+const submit = () => {
+    form.put(route("alamat.update", props.pegawaiAlamat.id), {
         preserveScroll: true,
         preserveState: true,
         replace: true,
-        onSuccess: (response) => {
-            Swal.fire({
-                title: "Tersimpan!",
-                text: "row pegawai berhasil diubah",
-                icon: "success",
-                confirmButtonText: "OK",
-            });
-            router.get(route("row.index"));
-        },
-        onError: (errors) => {
-            if (errors.countError) {
-                Swal.fire({
-                    title: "Gagal!",
-                    text: errors.countError,
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-            }
-        },
+        onError: (errors) =>
+            useToast({ icon: "error", text: Object.values(errors)[0] }),
     });
-};
-
-const kota = ref(props.kota);
-const kecamatan = ref(props.kecamatan);
-const desa = ref(props.desa);
-watch(
-    () => form.propinsi_id,
-    (value) => {
-        router.get(
-            route("row.edit", props.pegawaiAlamat.id),
-            { propinsi_id: value },
-            {
-                preserveState: true,
-                preserveScroll: true,
-                onSuccess: (response) => {
-                    form.kota_id = null;
-                    form.kecamatan_id = null;
-                    form.desa_id = null;
-                    kota.value = response.props.kota;
-                },
-            },
-        );
-    },
-);
-const selectedPropinsi = computed({
-    get() {
-        return props.propinsi.find((prop) => prop.id === form.propinsi_id);
-    },
-    set(propinsi) {
-        form.propinsi_id = propinsi.id;
-    },
-});
-watch(
-    () => form.kota_id,
-    (value) => {
-        router.get(
-            route("row.edit", props.pegawaiAlamat.id),
-            { kota_id: value },
-            {
-                preserveState: true,
-                preserveScroll: true,
-                onSuccess: (response) => {
-                    kecamatan.value = response.props.kecamatan;
-                },
-            },
-        );
-    },
-);
-const selectedKota = computed({
-    get() {
-        return kota.value?.find((kot) => kot.id === form.kota_id);
-    },
-    set(kota) {
-        form.kota_id = kota.id;
-    },
-});
-watch(
-    () => form.kecamatan_id,
-    (value) => {
-        router.get(
-            route("row.edit", props.pegawaiAlamat.id),
-            { kecamatan_id: value },
-            {
-                preserveState: true,
-                preserveScroll: true,
-                onSuccess: (response) => {
-                    desa.value = response.props.desa;
-                },
-            },
-        );
-    },
-);
-const selectedKecamatan = computed({
-    get() {
-        return kecamatan.value.find((kec) => kec.id === form.kecamatan_id);
-    },
-    set(kecamatan) {
-        form.kecamatan_id = kecamatan.id;
-    },
-});
-const selectedDesa = computed({
-    get() {
-        console.log(form.desa_id);
-        return desa.value?.find((des) => des.id === form.desa_id);
-    },
-    set(desa) {
-        form.desa_id = desa.id;
-    },
-});
-const back = () => {
-    router.get(route("row.index"));
 };
 </script>
 
@@ -160,166 +53,24 @@ const back = () => {
             <h2 class="text-center text-2xl font-semibold text-gray-700">
                 {{ title }}
             </h2>
-            <form class="space-y-4" @submit.prevent="simpanAlamat">
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Pegawai</span>
-                    </label>
-                    <input
-                        class="input input-bordered"
-                        disabled
-                        :class="{ 'input-error': form.errors.kode_pos }"
-                        :value="
-                            pegawai.nama_depan + ' ' + pegawai.nama_belakang
-                        "
-                    />
-                    <label class="label">
-                        <span
-                            v-if="form.errors.pegawai_id"
-                            class="label-text-alt text-error"
-                            >{{ form.errors.pegawai_id }}</span
-                        >
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Tipe</span>
-                    </label>
-
-                    <select
-                        v-model="form.tipe_alamat"
-                        class="select select-bordered"
-                        :class="{ 'select-error': form.errors.tipe_alamat }"
+            <form class="space-y-4" @submit.prevent="submit">
+                <FormBody
+                    v-model:pegawai_id="form.pegawai_id"
+                    v-model:tipe_alamat="form.tipe_alamat"
+                    v-model:propinsi_id="form.propinsi_id"
+                    v-model:kota_id="form.kota_id"
+                    v-model:kecamatan_id="form.kecamatan_id"
+                    v-model:desa_id="form.desa_id"
+                    v-model:kode_pos="form.kode_pos"
+                    v-model:alamat="form.alamat"
+                />
+                <div class="flex justify-end gap-2">
+                    <button
+                        class="btn btn-neutral btn-outline"
+                        onclick="window.history.back()"
                     >
-                        <option disabled selected>Pilih tipe</option>
-                        <option value="Domisili">Domisili</option>
-                        <option value="Asal">Asal</option>
-                    </select>
-                    <label class="label">
-                        <span
-                            v-if="form.errors.tipe_alamat"
-                            class="label-text-alt text-error"
-                            >{{ form.errors.tipe_alamat }}</span
-                        >
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Propinsi</span>
-                    </label>
-                    <vSelect
-                        v-model="selectedPropinsi"
-                        :options="propinsi"
-                        label="nama"
-                        class="w-full"
-                    >
-                    </vSelect>
-                    <label class="label">
-                        <span
-                            v-if="form.errors.propinsi_id"
-                            class="label-text-alt text-error"
-                            >{{ form.errors.propinsi_id }}</span
-                        >
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Kota/Kabupaten</span>
-                    </label>
-
-                    <vSelect
-                        v-model="selectedKota"
-                        :options="kota"
-                        label="nama"
-                        class="w-full"
-                    >
-                    </vSelect>
-                    <label class="label">
-                        <span
-                            v-if="form.errors.kota_id"
-                            class="label-text-alt text-error"
-                            >{{ form.errors.kota_id }}</span
-                        >
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Kecamatan</span>
-                    </label>
-
-                    <vSelect
-                        v-model="selectedKecamatan"
-                        :options="kecamatan"
-                        label="nama"
-                        class="w-full"
-                    >
-                    </vSelect>
-                    <label class="label">
-                        <span
-                            v-if="form.errors.kecamatan_id"
-                            class="label-text-alt text-error"
-                            >{{ form.errors.kecamatan_id }}</span
-                        >
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Desa</span>
-                    </label>
-                    <vSelect
-                        v-model="selectedDesa"
-                        :options="desa"
-                        label="nama"
-                        class="w-full"
-                    >
-                    </vSelect>
-                    <label class="label">
-                        <span
-                            v-if="form.errors.desa_id"
-                            class="label-text-alt text-error"
-                            >{{ form.errors.desa_id }}</span
-                        >
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Kode Pos</span>
-                    </label>
-                    <input
-                        v-model="form.kode_pos"
-                        type="number"
-                        placeholder="Masukkan kode pos"
-                        class="input input-bordered"
-                        :class="{ 'input-error': form.errors.kode_pos }"
-                    />
-                    <label class="label">
-                        <span
-                            v-if="form.errors.kode_pos"
-                            class="label-text-alt text-error"
-                            >{{ form.errors.kode_pos }}</span
-                        >
-                    </label>
-                </div>
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Alamat Lengkap</span>
-                    </label>
-                    <textarea
-                        v-model="form.row"
-                        class="textarea textarea-bordered h-24"
-                        :class="{ 'textarea-error': form.errors.row }"
-                        placeholder="Masukkan row lengkap"
-                    ></textarea>
-                    <label class="label">
-                        <span
-                            v-if="form.errors.row"
-                            class="label-text-alt text-error"
-                            >{{ form.errors.row }}</span
-                        >
-                    </label>
-                </div>
-                <div class="flex justify-end">
-                    <a class="btn btn-error mx-2" @click="back">Batal</a>
+                        Batal
+                    </button>
                     <button type="submit" class="btn btn-primary">
                         Simpan
                     </button>
