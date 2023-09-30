@@ -12,9 +12,10 @@ return new class extends Migration {
     {
         Schema::create('unit_kerja', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->foreignId('parent_id')->nullable()->constrained('unit_kerja')->cascadeOnUpdate()->nullOnDelete();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreignId('jenis_unit_kerja_id')->nullable()->constrained('jenis_unit_kerja')->cascadeOnUpdate()->nullOnDelete();
+            $table->boolean('is_active')->default(true);
+            $table->string('nama');
             $table->string('singkatan', 10)->nullable();
             $table->string('keterangan', 100)->nullable();
             $table->timestamps();
