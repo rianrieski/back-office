@@ -9,6 +9,7 @@ import {
 } from "@headlessui/vue";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/vue/24/outline/index.js";
 import { computed, ref } from "vue";
+import { debounce } from "lodash";
 
 const props = defineProps({
     modelValue: {
@@ -23,7 +24,7 @@ const props = defineProps({
     },
     label: {
         type: String,
-        default: "label",
+        default: "nama",
     },
     placeholder: {
         type: String,
@@ -35,9 +36,11 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "search"]);
 
 const query = ref("");
+
+const fireEvent = debounce((value) => emit("search", value), 200);
 
 const filteredOptions = computed(() => {
     return query.value === ""
@@ -68,6 +71,7 @@ const filteredOptions = computed(() => {
                             typeof option === 'string' ? option : option[label]
                     "
                     @change="query = $event.target.value"
+                    @keyup="fireEvent($event.target.value)"
                     :placeholder="placeholder"
                 />
                 <ComboboxButton

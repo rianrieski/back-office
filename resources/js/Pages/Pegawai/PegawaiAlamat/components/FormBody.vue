@@ -42,6 +42,7 @@ const emit = defineEmits([
 ]);
 
 const pegawai = computed(() => usePage().props.pegawai || []);
+const currentPegawai = computed(() => usePage().props.currentPegawai);
 const propinsi = computed(() => usePage().props.propinsi);
 const listOptions = computed(() => {
     const kota = usePage().props.kota;
@@ -57,7 +58,10 @@ const getOptions = (label) => {
 };
 
 const selectedPegawai = computed({
-    get: () => pegawai.value.find((peg) => peg.id === props.pegawai_id),
+    get: () =>
+        [...pegawai.value, currentPegawai].find(
+            (peg) => peg?.id === props.pegawai_id,
+        ),
     set: (pegawai) => emit("update:pegawai_id", pegawai.id),
 });
 const selectedTipeAlamat = computed({
@@ -90,14 +94,29 @@ const selectedDesa = computed({
     set: (desa_id) => emit("update:desa_id", desa_id),
 });
 
-const fetchData = (label, params) => {
-    const existingAlamat = usePage().props.pegawaiAlamat;
+const existingAlamat = computed(() => usePage().props.pegawaiAlamat);
 
-    const url = route().current("alamat.create")
+const url = computed(() => {
+    return route().current("alamat.create")
         ? route("alamat.create")
-        : route("alamat.edit", existingAlamat.id);
+        : route("alamat.edit", existingAlamat.value.id);
+});
 
-    router.get(url, params, {
+const fetchPegawai = (nama) => {
+    router.get(
+        url.value,
+        { filter: { nama } },
+        {
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+            only: ["pegawai"],
+        },
+    );
+};
+
+const fetchData = (label, params) => {
+    router.get(url.value, params, {
         only: [label],
         preserveScroll: true,
         preserveState: true,
@@ -132,8 +151,8 @@ const fetchData = (label, params) => {
                 :error="Boolean(errors.pegawai_id)"
                 :options="pegawai"
                 v-model="selectedPegawai"
-                label="nama"
                 placeholder="Pilih Pegawai"
+                @search="fetchPegawai"
             />
             <ErrorText :text="errors.pegawai_id" />
         </div>

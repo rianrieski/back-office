@@ -8,9 +8,9 @@ use App\Http\Requests\PegawaiAlamatRequest;
 use App\Models\Desa;
 use App\Models\Kecamatan;
 use App\Models\Kota;
-use App\Models\Pegawai;
 use App\Models\PegawaiAlamat;
 use App\Models\Propinsi;
+use App\Services\PegawaiService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -44,7 +44,7 @@ class PegawaiAlamatController extends Controller
 
         return Inertia::render('Pegawai/PegawaiAlamat/Create', [
             'title' => 'Tambah Alamat',
-            'pegawai' => fn() => Pegawai::select('id', 'nama')->whereNull('tanggal_berhenti')->get(),
+            'pegawai' => fn() => PegawaiService::getNamaBySearch(),
             'propinsi' => fn() => Propinsi::all(),
             'kota' => Inertia::lazy(fn() => Kota::where('propinsi_id', $request->get('propinsi_id'))->get()),
             'kecamatan' => Inertia::lazy(fn() => Kecamatan::where('kota_id', $request->get('kota_id'))->get()),
@@ -87,7 +87,8 @@ class PegawaiAlamatController extends Controller
 
         return Inertia::render('Pegawai/PegawaiAlamat/Edit', [
             'pegawaiAlamat' => $alamat,
-            'pegawai' => fn() => Pegawai::select('id', 'nama')->whereNull('tanggal_berhenti')->get(),
+            'pegawai' => fn() => PegawaiService::getNamaBySearch(),
+            'currentPegawai' => $alamat->pegawai()->select(['id', 'nama'])->first(),
             'propinsi' => fn() => Propinsi::all(),
             'kota' => fn() => Kota::when($propinsi_id = $request->get('propinsi_id'), fn(Builder $builder) => $builder
                 ->where('propinsi_id', $propinsi_id), fn(Builder $builder) => $builder
