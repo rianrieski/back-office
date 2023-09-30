@@ -61,7 +61,7 @@ const simpanPegawai = async () => {
             ]"
         />
         <MainCard>
-            <form @submit.prevent="simpanPegawai">
+            <form @submit.prevent="simpanPegawai" class="mx-auto max-w-7xl">
                 <FormBody
                     v-model:nik="form.nik"
                     v-model:nip="form.nip"
@@ -88,7 +88,7 @@ const simpanPegawai = async () => {
                     v-model:media_foto_pegawai="form.media_foto_pegawai"
                     v-model:media_kartu_pegawai="form.media_kartu_pegawai"
                 />
-                <div class="flex justify-between pt-4">
+                <div class="mt-4 flex justify-end gap-2">
                     <Link
                         :href="route('pegawai.index')"
                         class="btn btn-outline hover:btn-error"

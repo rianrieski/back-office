@@ -142,7 +142,7 @@ const fetchData = (label, params) => {
 </script>
 
 <template>
-    <div>
+    <div class="grid grid-cols-1 gap-x-2 gap-y-4 md:grid-cols-2 lg:grid-cols-3">
         <div class="form-control">
             <label class="label">
                 <span class="label-text">Pegawai</span>
@@ -251,7 +251,7 @@ const fetchData = (label, params) => {
             />
             <ErrorText :text="errors.kode_pos" />
         </div>
-        <div class="form-control">
+        <div class="form-control lg:col-span-2">
             <label class="label">
                 <span class="label-text">Alamat Lengkap</span>
             </label>

@@ -38,30 +38,26 @@ const submit = () => {
         ]"
     />
     <MainCard title="Rekam Alamat Baru">
-        <div class="m-auto w-full p-6 lg:max-w-xl">
-            <form class="space-y-4" @submit.prevent="submit">
-                <FormBody
-                    v-model:pegawai_id="form.pegawai_id"
-                    v-model:tipe_alamat="form.tipe_alamat"
-                    v-model:propinsi_id="form.propinsi_id"
-                    v-model:kota_id="form.kota_id"
-                    v-model:kecamatan_id="form.kecamatan_id"
-                    v-model:desa_id="form.desa_id"
-                    v-model:kode_pos="form.kode_pos"
-                    v-model:alamat="form.alamat"
-                />
-                <div class="flex justify-end gap-2">
-                    <button
-                        class="btn btn-neutral btn-outline"
-                        onclick="window.history.back()"
-                    >
-                        Batal
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        Simpan
-                    </button>
-                </div>
-            </form>
-        </div>
+        <form @submit.prevent="submit" class="mx-auto max-w-7xl">
+            <FormBody
+                v-model:pegawai_id="form.pegawai_id"
+                v-model:tipe_alamat="form.tipe_alamat"
+                v-model:propinsi_id="form.propinsi_id"
+                v-model:kota_id="form.kota_id"
+                v-model:kecamatan_id="form.kecamatan_id"
+                v-model:desa_id="form.desa_id"
+                v-model:kode_pos="form.kode_pos"
+                v-model:alamat="form.alamat"
+            />
+            <div class="mt-4 flex justify-end gap-2">
+                <button
+                    class="btn btn-neutral btn-outline"
+                    onclick="window.history.back()"
+                >
+                    Batal
+                </button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+        </form>
     </MainCard>
 </template>

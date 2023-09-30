@@ -48,35 +48,28 @@ const submit = () => {
             </li>
         </ul>
     </div>
-    <MainCard>
-        <div class="m-auto w-full p-6 lg:max-w-xl">
-            <h2 class="text-center text-2xl font-semibold text-gray-700">
-                {{ title }}
-            </h2>
-            <form class="space-y-4" @submit.prevent="submit">
-                <FormBody
-                    v-model:pegawai_id="form.pegawai_id"
-                    v-model:tipe_alamat="form.tipe_alamat"
-                    v-model:propinsi_id="form.propinsi_id"
-                    v-model:kota_id="form.kota_id"
-                    v-model:kecamatan_id="form.kecamatan_id"
-                    v-model:desa_id="form.desa_id"
-                    v-model:kode_pos="form.kode_pos"
-                    v-model:alamat="form.alamat"
-                />
-                <div class="flex justify-end gap-2">
-                    <button
-                        class="btn btn-neutral btn-outline"
-                        onclick="window.history.back()"
-                    >
-                        Batal
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        Simpan
-                    </button>
-                </div>
-            </form>
-        </div>
+    <MainCard title="Edit Alamat Pegawai">
+        <form @submit.prevent="submit" class="mx-auto max-w-7xl">
+            <FormBody
+                v-model:pegawai_id="form.pegawai_id"
+                v-model:tipe_alamat="form.tipe_alamat"
+                v-model:propinsi_id="form.propinsi_id"
+                v-model:kota_id="form.kota_id"
+                v-model:kecamatan_id="form.kecamatan_id"
+                v-model:desa_id="form.desa_id"
+                v-model:kode_pos="form.kode_pos"
+                v-model:alamat="form.alamat"
+            />
+            <div class="mt-4 flex justify-end gap-2">
+                <button
+                    class="btn btn-neutral btn-outline"
+                    onclick="window.history.back()"
+                >
+                    Batal
+                </button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+        </form>
     </MainCard>
 </template>
 

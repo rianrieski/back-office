@@ -69,7 +69,7 @@ const updatePegawai = async () => {
             ]"
         />
         <MainCard>
-            <form @submit.prevent="updatePegawai">
+            <form @submit.prevent="updatePegawai" class="mx-auto max-w-7xl">
                 <FormBody
                     :show-photo="true"
                     v-model:nik="form.nik"
