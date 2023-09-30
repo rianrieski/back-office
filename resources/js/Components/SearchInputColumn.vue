@@ -11,7 +11,10 @@ const props = defineProps({
         type: String,
         default: "Cari",
     },
-    options: Array,
+    options: {
+        type: Array,
+        required: true,
+    },
     keyword: {
         type: String,
         required: true,

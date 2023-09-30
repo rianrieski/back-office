@@ -59,7 +59,7 @@ const getOptions = (label) => {
 
 const selectedPegawai = computed({
     get: () =>
-        [...pegawai.value, currentPegawai].find(
+        [...pegawai.value, currentPegawai.value].find(
             (peg) => peg?.id === props.pegawai_id,
         ),
     set: (pegawai) => emit("update:pegawai_id", pegawai.id),

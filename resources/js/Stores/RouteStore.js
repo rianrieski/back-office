@@ -60,7 +60,6 @@ const useRouteStore = defineStore("route-store", () => {
                     icon: ArrowRightIcon,
                     label: "Riwayat Diklat",
                     href: route("riwayat-diklat.index"),
-                    permission: "riwayat_diklat_list",
                 },
                 {
                     icon: ArrowRightIcon,

@@ -75,7 +75,7 @@ const hapusPegawai = async (id) => {
     </div>
 
     <MainCard title="Daftar Pegawai">
-        <div class="mt-8 flex justify-between">
+        <div class="mt-8 grid gap-2 md:flex md:justify-between">
             <div>
                 <Link
                     :href="route('pegawai.create')"
@@ -160,7 +160,7 @@ const hapusPegawai = async (id) => {
             </table>
         </div>
 
-        <div class="mt-4 flex justify-between">
+        <div class="mt-4 grid gap-2 md:flex md:justify-between">
             <ShowingResultTable
                 :from="pegawai.from"
                 :to="pegawai.to"
