@@ -6,7 +6,10 @@ import {
 import { computed } from "vue";
 
 const props = defineProps({
-    links: Array,
+    links: {
+        type: Array,
+        required: true,
+    },
 });
 
 const emit = defineEmits(["goToPage"]);

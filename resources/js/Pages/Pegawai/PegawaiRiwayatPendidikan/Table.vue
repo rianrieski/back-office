@@ -1,6 +1,5 @@
 <script setup>
 import { router } from "@inertiajs/vue3";
-import Table from "@/Pages/HirarkiUnitKerja/Table.vue";
 import { onMounted, ref, watch } from "vue";
 import { debounce } from "lodash";
 import axios from "axios";

@@ -90,8 +90,9 @@ const simpanPegawai = async () => {
                 />
                 <div class="mt-4 flex justify-end gap-2">
                     <Link
+                        type="reset"
                         :href="route('pegawai.index')"
-                        class="btn btn-outline hover:btn-error"
+                        class="btn btn-neutral btn-outline"
                     >
                         Batal
                     </Link>

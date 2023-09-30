@@ -28,15 +28,8 @@ const useRouteStore = defineStore("route-store", () => {
             children: [
                 {
                     icon: ArrowRightIcon,
-                    label: "Test",
-                    href: "#",
-                    permission: "test",
-                },
-                {
-                    icon: ArrowRightIcon,
-                    label: "Hirarki Unit Kerja",
-                    href: route("hirarki-unit-kerja.index"),
-                    permission: "hirarki_unit_kerja_list",
+                    label: "Data Unit Kerja",
+                    href: route("unit-kerja.index"),
                 },
             ],
         },

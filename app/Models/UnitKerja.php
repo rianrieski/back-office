@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\Traits\HasRecursiveRelationshipScopes;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class UnitKerja extends Model
 {
-    use HasFactory, HasRecursiveRelationshipScopes;
+    use HasFactory, HasRecursiveRelationships;
 
     protected $table = 'unit_kerja';
     protected $guarded = [];

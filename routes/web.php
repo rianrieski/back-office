@@ -56,13 +56,11 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('master')->group(function () {
     Route::post('kota/getdata', [KotaController::class, 'getKota'])->name('kota.getdata');
-    Route::get('hirarki-unit-kerja/getdata', [HirarkiUnitKerjaController::class, 'getDataHirarkiUnitKerja'])->name('hirarki-unit-kerja.getdata');
-    Route::resource('hirarki-unit-kerja', HirarkiUnitKerjaController::class)->except('show');
     Route::get('hari-libur/getdata', [HariLiburController::class, 'getDataHariLibur'])->name('hari-libur.getdata');
     Route::resource('hari-libur', HariLiburController::class)->except('show');
 });
 
-Route::resource('unit-kerja', UnitKerjaController::class);
+Route::resource('unit-kerja', UnitKerjaController::class)->except('show');
 
 require __DIR__ . '/pegawai.php';
 

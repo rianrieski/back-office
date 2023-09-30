@@ -99,6 +99,7 @@ const updatePegawai = async () => {
                 />
                 <div class="flex justify-between pt-4">
                     <button
+                        type="reset"
                         onclick="window.history.back()"
                         class="btn btn-outline hover:btn-error"
                     >

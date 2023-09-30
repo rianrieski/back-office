@@ -74,30 +74,27 @@ const hapusPegawai = async (id) => {
         </ul>
     </div>
 
-    <MainCard>
-        <div class="overflow-x-auto">
-            <div class="flex justify-between py-4">
-                <div>
-                    <Link
-                        :href="route('pegawai.create')"
-                        class="btn btn-primary btn-outline"
-                    >
-                        Rekam Pegawai Baru
-                    </Link>
-                </div>
-                <div class="flex gap-2">
-                    <SearchInputColumn
-                        :options="columns"
-                        v-model:keyword="keyword"
-                        v-model:selected="filterBy"
-                        :search="() => fetchData()"
-                    />
-                    <PerPageOption
-                        v-model="perPage"
-                        @change="() => fetchData()"
-                    />
-                </div>
+    <MainCard title="Daftar Pegawai">
+        <div class="mt-8 flex justify-between">
+            <div>
+                <Link
+                    :href="route('pegawai.create')"
+                    class="btn btn-primary btn-outline"
+                >
+                    Rekam Pegawai Baru
+                </Link>
             </div>
+            <div class="flex gap-2">
+                <SearchInputColumn
+                    :options="columns"
+                    v-model:keyword="keyword"
+                    v-model:selected="filterBy"
+                    :search="() => fetchData()"
+                />
+                <PerPageOption v-model="perPage" @change="() => fetchData()" />
+            </div>
+        </div>
+        <div class="mt-4">
             <table class="table" aria-describedby="Tabel Profil Pegawai">
                 <thead>
                     <tr>
@@ -161,19 +158,19 @@ const hapusPegawai = async (id) => {
                     </tr>
                 </tbody>
             </table>
+        </div>
 
-            <div class="mt-4 flex justify-between">
-                <ShowingResultTable
-                    :from="pegawai.from"
-                    :to="pegawai.to"
-                    :total="pegawai.total"
-                    class="justify-self-start"
-                />
-                <Pagination
-                    :links="pegawai.links"
-                    @goToPage="(page) => fetchData({ page })"
-                />
-            </div>
+        <div class="mt-4 flex justify-between">
+            <ShowingResultTable
+                :from="pegawai.from"
+                :to="pegawai.to"
+                :total="pegawai.total"
+                class="justify-self-start"
+            />
+            <Pagination
+                :links="pegawai.links"
+                @goToPage="(page) => fetchData({ page })"
+            />
         </div>
     </MainCard>
 </template>
