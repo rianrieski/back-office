@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TukinController;
 use App\Http\Controllers\UangMakanController;
+use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -60,6 +61,8 @@ Route::prefix('master')->group(function () {
     Route::get('hari-libur/getdata', [HariLiburController::class, 'getDataHariLibur'])->name('hari-libur.getdata');
     Route::resource('hari-libur', HariLiburController::class)->except('show');
 });
+
+Route::resource('unit-kerja', UnitKerjaController::class);
 
 require __DIR__ . '/pegawai.php';
 
