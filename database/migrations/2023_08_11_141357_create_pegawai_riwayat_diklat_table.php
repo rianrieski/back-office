@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('pegawai_id')->constrained('pegawai')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('jenis_diklat_id')->constrained('jenis_diklat')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->text('nama');
             $table->date('tanggal_mulai');
             $table->date('tanggal_akhir');
             $table->integer('jam_pelajaran');

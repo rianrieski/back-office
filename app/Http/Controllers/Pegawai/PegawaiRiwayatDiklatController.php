@@ -10,7 +10,6 @@ use App\Models\PegawaiRiwayatDiklat;
 use App\Services\PegawaiService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -23,19 +22,22 @@ class PegawaiRiwayatDiklatController extends Controller
 
     public function index()
     {
+        $diklat = PegawaiRiwayatDiklat::find(request('diklat_id'));
+
         return Inertia::render('Pegawai/PegawaiRiwayatDiklat/Index', [
             'title' => 'Diklat Pegawai',
-            'diklat' => QueryBuilder::for(PegawaiRiwayatDiklat::class)
+            'media_sertifikat_url' => Inertia::lazy(fn() => $diklat?->getFirstMediaUrl('media_sertifikat')),
+            'diklat' => fn() => QueryBuilder::for(PegawaiRiwayatDiklat::class)
                 ->with(['pegawai:id,nama', 'jenisDiklat:id,nama'])
-                ->allowedFilters(['tanggal_mulai', 'penyelenggara', 'no_sertifikat',
-                    // Filter by model relationship
+                ->allowedFilters(['tanggal_mulai', 'nama', 'penyelenggara',
+                    // Filter by relationship
                     AllowedFilter::callback('pegawai', fn(Builder $builder, $value) => $builder
                         ->whereRelation('pegawai', 'nama', 'like', "%$value%")),
                     AllowedFilter::callback('jenis_diklat', fn(Builder $builder, $value) => $builder
                         ->whereRelation('jenisDiklat', 'nama', 'like', "%$value%"))
                 ])
-                ->allowedSorts(['tanggal_mulai', 'penyelenggara', 'no_sertifikat',
-                    // Sort by model relationship
+                ->allowedSorts(['tanggal_mulai', 'nama', 'penyelenggara',
+                    // Sort by relationship
                     AllowedSort::callback('pegawai', fn(Builder $builder, $val) => $builder->orderBy(Pegawai::select('nama')
                         ->whereColumn('pegawai.id', '=', 'pegawai_riwayat_diklat.pegawai_id'), $val ? 'DESC' : 'ASC')),
                     AllowedSort::callback('jenis_diklat', fn(Builder $builder, $val) => $builder->orderBy(JenisDiklat::select('nama')
@@ -71,34 +73,6 @@ class PegawaiRiwayatDiklatController extends Controller
         ]);
     }
 
-    public function show(string $id)
-    {
-        try {
-            $riwayatDiklat = PegawaiRiwayatDiklat::where('pegawai_riwayat_diklat.id', $id)
-                ->join('pegawai', 'pegawai.id', '=', 'pegawai_riwayat_diklat.pegawai_id')
-                ->join('jenis_diklat', 'jenis_diklat.id', '=', 'pegawai_riwayat_diklat.jenis_diklat_id')
-                ->select('pegawai_riwayat_diklat.id'
-                    , DB::raw("DATE_FORMAT(tanggal_mulai, '%d %b %Y') AS tanggal_mulai")
-                    , DB::raw("DATE_FORMAT(tanggal_akhir, '%d %b %Y') AS tanggal_akhir")
-                    , 'lokasi'
-                    , 'jam_pelajaran'
-                    , 'penyelenggaran'
-                    , DB::raw("DATE_FORMAT(tanggal_sertifikat, '%d %b %Y') AS tanggal_sertifikat")
-                    , 'no_sertifikat'
-                    , DB::raw('CONCAT(pegawai.nama_depan," " ,pegawai.nama_belakang) AS nama_lengkap')
-                    , 'jenis_diklat.nama AS nama_diklat')
-                ->first();
-            $riwayatDiklat->media_sertifikat = $riwayatDiklat->getMedia("media_sertifikat")[0]->getUrl();
-            if ($riwayatDiklat == null) {
-                return response()->json(['status' => 404, 'message' => 'data tidak ditemukan'], 404);
-            } else {
-                return response()->json(['status' => 200, 'message' => 'OK', 'data' => $riwayatDiklat], 200);
-            }
-        } catch (QueryException $e) {
-            return response()->json(['status' => 500, 'message' => 'kesalahan pada server'], 500);
-        }
-    }
-
     public function edit(string $id)
     {
         $pegawaiRiwayatDiklatDetail = PegawaiRiwayatDiklat::where('id', $id)->first();
@@ -110,7 +84,7 @@ class PegawaiRiwayatDiklatController extends Controller
         ]);
     }
 
-    public function update(PegawaiRiwayatDiklatRequest $request, string $id)
+    public function update(PegawaiRiwayatDiklatRequest $request, PegawaiRiwayatDiklat $riwayat_diklat)
     {
         try {
             $diklat = PegawaiRiwayatDiklat::where('id', $id)->first();
@@ -140,46 +114,13 @@ class PegawaiRiwayatDiklatController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(PegawaiRiwayatDiklat $riwayat_diklat)
     {
-        $diklat = PegawaiRiwayatDiklat::where('id', $id)->first();
+        // File terkait diklat otomatis terhapus
+        $riwayat_diklat->delete();
 
-        if ($diklat == null) {
-            return redirect()->back()->withErrors([
-                'query' => 'riwayat diklat gagal dihapus atau tidak ditemukan'
-            ]);
-        }
-        try {
-            DB::transaction(function () use ($diklat) {
-                if ($diklat->hasMedia("media_sertifikat")) {
-                    $diklat->getMedia("media_sertifikat")[0]->delete();
-                }
-                $diklat->delete();
-            });
-            return redirect()->back()->with('success', 'riwayat diklat berhasil dihapus');
-        } catch (QueryException $e) {
-            return redirect()->withErrors(['queruy' => 'riwayat diklat gagal dihapus']);
-        }
-    }
-
-    public function getDataRiwayatDiklat(Request $request)
-    {
-        $paginate = ($request->paginate) ? $request->paginate : 10;
-        $riwayatDiklat = PegawaiRiwayatDiklat::query()->when($request->cari, function ($query, $cari) {
-            $query->orWhere(DB::raw("DATE_FORMAT(tanggal_mulai, '%d %b %Y')"), 'like', "%{$cari}%");
-            $query->orWhere(DB::raw("DATE_FORMAT(tanggal_akhir, '%d %b %Y')"), 'like', "%{$cari}%");
-            $query->orWhere(DB::raw("CONCAT(nama_depan,' ',nama_belakang)"), 'like', "%{$cari}%");
-            $query->orWhere('pegawai.nama_depan', 'like', "%{$cari}%");
-            $query->orWhere('jenis_diklat.nama', 'like', "%{$cari}%");
-            $query->orWhere('pegawai.nama_belakang', 'like', "%{$cari}%");
-            $query->orWhere('tanggal_mulai', 'like', "%{$cari}%");
-            $query->orWhere('tanggal_akhir', 'like', "%{$cari}%");
-            $query->orWhere('jam_pelajaran', 'like', "%{$cari}%");
-        })
-            ->join('pegawai', 'pegawai.id', '=', 'pegawai_riwayat_diklat.pegawai_id')
-            ->join('jenis_diklat', 'jenis_diklat.id', '=', 'pegawai_riwayat_diklat.jenis_diklat_id')
-            ->select('pegawai_riwayat_diklat.id', DB::raw('CONCAT(nama_depan," " ,nama_belakang) AS nama_lengkap'), 'jenis_diklat.nama'
-                , DB::raw("DATE_FORMAT(tanggal_mulai, '%d %b %Y') AS tanggal_mulai"), DB::raw("DATE_FORMAT(tanggal_akhir, '%d %b %Y') AS tanggal_akhir"), 'penyelenggaran', 'no_sertifikat')->paginate($paginate);
-        return response()->json($riwayatDiklat);
+        return back()->with('toast', [
+            'message' => 'Data riwayat diklat berhasil dihapus'
+        ]);
     }
 }

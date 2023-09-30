@@ -133,21 +133,21 @@ const hapusPegawai = async (id) => {
                         <td>
                             <div class="flex items-center justify-center">
                                 <button
-                                    class="tooltip btn-primary btn-outline btn-xs tooltip-bottom hover:rounded-lg"
+                                    class="btn-primary btn-outline tooltip btn-xs tooltip-bottom hover:rounded-lg"
                                     data-tip="Edit"
                                     @click="editPegawai(item.id)"
                                 >
                                     <PencilSquareIcon class="h-4 w-4" />
                                 </button>
                                 <button
-                                    class="tooltip btn-info btn-outline btn-xs tooltip-bottom hover:rounded-lg"
+                                    class="btn-info btn-outline tooltip btn-xs tooltip-bottom hover:rounded-lg"
                                     data-tip="Detail"
                                     @click="lihatPegawai(item.id)"
                                 >
                                     <EyeIcon class="h-4 w-4" />
                                 </button>
                                 <button
-                                    class="tooltip btn-error btn-outline btn-xs tooltip-bottom rounded"
+                                    class="btn-error btn-outline tooltip btn-xs tooltip-bottom rounded"
                                     data-tip="Hapus"
                                     @click="hapusPegawai(item.id)"
                                 >

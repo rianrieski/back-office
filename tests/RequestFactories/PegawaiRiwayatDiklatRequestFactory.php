@@ -1,16 +1,14 @@
 <?php
 
-namespace Database\Factories;
+namespace Tests\RequestFactories;
 
 use App\Models\JenisDiklat;
 use App\Models\Pegawai;
-use App\Models\PegawaiRiwayatDiklat;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
+use Worksome\RequestFactories\RequestFactory;
 
-class PegawaiRiwayatDiklatFactory extends Factory
+class PegawaiRiwayatDiklatRequestFactory extends RequestFactory
 {
-    protected $model = PegawaiRiwayatDiklat::class;
-
     public function definition(): array
     {
         return [
@@ -19,11 +17,12 @@ class PegawaiRiwayatDiklatFactory extends Factory
             'nama' => fake()->sentence(),
             'tanggal_mulai' => fake()->date(),
             'tanggal_akhir' => fake()->date(),
-            'jam_pelajaran' => fake()->numberBetween(1, 20),
+            'jam_pelajaran' => fake()->numberBetween(1, 30),
             'lokasi' => fake()->city(),
             'penyelenggara' => fake()->company(),
-            'no_sertifikat' => fake()->numerify('###############'),
+            'no_sertifikat' => fake()->numerify('###########'),
             'tanggal_sertifikat' => fake()->date(),
+            'media_sertifikat' => UploadedFile::fake()->image('sertifikat.jpg'),
         ];
     }
 }

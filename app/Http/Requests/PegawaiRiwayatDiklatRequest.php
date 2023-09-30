@@ -14,17 +14,17 @@ class PegawaiRiwayatDiklatRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['nullable'],
             'pegawai_id' => ['required', 'exists:pegawai,id'],
             'jenis_diklat_id' => ['required', 'exists:jenis_diklat,id'],
-            'tanggal_mulai' => ['required', 'date_format:Y-m-d'],
-            'tanggal_akhir' => ['required', 'date_format:Y-m-d'],
+            'nama' => ['required', 'string'],
+            'tanggal_mulai' => ['required', 'date_format:Y-m-d', 'lte:tanggal_akhir'],
+            'tanggal_akhir' => ['required', 'date_format:Y-m-d', 'gte:tanggal_mulai'],
             'jam_pelajaran' => ['required', 'numeric'],
             'lokasi' => ['required'],
             'penyelenggara' => ['required'],
             'no_sertifikat' => ['required', 'max:100'],
-            'tanggal_sertifikat' => ['required', 'date_format:Y-m-d'],
-            'media_sertifikat' => ['required_without:id', 'nullable', 'mimes:pdf,jpg,jpeg,png', 'file', 'max:1024',],
+            'tanggal_sertifikat' => ['required', 'date_format:Y-m-d', 'gte:tanggal_akhir'],
+            'media_sertifikat' => ['required_without:id', 'nullable', 'mimes:pdf,jpg,jpeg,png', 'file', 'max:4096'],
         ];
     }
 
@@ -42,10 +42,10 @@ class PegawaiRiwayatDiklatRequest extends FormRequest
             'jam_pelajaran.required' => 'jam pelajaran harus diisi ',
             'jam_pelajaran.numeric' => 'jam pelajaran harus dalam bentuk angka',
             'lokasi.required' => 'lokasi harus diisi',
-            'penyelenggaran.required' => 'penyelenggaran harus diisi',
-            'penyelenggaran.max' => 'penyelnggaran terlalu panjang',
+            'penyelenggara.required' => 'penyelenggara harus diisi',
+            'penyelenggara.max' => 'penyelenggara terlalu panjang',
             'no_sertifikat.required' => 'no sertifikat harus diisi',
-            'no_sertifikat.max' => 'penyelnggaran terlalu panjang',
+            'no_sertifikat.max' => 'penyelenggara terlalu panjang',
             'tanggal_sertifikat.required' => 'tanggal sertifikat harus diisi ',
             'tanggal_sertifikat.date_format' => 'tanggal harus dalam bentuk format yang valid ',
             'media_sertifikat.required_without' => 'file sertifikat harus diisi',

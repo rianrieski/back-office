@@ -12,6 +12,7 @@ const errors = computed(() => usePage().props.errors);
 
 const props = defineProps({
     pegawai_id: { required: true },
+    nama: { required: true },
     jenis_diklat_id: { required: true },
     tanggal_mulai: { required: true },
     tanggal_akhir: { required: true },
@@ -25,6 +26,7 @@ const props = defineProps({
 
 const emit = defineEmits([
     "update:pegawai_id",
+    "update:nama",
     "update:jenis_diklat_id",
     "update:tanggal_mulai",
     "update:tanggal_akhir",
@@ -78,6 +80,19 @@ const fetchPegawai = (nama) => {
                 @search="fetchPegawai"
             />
             <ErrorText :text="errors.pegawai_id" />
+        </div>
+        <div class="form-control col-span-2">
+            <label class="label">
+                <span class="label-text">Nama Diklat</span>
+            </label>
+            <input
+                :value="nama"
+                @input="$emit('update:nama', $event.target.value)"
+                type="text"
+                placeholder="Nama Diklat"
+                class="input input-bordered"
+            />
+            <ErrorText :text="errors.nama" />
         </div>
         <div class="form-control col-span-2">
             <label class="label">

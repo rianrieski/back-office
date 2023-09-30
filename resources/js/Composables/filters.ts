@@ -13,3 +13,11 @@ export function useLocaleDate(date: Date): string {
         year: "numeric",
     });
 }
+
+export function useLongLocalDate(date: Date): string {
+    return date.toLocaleDateString("id", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
+}

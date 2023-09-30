@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('pegawai', PegawaiController::class);
 Route::resource('alamat', PegawaiAlamatController::class)->except('show');
-Route::resource('riwayat-diklat', PegawaiRiwayatDiklatController::class);
+Route::resource('riwayat-diklat', PegawaiRiwayatDiklatController::class)->except('show');
 
 Route::prefix('pegawai')->group(function () {
     Route::post('alamat/getkota', [PegawaiAlamatController::class, 'getKota'])->name('alamat.getkota');
