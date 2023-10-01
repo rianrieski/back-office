@@ -20,8 +20,8 @@ return new class extends Migration {
             $table->text('alamat');
             $table->string('no_ijazah', 100);
             $table->date('tanggal_ijazah');
-            $table->string('kode_gelar_depan', 10);
-            $table->string('kode_gelar_belakang', 10);
+            $table->string('kode_gelar_depan', 10)->nullable();
+            $table->string('kode_gelar_belakang', 10)->nullable();
             $table->timestamps();
         });
     }
