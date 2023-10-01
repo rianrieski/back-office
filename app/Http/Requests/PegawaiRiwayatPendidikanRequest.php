@@ -33,7 +33,7 @@ class PegawaiRiwayatPendidikanRequest extends FormRequest
             'tanggal_ijazah' => ['required', 'date_format:Y-m-d'],
             'kode_gelar_depan' => ['nullable', 'max:10'],
             'kode_gelar_belakang' => ['nullable', 'max:10'],
-            'media_ijazah' => ['required_without:id', 'nullable', 'mimes:pdf', 'file', 'max:4096'],
+            'media_ijazah' => ['required_without:id', 'nullable', 'mimes:pdf,jpg,png,jpeg', 'file', 'max:4096'],
         ];
     }
 
@@ -63,8 +63,8 @@ class PegawaiRiwayatPendidikanRequest extends FormRequest
             'kode_gelar_depan.max' => ' gelar depan maksimal 100 karakter',
             'kode_gelar_belakang.max' => 'gelar belakang maksimal 100 karakter',
             'media_ijazah.required_without' => 'file ijazah harus diisi',
-            'media_ijazah.mimes' => 'format file ijazah harus pdf',
-            'media_ijazah.max' => 'ukuran file terlalu besar (maksimal file 1MB)',
+            'media_ijazah.mimes' => 'format file ijazah harus pdf/jpg/png/jpeg',
+            'media_ijazah.max' => 'ukuran file terlalu besar (maksimal file 4MB)',
         ];
     }
 }

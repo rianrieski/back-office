@@ -10,7 +10,6 @@ use App\Models\PegawaiRiwayatPendidikan;
 use App\Models\Pendidikan;
 use App\Models\Propinsi;
 use App\Services\PegawaiService;
-use App\Services\PendidikanService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Inertia\Inertia;
@@ -56,8 +55,9 @@ class PegawaiRiwayatPendidikanController extends Controller
         return Inertia::render('Pegawai/PegawaiRiwayatPendidikan/Create', [
             'title' => 'Rekam Riwayat Pendidikan',
             'pegawai' => fn() => PegawaiService::getNamaBySearch(),
-            'pendidikan' => fn() => PendidikanService::getNamaBySearch(),
+            'pendidikan' => fn() => Pendidikan::limit(10)->get(),
             'propinsi' => fn() => Propinsi::select('id', 'nama')->get(),
+            'kota' => Inertia::lazy(fn() => Kota::where('propinsi_id', request('propinsi_id'))->get()),
         ]);
     }
 
@@ -83,7 +83,7 @@ class PegawaiRiwayatPendidikanController extends Controller
             'riwayatPendidikan' => fn() => $riwayat_pendidikan,
             'currentPegawai' => fn() => $riwayat_pendidikan->pegawai()->select('id', 'nama')->first(),
             'pegawai' => fn() => PegawaiService::getNamaBySearch(),
-            'pendidikan' => fn() => PendidikanService::getNamaBySearch(),
+            'pendidikan' => fn() => Pendidikan::limit(10)->get(),
             'propinsi' => fn() => Propinsi::select('id', 'nama')->get(),
             'kota' => fn() => Kota::when($propinsi_id = request('propinsi_id'), fn(Builder $builder) => $builder
                 ->where('propinsi_id', $propinsi_id), fn(Builder $builder) => $builder
