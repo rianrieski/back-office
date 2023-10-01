@@ -18,7 +18,7 @@ import {
 } from "@heroicons/vue/24/outline/index.js";
 import ShowDiklat from "@/Pages/Pegawai/PegawaiRiwayatDiklat/components/ShowDiklat.vue";
 
-defineProps(["title", "diklat"]);
+defineProps(["title", "riwayatDiklat"]);
 
 const columns = [
     { label: "Pegawai", column: "pegawai" },
@@ -39,7 +39,7 @@ const fetchData = (params = {}) => {
         }),
         {},
         {
-            only: ["diklat"],
+            only: ["riwayatDiklat"],
             preserveState: true,
             preserveScroll: true,
             replace: true,
@@ -138,7 +138,7 @@ const showDetail = (diklat) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-if="diklat.data.length < 0">
+                    <tr v-if="riwayatDiklat.data.length < 0">
                         <td colspan="7" class="text-center">
                             Data tidak ditemukan
                         </td>
@@ -146,10 +146,10 @@ const showDetail = (diklat) => {
                     <tr
                         v-else
                         class="hover"
-                        v-for="(row, i) in diklat.data"
+                        v-for="(row, i) in riwayatDiklat.data"
                         :key="row.id"
                     >
-                        <td>{{ diklat.from + i }}</td>
+                        <td>{{ riwayatDiklat.from + i }}</td>
                         <td>{{ row.pegawai.nama }}</td>
                         <td>{{ row.jenis_diklat.nama }}</td>
                         <td>{{ row.nama }}</td>
@@ -182,12 +182,12 @@ const showDetail = (diklat) => {
             </table>
             <div class="mt-4 grid gap-2 md:flex md:justify-between">
                 <ShowingResultTable
-                    :total="diklat.total"
-                    :to="diklat.to"
-                    :from="diklat.from"
+                    :total="riwayatDiklat.total"
+                    :to="riwayatDiklat.to"
+                    :from="riwayatDiklat.from"
                 />
                 <Pagination
-                    :links="diklat.links"
+                    :links="riwayatDiklat.links"
                     @goToPage="(page) => fetchData({ page })"
                 />
             </div>

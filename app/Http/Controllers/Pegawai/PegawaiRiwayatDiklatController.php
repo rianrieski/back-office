@@ -22,9 +22,9 @@ class PegawaiRiwayatDiklatController extends Controller
         $diklat = PegawaiRiwayatDiklat::find(request('diklat_id'));
 
         return Inertia::render('Pegawai/PegawaiRiwayatDiklat/Index', [
-            'title' => 'Diklat Pegawai',
+            'title' => 'Riwayat Diklat Pegawai',
             'media_sertifikat_url' => Inertia::lazy(fn() => $diklat?->getFirstMediaUrl('media_sertifikat')),
-            'diklat' => fn() => QueryBuilder::for(PegawaiRiwayatDiklat::class)
+            'riwayatDiklat' => fn() => QueryBuilder::for(PegawaiRiwayatDiklat::class)
                 ->with(['pegawai:id,nama', 'jenisDiklat:id,nama'])
                 ->allowedFilters(['tanggal_mulai', 'nama', 'penyelenggara',
                     // Filter by relationship
@@ -63,7 +63,9 @@ class PegawaiRiwayatDiklatController extends Controller
 
         $diklat = PegawaiRiwayatDiklat::create($data);
 
-        $diklat->addMediaFromRequest('media_sertifikat')->toMediaCollection('media_sertifikat');
+        if ($request->hasFile('media_sertifikat')) {
+            $diklat->addMediaFromRequest('media_sertifikat')->toMediaCollection('media_sertifikat');
+        }
 
         return to_route('riwayat-diklat.index')->with('toast', [
             'message' => 'Riwayat diklat berhasil disimpan'
@@ -104,8 +106,8 @@ class PegawaiRiwayatDiklatController extends Controller
         // File terkait diklat otomatis terhapus
         $riwayat_diklat->delete();
 
-        return back()->with('toast', [
-            'message' => 'Data riwayat diklat berhasil dihapus'
+        return to_route('riwayat-diklat.index')->with('toast', [
+            'message' => 'Riwayat diklat berhasil dihapus'
         ]);
     }
 }
