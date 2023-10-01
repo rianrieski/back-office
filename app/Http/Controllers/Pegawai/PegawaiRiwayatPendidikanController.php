@@ -5,25 +5,46 @@ namespace App\Http\Controllers\Pegawai;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PegawaiRiwayatPendidikanRequest;
 use App\Models\Kota;
+use App\Models\Pegawai;
 use App\Models\PegawaiRiwayatPendidikan;
+use App\Models\Pendidikan;
 use App\Models\Propinsi;
 use App\Services\PegawaiService;
 use App\Services\PendidikanService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PegawaiRiwayatPendidikanController extends Controller
 {
     public function index()
     {
+        $riwayat = PegawaiRiwayatPendidikan::with(['pegawai:id,nama', 'pendidikan:id,nama', 'propinsi:id,nama', 'kota:id,nama'])
+            ->find(request('riwayat_id'));
+
         return Inertia::render('Pegawai/PegawaiRiwayatPendidikan/Index', [
             'title' => 'Riwayat Pendidikan Pegawai',
+            'mediaIjazahUrl' => Inertia::lazy(fn() => $riwayat?->getFirstMediaUrl('media_sertifikat')),
+            'selectedRiwayat' => Inertia::lazy(fn() => $riwayat),
             'riwayatPendidikan' => fn() => QueryBuilder::for(PegawaiRiwayatPendidikan::class)
                 ->with(['pegawai:id,nama', 'pendidikan:id,nama'])
-                ->allowedFilters(['nama_instansi', 'no_ijazah', 'tanggal_ijazah'])
-                ->allowedSorts(['nama_instansi', 'no_ijazah', 'tanggal_ijazah'])
+                ->allowedFilters(['nama_instansi', 'no_ijazah', 'tanggal_ijazah',
+                    // Filter by relationship
+                    AllowedFilter::callback('pegawai', fn(Builder $builder, $value) => $builder
+                        ->whereRelation('pegawai', 'nama', 'like', "%$value%")),
+                    AllowedFilter::callback('pendidikan', fn(Builder $builder, $value) => $builder
+                        ->whereRelation('pendidikan', 'nama', 'like', "%$value%")),
+                ])
+                ->allowedSorts(['nama_instansi', 'no_ijazah', 'tanggal_ijazah',
+                    // Sort by relationship
+                    AllowedSort::callback('pegawai', fn(Builder $builder, $val) => $builder->orderBy(Pegawai::select('nama')
+                        ->whereColumn('pegawai.id', '=', 'pegawai_riwayat_pendidikan.pegawai_id'), $val ? 'DESC' : 'ASC')),
+                    AllowedSort::callback('pendidikan', fn(Builder $builder, $val) => $builder->orderBy(Pendidikan::select('nama')
+                        ->whereColumn('pendidikan.id', '=', 'pegawai_riwayat_pendidikan.pendidikan_id'), $val ? 'DESC' : 'ASC'))
+                ])
                 ->paginate(request('per_page', 15))
                 ->onEachSide(1)
                 ->appends(request()->query())

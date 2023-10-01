@@ -7,34 +7,18 @@ import { computed, onMounted, watch } from "vue";
 import { debounce } from "lodash";
 
 const props = defineProps({
-    placeholder: {
-        type: String,
-        default: "Cari",
-    },
-    options: {
-        type: Array,
-        required: true,
-    },
-    keyword: {
-        type: String,
-        required: true,
-    },
-    selected: Object,
-    search: {
-        type: Function,
-        required: true,
-    },
+    placeholder: { type: String, default: "Cari" },
+    options: { type: Array, required: true },
+    keyword: { type: String, required: true },
+    selected: { type: Object, required: true },
+    search: { type: Function, required: true },
 });
 
 const emit = defineEmits(["update:keyword", "update:selected"]);
 
 const selectedColumn = computed({
-    get() {
-        return props.selected;
-    },
-    set(value) {
-        return emit("update:selected", value);
-    },
+    get: () => props.selected,
+    set: (value) => emit("update:selected", value),
 });
 
 onMounted(() => {
