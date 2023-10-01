@@ -5,7 +5,7 @@ import SelectOption from "@/Components/SelectOption.vue";
 import ErrorText from "@/Components/ErrorText.vue";
 
 const pegawai = computed(() => usePage().props.pegawai);
-const jenisDiklat = computed(() => usePage().props.jenis_diklat);
+const jenisDiklat = computed(() => usePage().props.jenisDiklat);
 const riwayatDiklat = computed(() => usePage().props.riwayatDiklat);
 const currentPegawai = computed(() => usePage().props.currentPegawai);
 const errors = computed(() => usePage().props.errors);
@@ -46,7 +46,7 @@ const url = computed(() => {
 
 const selectedPegawai = computed({
     get: () =>
-        [...pegawai.value, currentPegawai].find(
+        [...pegawai.value, currentPegawai.value].find(
             (peg) => peg?.id === props.pegawai_id,
         ),
     set: (pegawai) => emit("update:pegawai_id", pegawai.id),

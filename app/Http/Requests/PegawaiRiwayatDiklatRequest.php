@@ -24,7 +24,7 @@ class PegawaiRiwayatDiklatRequest extends FormRequest
             'penyelenggara' => ['required'],
             'no_sertifikat' => ['required', 'max:100'],
             'tanggal_sertifikat' => ['required', 'date_format:Y-m-d', 'gte:tanggal_akhir'],
-            'media_sertifikat' => ['required_without:id', 'nullable', 'mimes:pdf,jpg,jpeg,png', 'file', 'max:4096'],
+            'media_sertifikat' => ['nullable', 'mimes:pdf,jpg,jpeg,png', 'file', 'max:4096'],
         ];
     }
 
