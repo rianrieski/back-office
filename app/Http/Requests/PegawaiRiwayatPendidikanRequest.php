@@ -22,18 +22,17 @@ class PegawaiRiwayatPendidikanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['nullable'],
             'pegawai_id' => ['required', 'exists:pegawai,id'],
             'pendidikan_id' => ['required', 'exists:pendidikan,id'],
             'nama_instansi' => ['required', 'max:100'],
-            'propinsi_id' => ['required', 'exists:propinsi,id'],
-            'kota_id' => ['required', 'exists:kota,id'],
+            'propinsi_id' => ['nullable', 'exists:propinsi,id'],
+            'kota_id' => ['nullable', 'exists:kota,id'],
             'alamat' => ['required'],
             'no_ijazah' => ['required', 'max:100'],
             'tanggal_ijazah' => ['required', 'date_format:Y-m-d'],
             'kode_gelar_depan' => ['nullable', 'max:10'],
             'kode_gelar_belakang' => ['nullable', 'max:10'],
-            'media_ijazah' => ['required_without:id', 'nullable', 'mimes:pdf,jpg,png,jpeg', 'file', 'max:4096'],
+            'media_ijazah' => ['nullable', 'mimes:pdf,jpg,png,jpeg', 'file', 'max:4096'],
         ];
     }
 

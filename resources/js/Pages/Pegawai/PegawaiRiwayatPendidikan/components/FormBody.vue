@@ -5,6 +5,7 @@ import { router, usePage } from "@inertiajs/vue3";
 import SelectOption from "@/Components/SelectOption.vue";
 import ErrorText from "@/Components/ErrorText.vue";
 import axios from "axios";
+import RequiredSign from "@/Components/RequiredSign.vue";
 
 const props = defineProps({
     pegawai_id: { required: true },
@@ -102,10 +103,13 @@ const fetchKota = (propinsi_id = null) => {
 </script>
 
 <template>
-    <div>
-        <div class="form-control">
+    <div class="grid gap-2 md:grid-cols-2">
+        <div class="form-control md:col-span-2">
             <label class="label">
-                <span class="label-text">Pegawai</span>
+                <span class="label-text">
+                    Pegawai
+                    <RequiredSign />
+                </span>
             </label>
             <SelectOption
                 :error="Boolean(errors.pegawai_id)"
@@ -118,7 +122,7 @@ const fetchKota = (propinsi_id = null) => {
         </div>
         <div class="form-control">
             <label class="label">
-                <span class="label-text">Pendidikan</span>
+                <span class="label-text">Pendidikan <RequiredSign /></span>
             </label>
             <SelectOption
                 :error="Boolean(errors.pendidikan_id)"
@@ -131,7 +135,7 @@ const fetchKota = (propinsi_id = null) => {
         </div>
         <div class="form-control">
             <label class="label">
-                <span class="label-text">Nama Instansi</span>
+                <span class="label-text">Nama Instansi <RequiredSign /></span>
             </label>
             <input
                 :value="nama_instansi"
@@ -179,9 +183,9 @@ const fetchKota = (propinsi_id = null) => {
             </select>
             <ErrorText :text="errors.kota_id" />
         </div>
-        <div class="form-control">
+        <div class="form-control md:col-span-2">
             <label class="label">
-                <span class="label-text">Alamat Lengkap</span>
+                <span class="label-text">Alamat Lengkap <RequiredSign /></span>
             </label>
             <textarea
                 :value="alamat"
@@ -194,7 +198,21 @@ const fetchKota = (propinsi_id = null) => {
         </div>
         <div class="form-control">
             <label class="label">
-                <span class="label-text">Tanggal Ijazah</span>
+                <span class="label-text">Nomor Ijazah <RequiredSign /></span>
+            </label>
+            <input
+                :value="no_ijazah"
+                @input="$emit('update:no_ijazah', $event.target.value)"
+                type="text"
+                placeholder="Masukkan nomor ijazah"
+                class="input input-bordered"
+                :class="{ 'textarea-error': errors.no_ijazah }"
+            />
+            <ErrorText :text="errors.no_ijazah" />
+        </div>
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">Tanggal Ijazah <RequiredSign /></span>
             </label>
             <input
                 :value="tanggal_ijazah"
@@ -208,20 +226,7 @@ const fetchKota = (propinsi_id = null) => {
             />
             <ErrorText :text="errors.tanggal_ijazah" />
         </div>
-        <div class="form-control">
-            <label class="label">
-                <span class="label-text">Nomor Ijazah</span>
-            </label>
-            <input
-                :value="no_ijazah"
-                @input="$emit('update:no_ijazah', $event.target.value)"
-                type="text"
-                placeholder="Masukkan nomor ijazah"
-                class="input input-bordered"
-                :class="{ 'textarea-error': errors.no_ijazah }"
-            />
-            <ErrorText :text="errors.no_ijazah" />
-        </div>
+
         <div class="form-control">
             <label class="label">
                 <span class="label-text">Gelar Depan</span>
@@ -258,7 +263,7 @@ const fetchKota = (propinsi_id = null) => {
         </div>
         <div class="form-control">
             <label class="label">
-                <span class="label-text">File Ijazah</span>
+                <span class="label-text">File Ijazah <RequiredSign /></span>
             </label>
             <input
                 accept=".pdf,.jpg,.png,.jpeg"

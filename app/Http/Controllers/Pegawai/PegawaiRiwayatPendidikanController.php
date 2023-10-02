@@ -26,7 +26,7 @@ class PegawaiRiwayatPendidikanController extends Controller
 
         return Inertia::render('Pegawai/PegawaiRiwayatPendidikan/Index', [
             'title' => 'Riwayat Pendidikan Pegawai',
-            'mediaIjazahUrl' => Inertia::lazy(fn() => $riwayat?->getFirstMediaUrl('media_sertifikat')),
+            'mediaIjazahUrl' => Inertia::lazy(fn() => $riwayat?->getFirstMediaUrl('media_ijazah')),
             'selectedRiwayat' => Inertia::lazy(fn() => $riwayat),
             'riwayatPendidikan' => fn() => QueryBuilder::for(PegawaiRiwayatPendidikan::class)
                 ->with(['pegawai:id,nama', 'pendidikan:id,nama'])
@@ -37,6 +37,7 @@ class PegawaiRiwayatPendidikanController extends Controller
                     AllowedFilter::callback('pendidikan', fn(Builder $builder, $value) => $builder
                         ->whereRelation('pendidikan', 'nama', 'like', "%$value%")),
                 ])
+                ->defaultSort('-id')
                 ->allowedSorts(['nama_instansi', 'no_ijazah', 'tanggal_ijazah',
                     // Sort by relationship
                     AllowedSort::callback('pegawai', fn(Builder $builder, $val) => $builder->orderBy(Pegawai::select('nama')
@@ -83,7 +84,7 @@ class PegawaiRiwayatPendidikanController extends Controller
             'riwayatPendidikan' => fn() => $riwayat_pendidikan,
             'currentPegawai' => fn() => $riwayat_pendidikan->pegawai()->select('id', 'nama')->first(),
             'pegawai' => fn() => PegawaiService::getNamaBySearch(),
-            'pendidikan' => fn() => Pendidikan::limit(10)->get(),
+            'pendidikan' => fn() => Pendidikan::whereKey($riwayat_pendidikan->pendidikan_id)->get(),
             'propinsi' => fn() => Propinsi::select('id', 'nama')->get(),
             'kota' => fn() => Kota::when($propinsi_id = request('propinsi_id'), fn(Builder $builder) => $builder
                 ->where('propinsi_id', $propinsi_id), fn(Builder $builder) => $builder
