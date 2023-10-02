@@ -40,7 +40,7 @@ describe('handling crud pegawai alamat', function () {
             ->assertInertia(fn(Assert $page) => $page
                 ->component('Pegawai/PegawaiAlamat/Create')
                 ->has('propinsi', 30)
-                ->has('pegawai', 50)
+                ->has('pegawai', 10)
             );
     });
 

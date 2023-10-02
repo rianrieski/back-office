@@ -21,3 +21,10 @@ export function useLongLocalDate(date: Date): string {
         year: "numeric",
     });
 }
+
+export function useLocalCurrency(number: number): string {
+    return new Intl.NumberFormat("id", {
+        style: "currency",
+        currency: "IDR",
+    }).format(number);
+}

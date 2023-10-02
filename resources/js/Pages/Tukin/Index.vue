@@ -1,138 +1,108 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
 import { router } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
-import { debounce } from "lodash";
-import Swal from "sweetalert2";
+import {
+    PencilSquareIcon,
+    TrashIcon,
+} from "@heroicons/vue/24/outline/index.js";
+import Breadcrumb from "@/Components/Breadcrumb.vue";
+import { useLocalCurrency } from "@/Composables/filters.ts";
+import { useConfirm, useToast } from "@/Composables/sweetalert.ts";
+import { ref } from "vue";
+import CreateForm from "@/Pages/Tukin/components/CreateForm.vue";
+import EditForm from "@/Pages/Tukin/components/EditForm.vue";
 
-const tambahTukin = ()=>{
-    router.get('/tukin/create');
-}
+const props = defineProps(["title", "tukin_list"]);
 
-const toEdit = (tukin)=>{
-    router.get(route('tukin.edit',{tukin}))
-}
+const showModal = ref(false);
+const modalComponent = ref(null);
+const selectedTukin = ref(null);
 
-const toDelete = (tukin)=>{
-    Swal.fire({
-        title: 'Apakah Anda Yakin?',
-        text: "Menghapus Data Master Tukin",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'Batal',
-        confirmButtonText: 'Ya'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            router.delete(route('tukin.destroy',{tukin}),{
-                onSuccess:(response)=>{
-                    Swal.fire(
-                        'Dihapus!',
-                        'Data Master Tukin Berhasil Dihapus!',
-                        'success'
-                    )
-                },
-                onError:(errors)=>{
-                    if(errors.query){
-                        Swal.fire({
-                            title: 'Gagal!',
-                            text: 'Data Master Tukin Gagal Dihapus!',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        })
-                    }
-                }
-            })
-
-        }
-    })
-}
-
-defineProps({
-    list_tukin:'',
-})
-
-const cari = ref('')
-const paginate = ref('10')
-watch(cari,debounce (value =>{
-    console.log('triger');
-        router.get(route('tukin.index'), {cari:value},{
-            preserveState:true,
-            preserveScroll:true,
-            replace:true
+const destroy = async (tukin) => {
+    const confirmed = await useConfirm({
+        text: "Hapus data tunjangan kinerja untuk grade " + tukin.grade,
     });
-},500));
-watch(paginate,value =>{
-    console.log('triger');
-    router.get(route('tukin.index'), {paginate:value},{
-        preserveState:true,
-        preserveScroll:true,
-        replace:true
+
+    router.delete(route("tukin.destroy", { tukin }), {
+        onBefore: () => confirmed,
+        onError: (errors) =>
+            useToast({ icon: "error", text: Object.values(errors)[0] }),
     });
-});
+};
+
+const tambahTukin = () => {
+    modalComponent.value = CreateForm;
+    showModal.value = true;
+};
+
+const editTukin = (tukin) => {
+    selectedTukin.value = tukin;
+    modalComponent.value = EditForm;
+    showModal.value = true;
+};
 </script>
 
 <template>
-    <div class="text-sm breadcrumbs">
-        <ul>
-            <li><a>Beranda</a></li>
-            <li>Master</li>
-            <li><span class="text-info">Tunjangan Kinerja</span></li>
-        </ul>
-    </div>
-    
-    <MainCard>
-        <div class="overflow-x-auto">
-            <div class="py-4 flex justify-between">
-                <div class="justify-start">
-                    <button class="btn btn-primary" @click="tambahTukin">Tambah</button>
-                </div>
-                <div class="justify-end">
-                    <input v-model="cari" type="text" placeholder="Cari" class="input input-bordered w-auto max-w-xs mr-2" />
-                    <select v-model="paginate"  class="select select-bordered w-auto max-w-xs">
-                        <option value="5">5</option>
-                        <option value="10" >10</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
-            </div>
-            <table class="table" aria-describedby="Tabel Master Tunjangan Kinerja">
-                <thead>
-                <tr style="text-align: center;">
-                    <th scope="col">No</th>
-                    <th scope="col">Grade Tukin</th>
-                    <th scope="col">Nominal Tukin</th>
-                    <th scope="col">Keterangan</th>
-                    <th scope="col">Aksi</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="hover" v-for="(tukin,index) in list_tukin.data" :key="tukin.id">
-                    <td scope="col" style="text-align: center;">{{index+1}}</td>
-                    <td scope="col" style="text-align: center;">{{tukin.grade}}</td>
-                    <td style="text-align: center;">{{tukin.nominal}}</td>
-                    <td style="text-align: center;">{{tukin.keterangan}}</td>
-                    <td style="text-align: center;">
-                        <button class="text-indigo-600 hover:text-indigo-900" @click="toEdit(tukin)">Edit</button>
-                        <button class="text-red-600 hover:text-red-900 ml-2" @click="toDelete(tukin)">Hapus</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+    <Head :title="title" />
 
-            <br>
-            <div class="join flex justify-end">
-                <Component
-                :is="link.url?'a':'span'"
-                v-for="link in list_tukin.links"
-                :href="link.url"
-                v-html="link.label"
-                class="join-item btn btn-xs"
-                :class="{'btn-disabled': !link.url, 'btn-active':link.active}"
-                />
+    <Breadcrumb
+        :lists="[
+            { label: 'Beranda', url: route('dashboard') },
+            { label: 'Tunjangan Kinerja' },
+        ]"
+    />
+
+    <component
+        :is="modalComponent"
+        :tukin="selectedTukin"
+        v-model:show="showModal"
+    />
+
+    <MainCard :title="title">
+        <div class="mt-4 flex justify-between py-4">
+            <div class="justify-start">
+                <button
+                    class="btn btn-primary btn-outline"
+                    @click="tambahTukin"
+                >
+                    Rekam Data Baru
+                </button>
             </div>
         </div>
+        <table class="table" aria-describedby="Tabel Master Tunjangan Kinerja">
+            <thead>
+                <tr>
+                    <th class="w-1/12">No</th>
+                    <th class="w-2/12">Grade Tukin</th>
+                    <th class="w-3/12">Nominal Tukin</th>
+                    <th class="w-4/12">Keterangan</th>
+                    <th class="w-1/12">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    class="hover"
+                    v-for="(row, index) in tukin_list"
+                    :key="row.id"
+                >
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ row.grade }}</td>
+                    <td>{{ useLocalCurrency(row.nominal) }}</td>
+                    <td>{{ row.keterangan || "-" }}</td>
+                    <td>
+                        <div class="flex gap-1">
+                            <PencilSquareIcon
+                                class="h-5 w-5 cursor-pointer text-primary"
+                                @click="editTukin(row)"
+                            />
+                            <TrashIcon
+                                class="h-5 w-5 cursor-pointer text-error"
+                                @click="destroy(row)"
+                            />
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </MainCard>
 </template>

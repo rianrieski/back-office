@@ -12,7 +12,7 @@ it('can render tukin list page', function () {
         ->get(route('tukin.index'))
         ->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Tukin/Index')
-            ->has('list_tukin')
+            ->has('tukin_list')
         );
 });
 
@@ -30,7 +30,9 @@ it('can handle tukin store request', function () {
         ->nominal->toEqual(10_000);
 
     $response->assertRedirect()
-        ->assertSessionHas('toast');
+        ->assertSessionHas('toast', [
+            'message' => 'Data tunjangan kinerja berhasil disimpan'
+        ]);
 });
 
 it('can validate tukin store request', function () {
@@ -59,7 +61,9 @@ it('can handle tukin update request', function () {
         ->grade->toEqual(8)
         ->nominal->toEqual(5_000);
 
-    $response->assertRedirect()->assertSessionHas('toast');
+    $response->assertRedirect()->assertSessionHas('toast', [
+        'message' => 'Data tunjangan kinerja berhasil diubah'
+    ]);
 });
 
 it('can handle tukin delete request', function () {
@@ -70,5 +74,8 @@ it('can handle tukin delete request', function () {
         ->delete(route('tukin.destroy', $tukin));
 
     $this->assertModelMissing($tukin);
-    $response->assertRedirect()->assertSessionHas('toast');
+    
+    $response->assertRedirect()->assertSessionHas('toast', [
+        'message' => 'Data tunjangan kinerja berhasil dihapus'
+    ]);
 });

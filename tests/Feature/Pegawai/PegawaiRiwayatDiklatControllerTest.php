@@ -17,7 +17,7 @@ describe('handling crud pegawai riwayat diklat', function () {
             ->get(route('riwayat-diklat.index'))
             ->assertInertia(fn(Assert $page) => $page
                 ->component('Pegawai/PegawaiRiwayatDiklat/Index')
-                ->has('diklat.data', 15)
+                ->has('riwayatDiklat.data', 15)
             );
     });
 
@@ -62,7 +62,7 @@ describe('handling crud pegawai riwayat diklat', function () {
                 ->component('Pegawai/PegawaiRiwayatDiklat/Edit')
                 ->has('pegawai', 10)
                 ->has('jenisDiklat', 5)
-                ->where('diklat.nama', $diklat->nama)
+                ->where('riwayatDiklat.nama', $diklat->nama)
                 ->where('currentPegawai.nama', $diklat->pegawai->nama)
                 ->missing('currentPegawai.nip')
             );

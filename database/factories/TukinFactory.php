@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Tukin;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class TukinFactory extends Factory
 {
@@ -13,10 +12,8 @@ class TukinFactory extends Factory
     public function definition()
     {
         return [
-            'grade' => $this->faker->randomNumber(),
-            'nominal' => $this->faker->randomNumber(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'grade' => fake()->unique()->randomNumber(),
+            'nominal' => fake()->numerify('#######'),
         ];
     }
 }
