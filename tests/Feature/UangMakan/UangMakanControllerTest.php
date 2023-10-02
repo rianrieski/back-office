@@ -12,10 +12,10 @@ it('can render uang makan list page', function () {
         ->get(route('umak.index'))
         ->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Umak/Index')
-            ->has('uang_makan'));
+            ->has('umak_list'));
 });
 
-it('can handle uang makan store page', function () {
+it('can handle uang makan store request', function () {
     $user = User::factory()->create();
     $golongan = Golongan::factory()->create();
 
@@ -32,7 +32,7 @@ it('can handle uang makan store page', function () {
     $response->assertRedirect()->assertSessionHas('toast');
 });
 
-it('can handle uang makan update page', function () {
+it('can handle uang makan update request', function () {
     $user = User::factory()->create();
     $umak = UangMakan::factory()->create();
     $golongan = Golongan::factory()->create();
