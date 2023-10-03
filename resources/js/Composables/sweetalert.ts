@@ -1,4 +1,4 @@
-import Swal, { SweetAlertIcon } from "sweetalert2";
+import Swal, { SweetAlertIcon, SweetAlertResult } from "sweetalert2";
 
 export async function useConfirm(params?: {
     title?: string;
@@ -31,12 +31,12 @@ export function useToast({
 }: {
     text: string;
     icon?: SweetAlertIcon;
-}): void {
+}): Promise<SweetAlertResult> {
     let textClass: string = icon === "error" ? "text-error" : "";
 
     const popupClass: string = `${textClass} text-sm`;
 
-    Swal.fire({
+    return Swal.fire({
         toast: true,
         text,
         icon,
