@@ -4,21 +4,40 @@ import { ref, watch } from "vue";
 import { debounce } from "lodash";
 import Swal from "sweetalert2";
 import MainCard from "@/Components/MainCard.vue";
+import Pagination from "@/Components/Pagination.vue";
+import ShowingResultTable from "@/Components/ShowingResultTable.vue";
+import PerPageOption from "@/Components/PerPageOption.vue";
+import SearchInputColumn from "@/Components/SearchInputColumn.vue";
+import { useQuery } from "@/Composables/tablequery.ts";
+import HeadColumn from "@/Components/HeadColumn.vue";
+import BodyRow from "@/Components/BodyRow.vue";
 
-const props = defineProps({
-    pegawai: Object,
-    filter: Object,
-});
+defineProps(["pegawai"]);
 
-const perPage = ref(props.pegawai.per_page);
+const columns = [
+    { label: "Nama Pegawai", column: "nama" },
+    { label: "NIP", column: "nip" },
+    {
+        label: "Status",
+        column: "status_dinas",
+        cell: (val) => (val == 1 ? "Aktif" : "Tidak Aktif"),
+    },
+];
 
-const cari = ref(props.filter.cari);
+const filterBy = ref({ label: "Nama Pegawai", column: "nama" });
+const keyword = ref("");
+const perPage = ref(10);
+const sortBy = ref(null);
+const query = useQuery({ keyword, filterBy, sortBy, perPage });
 
-const getPerPage = () => {
+const fetchData = (param = {}) => {
     router.get(
-        route("profil_pegawai.index"),
-        { perPage: perPage.value, cari: cari.value },
+        route("profil_pegawai.index", {
+            _query: { ...query.value, ...param },
+        }),
+        {},
         {
+            only: ["pegawai"],
             preserveState: true,
             preserveScroll: true,
             replace: true,
@@ -26,80 +45,189 @@ const getPerPage = () => {
     );
 };
 
-watch(
-    cari,
-    debounce((value) => {
-        router.get(
-            route("profil_pegawai.index"),
-            { perPage: perPage.value, cari: value },
-            {
-                preserveState: true,
-                preserveScroll: true,
-                replace: true,
-            },
-        );
-    }, 500),
-);
+// const syncAllData = () => {
+//     router.post(
+//         route("fetch-all-pns-data-utama"),
+//         {},
+//         {
+//             only: ["pegawai", "toast"],
+//             preserveScroll: true,
+//             preserveState: true,
+//             replace: true,
+//             onStart: () => (isLoading.value = true),
+//             onFinish: () => (isLoading.value = false),
+//         },
+//     );
+// };
 
-const tambahPegawai = () => {
-    router.get(route("profil_pegawai.create"));
-};
+// const perPage = ref(props.pegawai.per_page);
 
-const lihatPegawai = (id) => {
-    router.get(route("profil_pegawai.show", { profil_pegawai: id }));
-};
+// const cari = ref(props.filter.cari);
 
-const editPegawai = (id) => {
-    router.get(route("profil_pegawai.edit", { profil_pegawai: id }));
-};
+// const getPerPage = () => {
+//     router.get(
+//         route("profil_pegawai.index"),
+//         { perPage: perPage.value, cari: cari.value },
+//         {
+//             preserveState: true,
+//             preserveScroll: true,
+//             replace: true,
+//         },
+//     );
+// };
 
-const hapusPegawai = (id) => {
-    Swal.fire({
-        title: "Apakah Anda Yakin?",
-        text: "hapus data pegawai",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "Batal",
-        confirmButtonText: "Ya",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            router.delete(
-                route("profil_pegawai.destroy", { profil_pegawai: id }),
-                {
-                    onSuccess: (response) => {
-                        Toast.fire({
-                            icon: "success",
-                            html: response.props.flash.success,
-                        });
-                        router.get(route("profil_pegawai.index"));
-                    },
-                    onError: () => {
-                        Toast.fire({
-                            icon: "error",
-                            html: "Gangguan koneksi internet!",
-                        });
-                    },
-                },
-            );
-        }
-    });
-};
+// watch(
+//     cari,
+//     debounce((value) => {
+//         router.get(
+//             route("profil_pegawai.index"),
+//             { perPage: perPage.value, cari: value },
+//             {
+//                 preserveState: true,
+//                 preserveScroll: true,
+//                 replace: true,
+//             },
+//         );
+//     }, 500),
+// );
+
+// const tambahPegawai = () => {
+//     router.get(route("profil_pegawai.create"));
+// };
+
+// const lihatPegawai = (id) => {
+//     router.get(route("profil_pegawai.show", { profil_pegawai: id }));
+// };
+
+// const editPegawai = (id) => {
+//     router.get(route("profil_pegawai.edit", { profil_pegawai: id }));
+// };
+
+// const hapusPegawai = (id) => {
+//     Swal.fire({
+//         title: "Apakah Anda Yakin?",
+//         text: "hapus data pegawai",
+//         icon: "warning",
+//         showCancelButton: true,
+//         confirmButtonColor: "#3085d6",
+//         cancelButtonColor: "#d33",
+//         cancelButtonText: "Batal",
+//         confirmButtonText: "Ya",
+//     }).then((result) => {
+//         if (result.isConfirmed) {
+//             router.delete(
+//                 route("profil_pegawai.destroy", { profil_pegawai: id }),
+//                 {
+//                     onSuccess: (response) => {
+//                         Toast.fire({
+//                             icon: "success",
+//                             html: response.props.flash.success,
+//                         });
+//                         router.get(route("profil_pegawai.index"));
+//                     },
+//                     onError: () => {
+//                         Toast.fire({
+//                             icon: "error",
+//                             html: "Gangguan koneksi internet!",
+//                         });
+//                     },
+//                 },
+//             );
+//         }
+//     });
+// };
 </script>
 
 <template>
-    <div>
-        <Head title="Pegawai" />
-        <div class="breadcrumbs text-sm">
-            <ul>
+    <Head title="Pegawai" />
+    <div class="breadcrumbs text-sm">
+        <!-- <ul>
                 <li><a>Beranda</a></li>
                 <li>Pegawai</li>
                 <li><span class="text-info">Profil Pegawai</span></li>
-            </ul>
-        </div>
-        <MainCard>
+            </ul> -->
+    </div>
+    <MainCard title="Data Pegawai BSN">
+        <div class="mt-8">
+            <div class="grid gap-2 md:grid-cols-2 md:justify-items-end">
+                <div class="flex gap-2">
+                    <SearchInputColumn
+                        :options="columns"
+                        v-model:keyword="keyword"
+                        v-model:selected="filterBy"
+                        :search="() => fetchData()"
+                    />
+                    <PerPageOption
+                        v-model="perPage"
+                        @change="() => fetchData()"
+                    />
+                </div>
+            </div>
             <div class="overflow-x-auto">
+                <table class="table mt-4">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <HeadColumn
+                                v-for="col in columns"
+                                v-model="sortBy"
+                                :key="col.label"
+                                :content="col"
+                                @click="() => fetchData()"
+                            />
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="pegawai.data.length < 1">
+                            <td colspan="5" class="text-center">
+                                Data tidak ditemukan
+                            </td>
+                        </tr>
+                        <tr
+                            v-else
+                            v-for="(row, i) in pegawai.data"
+                            :key="row.id"
+                        >
+                            <td>{{ pegawai.from + i }}</td>
+                            <BodyRow
+                                v-for="col in columns"
+                                :data="row"
+                                :content="col"
+                            />
+                            <td>
+                                <div
+                                    class="tooltip tooltip-left"
+                                    data-tip="Detil"
+                                >
+                                    <Link
+                                        :href="
+                                            route('profil_pegawai.show', row.id)
+                                        "
+                                    >
+                                        <EyeIcon class="w-5 text-primary" />
+                                    </Link>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 grid gap-2 md:grid-cols-2 md:justify-items-end">
+                <ShowingResultTable
+                    :from="pegawai.from"
+                    :to="pegawai.to"
+                    :total="pegawai.total"
+                    class="justify-self-start"
+                />
+
+                <Pagination
+                    :links="pegawai.links"
+                    @goToPage="(page) => fetchData({ page })"
+                />
+            </div>
+        </div>
+        <!-- <div class="overflow-x-auto">
                 <div class="flex justify-between py-4">
                     <div class="justify-start">
                         <button class="btn btn-primary" @click="tambahPegawai">
@@ -247,7 +375,6 @@ const hapusPegawai = (id) => {
                         </template>
                     </div>
                 </div>
-            </div>
-        </MainCard>
-    </div>
+            </div> -->
+    </MainCard>
 </template>

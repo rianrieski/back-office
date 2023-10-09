@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+
+use function Pest\Laravel\get;
 
 class Pegawai extends Model implements HasMedia
 {
@@ -15,7 +18,16 @@ class Pegawai extends Model implements HasMedia
     protected $guarded = [];
     protected $primaryKey = 'id';
     protected $keyType = 'int';
+    protected $appends = ['nama'];
     public $incrementing = true;
+
+    protected function nama(): Attribute
+    {
+        return Attribute::make(function ($value, $attribute) {
+            return $attribute['nama_depan'] . " " . $attribute['nama_belakang'];
+        });
+    }
+
     public function agama()
     {
         return $this->belongsTo(Agama::class);

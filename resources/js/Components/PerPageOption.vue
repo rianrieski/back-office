@@ -20,8 +20,7 @@ onMounted(() => {
         @change="$emit('update:modelValue', $event.target.value)"
         class="select select-bordered"
     >
-        <option>15</option>
-        <option>30</option>
+        <option>10</option>
         <option>50</option>
         <option>100</option>
     </select>

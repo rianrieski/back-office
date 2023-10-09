@@ -11,32 +11,64 @@ use App\Models\JenisPegawai;
 use App\Models\StatusPegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Inertia\Inertia;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PegawaiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        if ($request->perPage) {
-            $perPage = $request->perPage;
-        } else {
-            $perPage = 10;
-        }
+        // if ($request->perPage) {
+        //     $perPage = $request->perPage;
+        // } else {
+        //     $perPage = 10;
+        // }
 
-        $queryPegawai = Pegawai::query()
-            ->when($request->cari, function ($query, $cari) {
-                $query->where('nip', 'like', '%' . $cari . '%')
-                    ->orWhere('nama_depan', 'like', '%' . $cari . '%')
-                    ->orWhere('nama_belakang', 'like', '%' . $cari . '%');
-            })->orderBy('id', 'desc');
+        // $queryPegawai = Pegawai::query()
+        //     ->when($request->cari, function ($query, $cari) {
+        //         $query->where('nip', 'like', '%' . $cari . '%')
+        //             ->orWhere('nama_depan', 'like', '%' . $cari . '%')
+        //             ->orWhere('nama_belakang', 'like', '%' . $cari . '%');
+        //     })->orderBy('id', 'desc');
 
-        return inertia('Pegawai/PegawaiProfil/Index', [
-            'pegawai' => $queryPegawai
-                ->paginate($perPage)
-                ->appends($request->only(['cari', 'perPage'])),
-            'filter' => $request->only(['cari', 'perPage']),
+        // return inertia('Pegawai/PegawaiProfil/Index', [
+        //     'pegawai' => $queryPegawai
+        //         ->paginate($perPage)
+        //         ->appends($request->only(['cari', 'perPage'])),
+        //     'filter' => $request->only(['cari', 'perPage']),
+        // ]);
+
+        $data =
+            QueryBuilder::for(Pegawai::class)
+            ->allowedFilters([
+                'nip', 'status_dinas',
+                AllowedFilter::callback('nama', function (Builder $query, $value) {
+                    $query->where('nama_depan', 'like', "%$value%")
+                        ->orWhere(
+                            'nama_belakang',
+                            'like',
+                            "%$value%"
+                        );
+                }),
+            ])
+            ->allowedSorts([
+                'nip', 'status_dinas',
+                AllowedSort::callback('nama', function (Builder $query, $value) {
+                    $query->orderBy('nama_depan', $value ? 'DESC' : 'ASC');
+                })
+            ])
+            ->paginate(request('per_page', 10))
+            ->onEachSide(1)
+            ->appends(request()->query());
+
+        return Inertia::render('Pegawai/PegawaiProfil/Index', [
+            'pegawai' => fn () => $data,
         ]);
     }
 
