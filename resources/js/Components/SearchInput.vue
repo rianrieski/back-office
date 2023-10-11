@@ -1,15 +1,36 @@
 <script setup>
 import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline/index.js";
+import { debounce } from "lodash";
+import { computed, onMounted } from "vue";
 
-defineProps({
+const props = defineProps({
     placeholder: {
         type: String,
         default: "Cari",
     },
     modelValue: String,
+    search: {
+        type: Function,
+        required: true,
+    },
 });
 
-defineEmits(["update:modelValue"]);
+onMounted(() => {
+    const params = route().params;
+    if (params?.filter) {
+        emit("update:modelValue", Object.values(params.filter)[0]);
+    }
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const keyword = computed({
+    get: () => props.modelValue,
+    set: debounce((val) => {
+        emit("update:modelValue", val);
+        props.search();
+    }, 300),
+});
 </script>
 
 <template>
@@ -20,11 +41,10 @@ defineEmits(["update:modelValue"]);
             <MagnifyingGlassIcon class="w-4" />
         </div>
         <input
-            :value="modelValue"
+            v-model="keyword"
             type="text"
             class="input input-bordered input-md w-full pl-10"
             :placeholder="placeholder"
-            @input="$emit('update:modelValue', $event.target.value)"
         />
     </div>
 </template>

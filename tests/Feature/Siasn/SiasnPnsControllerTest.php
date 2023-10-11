@@ -8,7 +8,7 @@ it('it can render pns siasn list page', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
-        ->get(route('siasn.asn.index'))
+        ->get(route('siasn-asn.index'))
         ->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Siasn/Asn/Index'));
 });
@@ -20,7 +20,7 @@ it('can render a pns siasn page', function () {
     $pns = SiasnPnsDataUtama::factory()->create();
 
     $this->actingAs($user)
-        ->get(route('siasn.asn.show', $pns->id))
+        ->get(route('siasn-asn.show', $pns->id))
         ->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Siasn/Asn/Show')
             ->has('siasn')

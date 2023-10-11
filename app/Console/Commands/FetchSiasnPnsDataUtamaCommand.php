@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Services\SiasnSimpegService;
 use Illuminate\Console\Command;
 
-class FetchSiasnPnsDataUtama extends Command
+class FetchSiasnPnsDataUtamaCommand extends Command
 {
     /**
      * The name and signature of the console command.

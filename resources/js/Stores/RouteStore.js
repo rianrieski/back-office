@@ -107,9 +107,12 @@ const useRouteStore = defineStore("route-store", () => {
             name: "siasn.*",
             children: [
                 {
-                    icon: UsersIcon,
                     label: "Data ASN",
-                    href: route("siasn.asn.index"),
+                    href: route("siasn-asn.index"),
+                },
+                {
+                    label: "Riwayat Penghargaan",
+                    href: route("siasn-penghargaan.index"),
                 },
             ],
         },

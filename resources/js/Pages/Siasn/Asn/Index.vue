@@ -54,7 +54,7 @@ watch(perPage, () => fetchData());
 
 const fetchData = (additional) => {
     router.get(
-        route("siasn.asn.index", {
+        route("siasn-asn.index", {
             _query: { ...query.value, ...additional },
         }),
         {},
@@ -165,7 +165,7 @@ const sort = (column) => {
                                     data-tip="Lihat detil"
                                 >
                                     <Link
-                                        :href="route('siasn.asn.show', row.id)"
+                                        :href="route('siasn-asn.show', row.id)"
                                     >
                                         <DocumentMagnifyingGlassIcon
                                             class="w-5 text-primary"
