@@ -19,9 +19,9 @@ const goToPage = (link) => {
         return;
     }
 
-    if (link.label.includes("previous")) {
+    if (link.label.toLowerCase().includes("sebelum")) {
         pageNumber = Number(activeLink.value.label) - 1;
-    } else if (link.label.includes("next")) {
+    } else if (link.label.toLowerCase().includes("berikut")) {
         pageNumber = Number(activeLink.value.label) + 1;
     } else {
         pageNumber = link.label;
