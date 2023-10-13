@@ -13,6 +13,7 @@ use App\Http\Controllers\Pegawai\PegawaiController;
 use App\Http\Controllers\Pegawai\PegawaiRiwayatDiklatController;
 use App\Http\Controllers\Pegawai\PegawaiRiwayatJabatanController;
 use App\Http\Controllers\Pegawai\PegawaiRiwayatPendidikanController;
+use App\Http\Controllers\Pegawai\PegawaiRiwayatPenghargaanController;
 use App\Http\Controllers\Pegawai\PegawaiSaldoCutiController;
 use App\Http\Controllers\Pegawai\PegawaiSuamiIstriController;
 use App\Http\Controllers\Pegawai\PegawaiTmtGajiController;
@@ -93,6 +94,10 @@ Route::prefix('master')->group(function () {
 require __DIR__ . '/siap.php';
 
 require __DIR__ . '/siasn.php';
+
+Route::prefix('pegawai')->group(function () {
+    Route::resource('riwayat-penghargaan', PegawaiRiwayatPenghargaanController::class)->only('index', 'store', 'update', 'destroy');
+});
 
 require __DIR__ . '/auth.php';
 

@@ -16,7 +16,3 @@ it('can render siasn riwayat penghargaan list page', function () {
             ->has('penghargaan.data', 15)
         );
 });
-
-it('can handle siasn riwayat penghargaan store request', function () {
-//    
-});

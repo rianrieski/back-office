@@ -99,6 +99,10 @@ const useRouteStore = defineStore("route-store", () => {
                     href: route("saldo-cuti.index"),
                     permission: "saldo_cuti_list",
                 },
+                {
+                    label: "Riwayat Penghargaan",
+                    href: route("riwayat-penghargaan.index"),
+                },
             ],
         },
         {
