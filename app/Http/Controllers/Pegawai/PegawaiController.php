@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pegawai;
 
+use App\Enums\GolonganDarah;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PegawaiRequest;
 use App\Models\Pegawai;
@@ -24,26 +25,6 @@ class PegawaiController extends Controller
      */
     public function index()
     {
-        // if ($request->perPage) {
-        //     $perPage = $request->perPage;
-        // } else {
-        //     $perPage = 10;
-        // }
-
-        // $queryPegawai = Pegawai::query()
-        //     ->when($request->cari, function ($query, $cari) {
-        //         $query->where('nip', 'like', '%' . $cari . '%')
-        //             ->orWhere('nama_depan', 'like', '%' . $cari . '%')
-        //             ->orWhere('nama_belakang', 'like', '%' . $cari . '%');
-        //     })->orderBy('id', 'desc');
-
-        // return inertia('Pegawai/PegawaiProfil/Index', [
-        //     'pegawai' => $queryPegawai
-        //         ->paginate($perPage)
-        //         ->appends($request->only(['cari', 'perPage'])),
-        //     'filter' => $request->only(['cari', 'perPage']),
-        // ]);
-
         $data =
             QueryBuilder::for(Pegawai::class)
             ->allowedFilters([
@@ -87,6 +68,7 @@ class PegawaiController extends Controller
             'statusNikah' => $statusNikah,
             'jenisPegawai' => $jenisPegawai,
             'statusPegawai' => $statusPegawai,
+            'golonganDarah' => GolonganDarah::cases()
         ]);
     }
 
@@ -99,51 +81,41 @@ class PegawaiController extends Controller
 
         $validated = $request->validated();
 
-        Arr::pull($validated, 'media_kartu_pegawai');
-        Arr::pull($validated, 'media_foto_pegawai');
+        Arr::forget($validated, ['media_kartu_pegawai', 'media_foto_pegawai']);
 
         $pegawai = Pegawai::create($validated);
 
-        $pegawai->addMediaFromRequest('media_foto_pegawai')->toMediaCollection('media_foto_pegawai');
-        $pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
+        if ($request->validated('media_foto_pegawai')) {
+            $pegawai->addMediaFromRequest('media_foto_pegawai')->toMediaCollection('media_foto_pegawai');
+        }
 
-        return redirect()->route('profil_pegawai.index')->with('success', 'Data pegawai berhasil dibuat!');
+        if ($request->validated('media_kartu_pegawai')) {
+            $pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
+        }
+
+        return redirect()->route('profil_pegawai.show', $pegawai)->with('toast', [
+            'message' => 'Data pegawai berhasil disimpan'
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Pegawai $profil_pegawai)
     {
-        $pegawai = Pegawai::with([
+        $profil_pegawai->load([
             'agama:id,nama',
             'jenis_kawin:id,nama',
             'jenis_pegawai:id,nama',
             'status_pegawai:id,nama',
-        ])->where('id', $id)->first();
-
-        $fotoPegawai = $pegawai->getMedia("media_foto_pegawai");
-
-        if (count($fotoPegawai) == 0) {
-            $urlFotoPegawai = url(asset('assets/noPhotoFound.png'));
-        } else {
-            $urlFotoPegawai = $fotoPegawai[0]->getUrl();
-        }
-
-        $kartuPegawai = $pegawai->getMedia("media_kartu_pegawai");
-
-        if (count($kartuPegawai) == 0) {
-            $urlKartuPegawai = url(asset('assets/noPhotoFound.png'));
-        } else {
-            $urlKartuPegawai = $kartuPegawai[0]->getUrl();
-        }
+        ]);
 
         return inertia(
             'Pegawai/PegawaiProfil/Show',
             [
-                'pegawai' => $pegawai,
-                'media_foto_pegawai' => $urlFotoPegawai,
-                'media_kartu_pegawai' => $urlKartuPegawai,
+                'pegawai' => $profil_pegawai,
+                'media_foto_pegawai' => fn () => $profil_pegawai->getFirstMediaUrl('media_foto_pegawai'),
+                'media_kartu_pegawai' => fn () => $profil_pegawai->getFirstMediaUrl('media_kartu_pegawai'),
             ]
         );
     }
@@ -151,94 +123,72 @@ class PegawaiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Pegawai $profil_pegawai)
     {
-        $pegawai = Pegawai::with([
+        $profil_pegawai->load([
             'agama:id,nama',
             'jenis_kawin:id,nama',
             'jenis_pegawai:id,nama',
             'status_pegawai:id,nama',
-        ])->where('id', $id)->first();
+        ]);
 
         $agama = Agama::all();
         $statusNikah = JenisKawin::all();
         $jenisPegawai = JenisPegawai::all();
         $statusPegawai = StatusPegawai::all();
 
-        $fotoPegawai = $pegawai->getMedia("media_foto_pegawai");
-
-        if (count($fotoPegawai) == 0) {
-            $urlFotoPegawai = url(asset('assets/noPhotoFound.png'));
-        } else {
-            $urlFotoPegawai = $fotoPegawai[0]->getUrl();
-        }
-
-        $kartuPegawai = $pegawai->getMedia("media_kartu_pegawai");
-
-        if (count($kartuPegawai) == 0) {
-            $urlKartuPegawai = url(asset('assets/noPhotoFound.png'));
-        } else {
-            $urlKartuPegawai = $kartuPegawai[0]->getUrl();
-        }
-
         return inertia(
             'Pegawai/PegawaiProfil/Edit',
             [
-                'pegawai' => $pegawai,
+                'pegawai' => $profil_pegawai,
                 'agama' => fn () => $agama,
                 'statusNikah' => fn () => $statusNikah,
                 'jenisPegawai' => fn () => $jenisPegawai,
                 'statusPegawai' => fn () => $statusPegawai,
-                'media_foto_pegawai' => $urlFotoPegawai,
-                'media_kartu_pegawai' => $urlKartuPegawai,
+                'media_foto_pegawai' => fn () => $profil_pegawai->getFirstMediaUrl('media_foto_pegawai'),
+                'media_kartu_pegawai' => fn () => $profil_pegawai->getFirstMediaUrl('media_kartu_pegawai'),
+                'golonganDarah' => fn () => GolonganDarah::cases()
             ]
         );
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(PegawaiRequest $request, $id)
+    public function update(PegawaiRequest $request, Pegawai $profil_pegawai)
     {
         $validated = $request->validated();
 
-        Arr::pull($validated, 'media_kartu_pegawai');
-        Arr::pull($validated, 'media_foto_pegawai');
+        dd($validated);
 
-        $pegawai = Pegawai::findOrFail($id);
+        Arr::forget($validated, ['media_kartu_pegawai', 'media_foto_pegawai']);
 
-        $pegawai->update($validated);
+        $profil_pegawai->update($validated);
 
         if ($request->validated('media_foto_pegawai')) {
-            $pegawai->clearMediaCollection('media_foto_pegawai');
-            $pegawai->addMediaFromRequest('media_foto_pegawai')->toMediaCollection('media_foto_pegawai');
+            $profil_pegawai->clearMediaCollection('media_foto_pegawai');
+            $profil_pegawai->addMediaFromRequest('media_foto_pegawai')->toMediaCollection('media_foto_pegawai');
         }
 
         if ($request->validated('media_kartu_pegawai')) {
-            $pegawai->clearMediaCollection('media_kartu_pegawai');
-            $pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
+            $profil_pegawai->clearMediaCollection('media_kartu_pegawai');
+            $profil_pegawai->addMediaFromRequest('media_kartu_pegawai')->toMediaCollection('media_kartu_pegawai');
         }
 
-        return redirect()->route('profil_pegawai.index')->with('success', 'Data pegawai berhasil diubah!');
+        return redirect()->route('profil_pegawai.show', $profil_pegawai)->with('toast', [
+            'message' => 'Data pegawai berhasil disimpan'
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Pegawai $pegawai)
     {
-        $pegawai = Pegawai::findOrFail($id);
+        dd($pegawai->id);
 
-        if ($pegawai->hasMedia("media_foto_pegawai")) {
-            $pegawai->getMedia("media_foto_pegawai")[0]->delete();
-        }
-
-        if ($pegawai->hasMedia("media_kartu_pegawai")) {
-            $pegawai->getMedia("media_kartu_pegawai")[0]->delete();
-        }
-
+        // Semua files terkait pegawai akan otomatis terhapus
         $pegawai->delete();
 
-        return redirect()->route('profil_pegawai.index')->with('success', 'Data pegawai berhasil dihapus!');
+        return redirect()->route('profil_pegawai.index')->with('toast', [
+            'message' => 'Data pegawai berhasil dihapus'
+        ]);
     }
 }

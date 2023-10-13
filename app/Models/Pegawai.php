@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Support\Arr;
 
 use function Pest\Laravel\get;
 
@@ -24,7 +25,11 @@ class Pegawai extends Model implements HasMedia
     protected function nama(): Attribute
     {
         return Attribute::make(function ($value, $attribute) {
-            return $attribute['nama_depan'] . " " . $attribute['nama_belakang'];
+            if (Arr::has($attribute, 'nama_depan') && Arr::has($attribute, 'nama_belakang')) {
+                return $attribute['nama_depan'] . " " . $attribute['nama_belakang'];
+            } else {
+                return null;
+            }
         });
     }
 
