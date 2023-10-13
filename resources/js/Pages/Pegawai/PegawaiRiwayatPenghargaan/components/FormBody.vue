@@ -23,11 +23,15 @@ const emit = defineEmits([
 ]);
 
 const pegawai = computed(() => usePage().props.pegawai || []);
+const currentPegawai = computed(() => usePage().props.currentPegawai);
 const penghargaan = computed(() => usePage().props.penghargaan);
 const errors = computed(() => usePage().props.errors);
 
 const selectedPegawai = computed({
-    get: () => pegawai.value.find((peg) => peg.id === props.pegawai_id),
+    get: () =>
+        [...pegawai.value, currentPegawai?.value].find(
+            (peg) => peg.id === props.pegawai_id,
+        ),
     set: (value) => emit("update:pegawai_id", value.id),
 });
 

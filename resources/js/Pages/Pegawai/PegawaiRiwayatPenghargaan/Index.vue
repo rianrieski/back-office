@@ -6,6 +6,7 @@ import PerPageOption from "@/Components/PerPageOption.vue";
 import ShowingResultTable from "@/Components/ShowingResultTable.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { router } from "@inertiajs/vue3";
+import { PencilSquareIcon } from "@heroicons/vue/24/outline/index.js";
 
 defineProps(["riwayat"]);
 
@@ -83,7 +84,22 @@ const fetchData = (params = {}) => {
                         <td>{{ row.no_sk }}</td>
                         <td>{{ row.tanggal_sk }}</td>
                         <td>{{ row.tahun }}</td>
-                        <td>Aksi</td>
+                        <td>
+                            <div class="flex gap-1">
+                                <Link
+                                    :href="
+                                        route(
+                                            'riwayat-penghargaan.edit',
+                                            row.id,
+                                        )
+                                    "
+                                >
+                                    <PencilSquareIcon
+                                        class="h-5 w-5 text-primary"
+                                    />
+                                </Link>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>

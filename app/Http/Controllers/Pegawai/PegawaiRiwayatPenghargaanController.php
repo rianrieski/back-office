@@ -54,12 +54,30 @@ class PegawaiRiwayatPenghargaanController extends Controller
 
         $riwayat = PegawaiRiwayatPenghargaan::create($data);
 
-        if ($request->has('media_sk')) {
+        if ($request->validated('media_sk')) {
             $riwayat->addMediaFromRequest('media_sk')->toMediaCollection('media_sk');
         }
 
         return to_route('riwayat-penghargaan.index')
             ->with('toast', ['message' => 'Data berhasil disimpan']);
+    }
+
+    public function edit(PegawaiRiwayatPenghargaan $riwayat_penghargaan)
+    {
+        return Inertia::render('Pegawai/PegawaiRiwayatPenghargaan/Edit', [
+            'riwayat' => $riwayat_penghargaan,
+            'currentPegawai' => $riwayat_penghargaan->pegawai()
+                ->select('id', 'nama_depan', 'nama_belakang')
+                ->first(),
+            'pegawai' => fn() => Pegawai::query()
+                ->select('id', 'nama_depan', 'nama_belakang')
+                ->when($nama = request('nama'), fn(Builder $builder) => $builder
+                    ->where('nama_depan', 'like', "%$nama%")
+                    ->orWhere('nama_belakang', 'like', "%$nama%"))
+                ->limit(10)
+                ->get(),
+            'penghargaan' => fn() => Penghargaan::select('id', 'nama')->get(),
+        ]);
     }
 
     public function update(PegawaiRiwayatPenghargaanRequest $request, PegawaiRiwayatPenghargaan $riwayat_penghargaan)
@@ -70,7 +88,7 @@ class PegawaiRiwayatPenghargaanController extends Controller
 
         $riwayat_penghargaan->update($data);
 
-        if ($request->has('media_sk')) {
+        if ($request->validated('media_sk')) {
             $riwayat_penghargaan->clearMediaCollection('media_sk');
             $riwayat_penghargaan->addMediaFromRequest('media_sk')->toMediaCollection('media_sk');
         }

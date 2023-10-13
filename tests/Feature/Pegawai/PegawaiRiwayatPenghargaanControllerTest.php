@@ -58,6 +58,21 @@ it('can handle riwayat penghargaan store request', function () {
         ->pegawai->is($pegawai)->toBeTrue();
 });
 
+it('can render riwayat penghargaan edit page', function () {
+    $user = User::factory()->create();
+    $riwayat = PegawaiRiwayatPenghargaan::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('riwayat-penghargaan.edit', $riwayat))
+        ->assertInertia(fn(AssertableInertia $page) => $page
+            ->component('Pegawai/PegawaiRiwayatPenghargaan/Edit')
+            ->has('pegawai')
+            ->has('currentPegawai')
+            ->has('penghargaan')
+            ->has('riwayat')
+        );
+});
+
 it('can handle riwayat penghargaan update request', function () {
     $user = User::factory()->create();
     $riwayat = PegawaiRiwayatPenghargaan::factory()->create();
