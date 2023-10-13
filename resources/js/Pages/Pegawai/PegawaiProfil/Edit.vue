@@ -53,7 +53,7 @@ const updatePegawai = async () => {
             replace: true,
             onBefore: () => confirmed,
             onStart: () => (isLoading.value = true),
-            onFinish: () => (isLoading.value = true),
+            onFinish: () => (isLoading.value = false),
         },
     );
 };

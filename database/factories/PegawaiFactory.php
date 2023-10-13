@@ -25,7 +25,7 @@ class PegawaiFactory extends Factory
             'nama_belakang' => fake()->lastName(),
             'jenis_kelamin' => fake()->randomElement(['L', 'P']),
             'agama_id' => fake()->numberBetween(1, 7),
-            'golongan_darah' => fake()->randomElement(['O-', 'O+', 'A+', 'A-', 'B+', 'B-', 'AB-', 'AB+']),
+            'golongan_darah' => fake()->randomElement(['O', 'A', 'B', 'AB']),
             'jenis_kawin_id' => fake()->numberBetween(1, 4),
             'tempat_lahir' => fake()->city(),
             'tanggal_lahir' => fake()->dateTimeBetween('1990-01-01', '2012-12-31')->format('Y-m-d'),

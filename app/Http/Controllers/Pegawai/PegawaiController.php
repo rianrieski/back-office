@@ -156,8 +156,6 @@ class PegawaiController extends Controller
     {
         $validated = $request->validated();
 
-        dd($validated);
-
         Arr::forget($validated, ['media_kartu_pegawai', 'media_foto_pegawai']);
 
         $profil_pegawai->update($validated);
@@ -180,12 +178,10 @@ class PegawaiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pegawai $pegawai)
+    public function destroy(Pegawai $profil_pegawai)
     {
-        dd($pegawai->id);
-
         // Semua files terkait pegawai akan otomatis terhapus
-        $pegawai->delete();
+        $profil_pegawai->delete();
 
         return redirect()->route('profil_pegawai.index')->with('toast', [
             'message' => 'Data pegawai berhasil dihapus'
