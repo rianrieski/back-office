@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Pegawai;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PegawaiRiwayatPenghargaanRequest;
+use App\Models\Pegawai;
 use App\Models\PegawaiRiwayatPenghargaan;
+use App\Models\Penghargaan;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Inertia\Inertia;
@@ -26,6 +28,20 @@ class PegawaiRiwayatPenghargaanController extends Controller
                 ])
                 ->paginate(request('per_page', 15))
                 ->appends(request()->query())
+        ]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Pegawai/PegawaiRiwayatPenghargaan/Create', [
+            'pegawai' => Pegawai::query()
+                ->select('id', 'nama_depan', 'nama_belakang')
+                ->when($nama = request('nama'), fn(Builder $builder) => $builder
+                    ->where('nama_depan', 'like', "%$nama%")
+                    ->orWhere('nama_belakang', 'like', "%$nama%"))
+                ->limit(10)
+                ->get(),
+            'penghargaan' => Penghargaan::select('id', 'nama')->get(),
         ]);
     }
 

@@ -36,9 +36,12 @@ const fetchData = (params = {}) => {
     <MainCard title="Daftar Riwayat Penghargaan">
         <div class="mt-8 flex justify-between">
             <div>
-                <button class="btn btn-primary btn-outline btn-sm">
+                <Link
+                    :href="route('riwayat-penghargaan.create')"
+                    class="btn btn-primary btn-outline btn-sm"
+                >
                     Rekam Data Baru
-                </button>
+                </Link>
             </div>
             <div class="flex gap-2">
                 <SearchInput

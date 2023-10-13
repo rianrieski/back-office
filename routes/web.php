@@ -96,7 +96,7 @@ require __DIR__ . '/siap.php';
 require __DIR__ . '/siasn.php';
 
 Route::prefix('pegawai')->group(function () {
-    Route::resource('riwayat-penghargaan', PegawaiRiwayatPenghargaanController::class)->only('index', 'store', 'update', 'destroy');
+    Route::resource('riwayat-penghargaan', PegawaiRiwayatPenghargaanController::class)->except('show');
 });
 
 require __DIR__ . '/auth.php';

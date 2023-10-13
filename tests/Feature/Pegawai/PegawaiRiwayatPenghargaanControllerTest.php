@@ -22,6 +22,20 @@ it('can render riwayat penghargaan list page', function () {
         );
 });
 
+it('can render riwayat penghargaan create page', function () {
+    $user = User::factory()->create();
+    Pegawai::factory()->count(20)->create();
+    Penghargaan::factory()->count(5)->create();
+
+    $this->actingAs($user)
+        ->get(route('riwayat-penghargaan.create'))
+        ->assertInertia(fn(AssertableInertia $page) => $page
+            ->component('Pegawai/PegawaiRiwayatPenghargaan/Create')
+            ->has('pegawai', 10)
+            ->has('penghargaan', 5)
+        );
+});
+
 it('can handle riwayat penghargaan store request', function () {
     $user = User::factory()->create();
 
