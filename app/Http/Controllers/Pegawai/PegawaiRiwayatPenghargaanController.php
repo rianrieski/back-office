@@ -26,6 +26,7 @@ class PegawaiRiwayatPenghargaanController extends Controller
                             ->where('nama_depan', 'like', "%$value%")
                             ->orWhere('nama_belakang', 'like', "%$value%")))
                 ])
+                ->orderByDesc('id')
                 ->paginate(request('per_page', 15))
                 ->appends(request()->query())
         ]);
@@ -34,14 +35,14 @@ class PegawaiRiwayatPenghargaanController extends Controller
     public function create()
     {
         return Inertia::render('Pegawai/PegawaiRiwayatPenghargaan/Create', [
-            'pegawai' => Pegawai::query()
+            'pegawai' => fn() => Pegawai::query()
                 ->select('id', 'nama_depan', 'nama_belakang')
                 ->when($nama = request('nama'), fn(Builder $builder) => $builder
                     ->where('nama_depan', 'like', "%$nama%")
                     ->orWhere('nama_belakang', 'like', "%$nama%"))
                 ->limit(10)
                 ->get(),
-            'penghargaan' => Penghargaan::select('id', 'nama')->get(),
+            'penghargaan' => fn() => Penghargaan::select('id', 'nama')->get(),
         ]);
     }
 

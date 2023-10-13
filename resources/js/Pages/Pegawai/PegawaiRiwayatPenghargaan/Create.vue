@@ -11,6 +11,10 @@ const form = useForm({
     tahun: null,
     media_sk: null,
 });
+
+const submit = () => {
+    form.post(route("riwayat-penghargaan.store"));
+};
 </script>
 
 <template>
@@ -30,9 +34,9 @@ const form = useForm({
                 <Link
                     class="btn btn-neutral btn-outline"
                     :href="route('riwayat-penghargaan.index')"
-                    >Batal</Link
-                >
-                <button class="btn btn-primary">Simpan</button>
+                    >Batal
+                </Link>
+                <button class="btn btn-primary" type="submit">Simpan</button>
             </div>
         </form>
     </MainCard>

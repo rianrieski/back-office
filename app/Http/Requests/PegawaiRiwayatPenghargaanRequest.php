@@ -14,7 +14,7 @@ class PegawaiRiwayatPenghargaanRequest extends FormRequest
             'no_sk' => ['required', 'string'],
             'tanggal_sk' => ['required', 'date'],
             'tahun' => ['required', 'digits:4'],
-            'media_sk' => ['mimes:jpg,png,jpeg,pdf'],
+            'media_sk' => ['nullable', 'mimes:jpg,png,jpeg,pdf'],
         ];
     }
 }

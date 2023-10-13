@@ -52,7 +52,7 @@ const fetchData = (params = {}) => {
                 <PerPageOption v-model="perPage" @change="() => fetchData()" />
             </div>
         </div>
-        <div class="overflow-x-auto">
+        <div class="mt-2 overflow-x-auto">
             <table class="table">
                 <thead>
                     <tr>
