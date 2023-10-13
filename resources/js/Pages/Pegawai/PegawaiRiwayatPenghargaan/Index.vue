@@ -6,7 +6,11 @@ import PerPageOption from "@/Components/PerPageOption.vue";
 import ShowingResultTable from "@/Components/ShowingResultTable.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { router } from "@inertiajs/vue3";
-import { PencilSquareIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+    PencilSquareIcon,
+    TrashIcon,
+} from "@heroicons/vue/24/outline/index.js";
+import { useConfirm } from "@/Composables/sweetalert.ts";
 
 defineProps(["riwayat"]);
 
@@ -28,6 +32,19 @@ const fetchData = (params = {}) => {
             replace: true,
         },
     );
+};
+
+const destroy = async (data) => {
+    const confirmed = await useConfirm({
+        text: `Hapus data riwayat penghargaan ini untuk pegawai ${data.pegawai.nama}`,
+    });
+
+    router.delete(route("riwayat-penghargaan.destroy", data.id), {
+        onBefore: () => confirmed,
+        replace: true,
+        preserveState: true,
+        preserveScroll: true,
+    });
 };
 </script>
 
@@ -98,6 +115,10 @@ const fetchData = (params = {}) => {
                                         class="h-5 w-5 text-primary"
                                     />
                                 </Link>
+                                <TrashIcon
+                                    @click="destroy(row)"
+                                    class="h-5 w-5 cursor-pointer text-error"
+                                />
                             </div>
                         </td>
                     </tr>

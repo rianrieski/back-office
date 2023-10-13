@@ -102,6 +102,6 @@ class PegawaiRiwayatPenghargaanController extends Controller
         $riwayat_penghargaan->delete();
 
         return to_route('riwayat-penghargaan.index')
-            ->with('toast', ['message' => 'Data berhasil dihapus']);
+            ->with('toast', ['message' => 'Data berhasil dihapus, silakan hapus data terkait pada SIASN']);
     }
 }
