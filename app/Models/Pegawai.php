@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Support\Arr;
 
 class Pegawai extends Model implements HasMedia
 {
@@ -17,8 +17,8 @@ class Pegawai extends Model implements HasMedia
     protected $guarded = [];
     protected $primaryKey = 'id';
     protected $keyType = 'int';
-    public $incrementing = true;
     protected $appends = ['nama'];
+    public $incrementing = true;
 
     protected function nama(): Attribute
     {
@@ -50,12 +50,10 @@ class Pegawai extends Model implements HasMedia
     {
         return $this->belongsTo(StatusPegawai::class);
     }
-
     public function pegawai_riwayat_jabatan()
     {
         return $this->hasMany(PegawaiRiwayatJabatan::class);
     }
-
     public function pegawai_alamat()
     {
         return $this->hasMany(PegawaiAlamat::class);

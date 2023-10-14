@@ -1,12 +1,16 @@
 <script setup>
 import MainCard from "@/Components/MainCard.vue";
 import { Link } from "@inertiajs/vue3";
+import Breadcrumb from "@/Components/Breadcrumb.vue";
+import { useNoPhotoUrl } from "@/Composables/helpers.ts";
 
 defineProps({
     pegawai: Object,
     media_foto_pegawai: String,
     media_kartu_pegawai: String,
 });
+
+const noPhotoUrl = useNoPhotoUrl();
 
 const tanggalFormat = (dateString) => {
     const date = new Date(dateString);
@@ -18,14 +22,13 @@ const tanggalFormat = (dateString) => {
 <template>
     <div>
         <Head title="Lihat Pegawai" />
-        <div class="breadcrumbs text-sm">
-            <ul>
-                <li><a>Beranda</a></li>
-                <li>Pegawai</li>
-                <li>Profil Pegawai</li>
-                <li><span class="text-info">Lihat Pegawai</span></li>
-            </ul>
-        </div>
+        <Breadcrumb
+            :lists="[
+                { label: 'Beranda', url: route('dashboard') },
+                { label: 'Pegawai', url: route('profil_pegawai.index') },
+                { label: 'Data Pegawai' },
+            ]"
+        />
         <MainCard>
             <div class="grid grid-cols-6 gap-4">
                 <table class="col-span-4 text-left">
@@ -42,9 +45,7 @@ const tanggalFormat = (dateString) => {
                     <tr>
                         <th class="align-top">Nama Lengkap</th>
                         <td class="px-2 align-top">:</td>
-                        <td class="align-top">
-                            {{ pegawai.nama_depan }} {{ pegawai.nama_belakang }}
-                        </td>
+                        <td class="align-top">{{ pegawai.nama }}</td>
                     </tr>
                     <tr>
                         <th class="align-top">Jenis Kelamin</th>
@@ -215,12 +216,12 @@ const tanggalFormat = (dateString) => {
                 </table>
                 <div class="col-span-2">
                     <img
-                        :src="media_foto_pegawai"
+                        :src="media_foto_pegawai || noPhotoUrl"
                         class="mb-4 rounded-md border-2"
                         alt=""
                     />
                     <img
-                        :src="media_kartu_pegawai"
+                        :src="media_kartu_pegawai || noPhotoUrl"
                         class="rounded-md border-2"
                         alt=""
                     />
@@ -229,11 +230,7 @@ const tanggalFormat = (dateString) => {
             <div class="mt-4 grid justify-items-end">
                 <Link
                     class="rounded-md bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-500"
-                    :href="
-                        route('profil_pegawai.edit', {
-                            profil_pegawai: pegawai.id,
-                        })
-                    "
+                    :href="route('profil_pegawai.edit', pegawai.id)"
                 >
                     Edit
                 </Link>

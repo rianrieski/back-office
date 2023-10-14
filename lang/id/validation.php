@@ -42,6 +42,7 @@ return [
     'email'                => 'Isian :attribute harus berupa alamat surel yang valid.',
     'ends_with'            => 'Isian :attribute harus diakhiri dengan: :values.',
     'exists'               => 'Isian :attribute yang dipilih tidak valid.',
+    'enum'                 => 'Isian :attribute tidak valid.',
     'file'                 => 'Isian :attribute harus berupa file.',
     'filled'               => 'Isian :attribute wajib diisi.',
     'gt' => [

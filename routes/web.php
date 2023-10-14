@@ -49,7 +49,7 @@ Route::prefix('pegawai')->group(function () {
     Route::resource('alamat', PegawaiAlamatController::class)->only('index', 'create', 'store', 'edit', 'update', 'destroy', 'show');
     Route::post('alamat/getkota', [PegawaiAlamatController::class, 'getKota'])->name('alamat.getkota');
     Route::resource('profil_pegawai', PegawaiController::class);
-    Route::resource('riwayat_jabatan_pegawai', PegawaiRiwayatJabatanController::class)->only('index');
+    Route::resource('riwayat_jabatan_pegawai', PegawaiRiwayatJabatanController::class);
     Route::get('riwayat-diklat/getdata', [PegawaiRiwayatDiklatController::class, 'getDataRiwayatDiklat'])->name('riwayat-diklat.getdata');
     Route::resource('riwayat-diklat', PegawaiRiwayatDiklatController::class);
     Route::get('tmt-gaji/getdata', [PegawaiTmtGajiController::class, 'getDataTmtGaji'])->name('tmt-gaji.getdata');

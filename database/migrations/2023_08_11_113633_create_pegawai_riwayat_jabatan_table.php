@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('tmt_jabatan');
             $table->string('pejabat_penetap', 50);
             $table->boolean('is_plt');
+            $table->boolean('is_current');
             $table->timestamps();
             $table->foreign('pegawai_id')->references('id')->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('jabatan_unit_kerja_id')->references('id')->on('jabatan_unit_kerja')->onUpdate('cascade')->onDelete('cascade');

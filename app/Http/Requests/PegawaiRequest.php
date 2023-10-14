@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GolonganDarah;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class PegawaiRequest extends FormRequest
 {
@@ -28,7 +30,7 @@ class PegawaiRequest extends FormRequest
             'nama_belakang' => 'required|max:50|regex:/^[\pL\s\-]+$/u',
             'jenis_kelamin' => 'required',
             'agama_id' => 'required',
-            'golongan_darah' => 'required',
+            'golongan_darah' => new Enum(GolonganDarah::class),
             'jenis_kawin_id' => 'required',
             'tempat_lahir' => 'required|max:50|regex:/^[\pL\s\-]+$/u',
             'tanggal_lahir' => 'required',

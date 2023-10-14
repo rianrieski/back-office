@@ -4,6 +4,7 @@ import "../css/app.css";
 import { createApp, h } from "vue";
 import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
+
 import { createPinia } from "pinia";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
