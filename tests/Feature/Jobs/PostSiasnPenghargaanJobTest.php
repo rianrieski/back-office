@@ -4,6 +4,7 @@ use App\Integration\Siasn\Request\Simpeg\PostPenghargaanRequest;
 use App\Jobs\PostSiasnPenghargaanJob;
 use App\Models\PegawaiRiwayatPenghargaan;
 use App\Models\Penghargaan;
+use App\Models\Siasn\Referensi\RefDokumen;
 use App\Models\Siasn\SiasnPnsDataUtama;
 use Illuminate\Http\UploadedFile;
 use Saloon\Http\Faking\MockResponse;
@@ -35,6 +36,8 @@ test('post siasn penghargaan job', function () {
     $riwayat = PegawaiRiwayatPenghargaan::factory()
         ->for(Penghargaan::factory()->state(['bkn_id' => 201]))
         ->create();
+    RefDokumen::factory()->create(['detailLayananNama' => 'Riwayat Penghargaan']);
+    
     $uploaded = UploadedFile::fake()->create('example.pdf', 5, 'application/pdf');
     $riwayat->addMedia($uploaded)->toMediaCollection('media_sk');
     SiasnPnsDataUtama::factory()->create(['nipBaru' => $riwayat->pegawai->nip]);

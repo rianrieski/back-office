@@ -4,9 +4,11 @@ use App\Integration\Siasn\Request\Referensi\GetAgamaRequest;
 use App\Integration\Siasn\Request\Referensi\GetAlasanHukDisRequest;
 use App\Integration\Siasn\Request\Referensi\GetAsnJenisJabatanRequest;
 use App\Integration\Siasn\Request\Referensi\GetKedudukanHukumRequest;
+use App\Integration\Siasn\Request\Referensi\GetRefDokumenRequest;
 use App\Models\Siasn\Referensi\Agama;
 use App\Models\Siasn\Referensi\AlasanHukDis;
 use App\Models\Siasn\Referensi\KedudukanHukum;
+use App\Models\Siasn\Referensi\RefDokumen;
 use App\Services\SiasnReferensiService;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
@@ -65,5 +67,9 @@ describe('siasn referensi data', function () {
         $service = new SiasnReferensiService();
 
         $service->fetchRefDokumen();
+
+        Saloon::assertSent(GetRefDokumenRequest::class);
+
+        expect(RefDokumen::count())->not->toBeEmpty();
     });
 });

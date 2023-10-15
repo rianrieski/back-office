@@ -7,9 +7,11 @@ use App\Integration\Siasn\Request\Referensi\GetAgamaRequest;
 use App\Integration\Siasn\Request\Referensi\GetAlasanHukDisRequest;
 use App\Integration\Siasn\Request\Referensi\GetAsnJenisJabatanRequest;
 use App\Integration\Siasn\Request\Referensi\GetKedudukanHukumRequest;
+use App\Integration\Siasn\Request\Referensi\GetRefDokumenRequest;
 use App\Models\Siasn\Referensi\Agama;
 use App\Models\Siasn\Referensi\AlasanHukDis;
 use App\Models\Siasn\Referensi\KedudukanHukum;
+use App\Models\Siasn\Referensi\RefDokumen;
 use Saloon\Contracts\Authenticator;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\PendingRequest;
@@ -77,6 +79,10 @@ class SiasnReferensiService
 
     public function fetchRefDokumen(): void
     {
-//        $response =
+        $response = $this->connector->sendAndRetry(new GetRefDokumenRequest, 3, 1000, $this->resetToken);
+
+        $result = $response->json('results');
+
+        RefDokumen::upsert($result, ['id']);
     }
 }
