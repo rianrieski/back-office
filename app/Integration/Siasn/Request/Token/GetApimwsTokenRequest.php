@@ -30,7 +30,7 @@ class GetApimwsTokenRequest extends Request implements HasBody
 
     public function resolveEndpoint(): string
     {
-        return 'https://apimws.bkn.go.id/oauth2/token';
+        return config('services.apimws-bkn.token_url');
     }
 
     protected function defaultBody(): array

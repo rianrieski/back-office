@@ -12,14 +12,16 @@ class GetSiasnTokenRequest extends Request implements HasBody
     use HasFormBody;
 
     protected Method $method = Method::POST;
+    protected string $endpoint;
 
-    public function __construct(public int $timeout = 60)
+    public function __construct(public int $timeout = 60,)
     {
+        $this->endpoint = config('services.sso-siasn.token_url');
     }
 
     public function resolveEndpoint(): string
     {
-        return 'https://sso-siasn.bkn.go.id/auth/realms/public-siasn/protocol/openid-connect/token';
+        return $this->endpoint;
     }
 
     protected function defaultConfig(): array

@@ -17,7 +17,7 @@ class SiasnReferensiConnector extends Connector
 
     public function resolveBaseUrl(): string
     {
-        return 'https://apimws.bkn.go.id:8243/referensi_siasn/1';
+        return config('services.apimws-bkn.reference_url');
     }
 
     protected function defaultSender(): Sender

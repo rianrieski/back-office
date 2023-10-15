@@ -15,7 +15,7 @@ class SiasnSimpegConnector extends Connector
 
     public function resolveBaseUrl(): string
     {
-        return 'https://apimws.bkn.go.id:8243/apisiasn/1.0';
+        return config('services.apimws-bkn.base_url');
     }
 
     protected function defaultSender(): Sender
