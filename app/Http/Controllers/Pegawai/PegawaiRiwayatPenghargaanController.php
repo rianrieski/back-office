@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Pegawai;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PegawaiRiwayatPenghargaanRequest;
+use App\Jobs\GetSiasnRwPenghargaanJob;
+use App\Jobs\PostSiasnPenghargaanJob;
 use App\Models\Pegawai;
 use App\Models\PegawaiRiwayatPenghargaan;
 use App\Models\Penghargaan;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Bus;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -57,6 +60,11 @@ class PegawaiRiwayatPenghargaanController extends Controller
         if ($request->validated('media_sk')) {
             $riwayat->addMediaFromRequest('media_sk')->toMediaCollection('media_sk');
         }
+
+        Bus::chain([
+            new PostSiasnPenghargaanJob($riwayat),
+            new GetSiasnRwPenghargaanJob($riwayat),
+        ])->dispatch();
 
         return to_route('riwayat-penghargaan.index')
             ->with('toast', ['message' => 'Data berhasil disimpan']);

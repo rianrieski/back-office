@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Requests\PegawaiRiwayatPenghargaanRequest;
+use App\Jobs\GetSiasnRwPenghargaanJob;
+use App\Jobs\PostSiasnPenghargaanJob;
 use App\Models\Pegawai;
 use App\Models\PegawaiRiwayatPenghargaan;
 use App\Models\Penghargaan;
@@ -37,6 +39,8 @@ it('can render riwayat penghargaan create page', function () {
 });
 
 it('can handle riwayat penghargaan store request', function () {
+    \Illuminate\Support\Facades\Queue::fake();
+
     $user = User::factory()->create();
 
     PegawaiRiwayatPenghargaanRequest::fake();
@@ -47,6 +51,8 @@ it('can handle riwayat penghargaan store request', function () {
         ->assertSessionHas('toast', ['message' => 'Data berhasil disimpan']);
 
     $this->assertDatabaseCount(PegawaiRiwayatPenghargaan::class, 1);
+
+    \Illuminate\Support\Facades\Queue::assertPushedWithChain(PostSiasnPenghargaanJob::class, [GetSiasnRwPenghargaanJob::class]);
 
     $riwayat = PegawaiRiwayatPenghargaan::first();
     $penghargaan = Penghargaan::first();
@@ -99,7 +105,3 @@ it('can handle riwayat penghargaan delete request', function () {
 
     $this->assertModelMissing($riwayat);
 });
-
-test('dispatch post riwayat penghargaan job to siasn when created', function () {
-//
-})->skip();

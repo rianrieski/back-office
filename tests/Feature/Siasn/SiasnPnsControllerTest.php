@@ -27,4 +27,4 @@ it('can render a pns siasn page', function () {
 //            ->has('siap.pangkatTerakhir')
 //            ->has('siap.agama')
         );
-});
+})->skip(fn() => \Illuminate\Support\Facades\DB::getDriverName() !== 'sqlsrv');
