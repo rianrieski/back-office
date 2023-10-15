@@ -12,6 +12,7 @@ use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtu;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasangan;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
 use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaan;
+use App\Integration\Siasn\Request\Simpeg\GetRwPenghargaan;
 use App\Integration\Siasn\Request\Simpeg\PostPenghargaan;
 use App\Integration\Siasn\Request\Token\GetApimwsTokenRequest;
 use App\Integration\Siasn\Request\Token\GetSiasnTokenRequest;
@@ -158,6 +159,25 @@ class SiasnSimpegService
                 continue;
             }
         }
+    }
+
+    public function fetchRwPenghargaan(string $rwPenghargaanId)
+    {
+        $response = $this->connector->sendAndRetry(new GetRwPenghargaan('094bbc1e-4072-49b1-8fdf-20eafe223fd0'), 3, 1000, $this->resetToken);
+
+        if ($response->json('code')) {
+            $result = $response->json('data');
+            $path = Arr::first($result['path']);
+            $data = SiasnPenghargaanData::from([
+                ...$result,
+                'id' => $result['ID'],
+                'path' => [SiasnUploadedFile::from($path)]
+            ]);
+
+            return SiasnPnsRwPenghargaan::updateOrCreate(['id' => $data->id], $data->toArray());
+        }
+
+        return $response->json();
     }
 
     /**

@@ -5,6 +5,7 @@ use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtu;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasangan;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
 use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaan;
+use App\Integration\Siasn\Request\Simpeg\GetRwPenghargaan;
 use App\Integration\Siasn\Request\Simpeg\PostPenghargaan;
 use App\Models\PegawaiRiwayatPenghargaan;
 use App\Models\Siasn\SiasnPnsDataOrtu;
@@ -90,6 +91,18 @@ describe('siasn riwayat penghargaan', function () {
     });
 
     it('can fetch siasn riwayat penghargaan', function () {
+        $service = new SiasnSimpegService();
+
+        $this->assertDatabaseEmpty(SiasnPnsRwPenghargaan::class);
+
+        $service->fetchRwPenghargaan('094bbc1e-4072-49b1-8fdf-20eafe223fd0');
+
+        \Saloon\Laravel\Facades\Saloon::assertSent(GetRwPenghargaan::class);
+
+        expect(SiasnPnsRwPenghargaan::first()->id)->toEqual('094bbc1e-4072-49b1-8fdf-20eafe223fd0');
+    });
+
+    it('can fetch siasn pns riwayat penghargaan', function () {
         $service = new SiasnSimpegService();
 
         expect(SiasnPnsRwPenghargaan::count())->toBeEmpty();

@@ -12,6 +12,7 @@ class SiasnPnsRwPenghargaan extends Model
     protected $table = 'siasn_pns_rw_penghargaan';
 
     protected $guarded = [];
+    protected $keyType = 'string';
 
     protected $casts = [
         'path' => 'array'

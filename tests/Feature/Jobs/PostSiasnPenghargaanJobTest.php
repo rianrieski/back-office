@@ -30,7 +30,6 @@ test('post siasn penghargaan job', function () {
 
             return MockResponse::fixture('Simpeg/' . $reflection->getShortName());
         },
-//        MockResponse::make([], 200)
     ]);
 
     $riwayat = PegawaiRiwayatPenghargaan::factory()
