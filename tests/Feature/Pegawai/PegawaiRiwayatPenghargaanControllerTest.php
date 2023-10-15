@@ -80,6 +80,7 @@ it('can render riwayat penghargaan edit page', function () {
 });
 
 it('can handle riwayat penghargaan update request', function () {
+    \Illuminate\Support\Facades\Queue::fake();
     $user = User::factory()->create();
     $riwayat = PegawaiRiwayatPenghargaan::factory()->create();
 
@@ -89,6 +90,8 @@ it('can handle riwayat penghargaan update request', function () {
         ->put(route('riwayat-penghargaan.update', $riwayat))
         ->assertRedirect(route('riwayat-penghargaan.index'))
         ->assertSessionHas('toast', ['message' => 'Data berhasil disimpan']);
+
+    \Illuminate\Support\Facades\Queue::assertPushedWithChain(PostSiasnPenghargaanJob::class, [GetSiasnRwPenghargaanJob::class]);
 
     expect($riwayat->fresh())->getMedia('media_sk')->toHaveCount(1);
 });

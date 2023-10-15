@@ -96,6 +96,11 @@ class PegawaiRiwayatPenghargaanController extends Controller
 
         $riwayat_penghargaan->update($data);
 
+        Bus::chain([
+            new PostSiasnPenghargaanJob($riwayat_penghargaan),
+            new GetSiasnRwPenghargaanJob($riwayat_penghargaan),
+        ])->dispatch();
+
         if ($request->validated('media_sk')) {
             $riwayat_penghargaan->clearMediaCollection('media_sk');
             $riwayat_penghargaan->addMediaFromRequest('media_sk')->toMediaCollection('media_sk');
