@@ -8,12 +8,12 @@ use App\Data\SiasnPnsDataPasanganData;
 use App\Data\SiasnUploadedFile;
 use App\Integration\Siasn\Authenticator\SiasnSimpegAuthenticator;
 use App\Integration\Siasn\Connector\SiasnSimpegConnector;
-use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtu;
-use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasangan;
-use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
-use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaan;
-use App\Integration\Siasn\Request\Simpeg\GetRwPenghargaan;
-use App\Integration\Siasn\Request\Simpeg\PostPenghargaan;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtuRequest;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasanganRequest;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtamaRequest;
+use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaanRequest;
+use App\Integration\Siasn\Request\Simpeg\GetRwPenghargaanRequest;
+use App\Integration\Siasn\Request\Simpeg\PostPenghargaanRequest;
 use App\Integration\Siasn\Request\Token\GetApimwsTokenRequest;
 use App\Integration\Siasn\Request\Token\GetSiasnTokenRequest;
 use App\Jobs\GetSiasnPnsDataUtamaJob;
@@ -57,7 +57,7 @@ class SiasnSimpegService
 
     public function fetchPnsDataUtama(string|int $nip): SiasnPnsDataUtama
     {
-        $response = $this->connector->sendAndRetry(new GetPnsDataUtama($nip), 3, 5000, $this->resetToken);
+        $response = $this->connector->sendAndRetry(new GetPnsDataUtamaRequest($nip), 3, 5000, $this->resetToken);
 
         $data = $response->json()['data'];
 
@@ -85,7 +85,7 @@ class SiasnSimpegService
 
     public function fetchPnsDataPasangan(string|int $nip): void
     {
-        $response = $this->connector->sendAndRetry(new GetPnsDataPasangan($nip), 3, 5000, $this->resetToken);
+        $response = $this->connector->sendAndRetry(new GetPnsDataPasanganRequest($nip), 3, 5000, $this->resetToken);
 
         $data = $response->json()['data'];
 
@@ -114,7 +114,7 @@ class SiasnSimpegService
 
     public function fetchPnsRwPenghargaan(string|int $nip): void
     {
-        $response = $this->connector->sendAndRetry(new GetPnsRwPenghargaan($nip), 3, 5000, $this->resetToken);
+        $response = $this->connector->sendAndRetry(new GetPnsRwPenghargaanRequest($nip), 3, 5000, $this->resetToken);
 
         $data = $response->json()['data'];
 
@@ -140,7 +140,7 @@ class SiasnSimpegService
 
     public function fetchPnsDataOrtu(string|int $nip): void
     {
-        $response = $this->connector->sendAndRetry(new GetPnsDataOrtu($nip), 3, 5000, $this->resetToken);
+        $response = $this->connector->sendAndRetry(new GetPnsDataOrtuRequest($nip), 3, 5000, $this->resetToken);
 
         $object = SiasnPnsDataOrtuData::fromResponse($response->json('data'));
 
@@ -163,7 +163,7 @@ class SiasnSimpegService
 
     public function fetchRwPenghargaan(string $rwPenghargaanId)
     {
-        $response = $this->connector->sendAndRetry(new GetRwPenghargaan('094bbc1e-4072-49b1-8fdf-20eafe223fd0'), 3, 1000, $this->resetToken);
+        $response = $this->connector->sendAndRetry(new GetRwPenghargaanRequest('094bbc1e-4072-49b1-8fdf-20eafe223fd0'), 3, 1000, $this->resetToken);
 
         if ($response->json('code')) {
             $result = $response->json('data');
@@ -190,7 +190,7 @@ class SiasnSimpegService
      */
     public function postPenghargaan(SiasnPenghargaanData $data): string
     {
-        $response = $this->connector->sendAndRetry(new PostPenghargaan($data), 3, 1000, $this->resetToken);
+        $response = $this->connector->sendAndRetry(new PostPenghargaanRequest($data), 3, 1000, $this->resetToken);
 
         if (!$response->json('success')) {
             throw new ClientException($response, $response->json('message'));

@@ -1,6 +1,6 @@
 <?php
 
-use App\Integration\Siasn\Request\Simpeg\PostPenghargaan;
+use App\Integration\Siasn\Request\Simpeg\PostPenghargaanRequest;
 use App\Jobs\PostSiasnPenghargaanJob;
 use App\Models\PegawaiRiwayatPenghargaan;
 use App\Models\Penghargaan;
@@ -46,5 +46,5 @@ test('post siasn penghargaan job', function () {
     Http::assertSent(fn(\Illuminate\Http\Client\Request $request) => $request
             ->url() === $baseUrl . '/upload-dok');
 
-    \Saloon\Laravel\Facades\Saloon::assertSent(PostPenghargaan::class);
+    \Saloon\Laravel\Facades\Saloon::assertSent(PostPenghargaanRequest::class);
 });

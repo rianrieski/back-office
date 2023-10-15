@@ -9,7 +9,7 @@ use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 
-class PostPenghargaan extends Request implements HasBody
+class PostPenghargaanRequest extends Request implements HasBody
 {
     use HasJsonBody, AlwaysThrowOnErrors;
 

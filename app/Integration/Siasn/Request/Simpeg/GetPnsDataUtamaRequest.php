@@ -5,7 +5,7 @@ namespace App\Integration\Siasn\Request\Simpeg;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
-class GetPnsDataUtama extends Request
+class GetPnsDataUtamaRequest extends Request
 {
     protected Method $method = Method::GET;
 

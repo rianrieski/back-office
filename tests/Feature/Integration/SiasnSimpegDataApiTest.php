@@ -1,12 +1,12 @@
 <?php
 
 use App\Data\SiasnPenghargaanData;
-use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtu;
-use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasangan;
-use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
-use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaan;
-use App\Integration\Siasn\Request\Simpeg\GetRwPenghargaan;
-use App\Integration\Siasn\Request\Simpeg\PostPenghargaan;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtuRequest;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasanganRequest;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtamaRequest;
+use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaanRequest;
+use App\Integration\Siasn\Request\Simpeg\GetRwPenghargaanRequest;
+use App\Integration\Siasn\Request\Simpeg\PostPenghargaanRequest;
 use App\Models\PegawaiRiwayatPenghargaan;
 use App\Models\Siasn\SiasnPnsDataOrtu;
 use App\Models\Siasn\SiasnPnsDataPasangan;
@@ -33,7 +33,7 @@ describe('siasn simpeg data transaction', function () {
 
         $service->fetchPnsDataUtama(199111182019031005);
 
-        \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataUtama::class);
+        \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataUtamaRequest::class);
 
         expect(SiasnPnsDataUtama::first()->nipBaru)->toEqual(199111182019031005);
     });
@@ -43,7 +43,7 @@ describe('siasn simpeg data transaction', function () {
 
         $service->fetchPnsDataPasangan(199111182019031005);
 
-        \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataPasangan::class);
+        \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataPasanganRequest::class);
 
         expect(SiasnPnsDataPasangan::count())->not->toBeEmpty();
     });
@@ -53,7 +53,7 @@ describe('siasn simpeg data transaction', function () {
 
         $service->fetchPnsDataOrtu(198308212011011011);
 
-        \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataOrtu::class);
+        \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataOrtuRequest::class);
 
         expect(SiasnPnsDataOrtu::count())->not->toBeEmpty();
     });
@@ -97,7 +97,7 @@ describe('siasn riwayat penghargaan', function () {
 
         $service->fetchRwPenghargaan('094bbc1e-4072-49b1-8fdf-20eafe223fd0');
 
-        \Saloon\Laravel\Facades\Saloon::assertSent(GetRwPenghargaan::class);
+        \Saloon\Laravel\Facades\Saloon::assertSent(GetRwPenghargaanRequest::class);
 
         expect(SiasnPnsRwPenghargaan::first()->id)->toEqual('094bbc1e-4072-49b1-8fdf-20eafe223fd0');
     });
@@ -109,7 +109,7 @@ describe('siasn riwayat penghargaan', function () {
 
         $service->fetchPnsRwPenghargaan(197809072002121002);
 
-        \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsRwPenghargaan::class);
+        \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsRwPenghargaanRequest::class);
 
         expect(SiasnPnsRwPenghargaan::count())->not->toBeEmpty();
     });
@@ -130,7 +130,7 @@ describe('siasn riwayat penghargaan', function () {
 
         $service->postPenghargaan($data);
 
-        \Saloon\Laravel\Facades\Saloon::assertSent(PostPenghargaan::class);
+        \Saloon\Laravel\Facades\Saloon::assertSent(PostPenghargaanRequest::class);
     });
 
     it('can upload file', function () {

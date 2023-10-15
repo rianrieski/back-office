@@ -74,4 +74,9 @@ class SiasnReferensiService
 
         KedudukanHukum::upsert($result, ['id']);
     }
+
+    public function fetchRefDokumen(): void
+    {
+//        $response =
+    }
 }

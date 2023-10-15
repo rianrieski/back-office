@@ -60,4 +60,10 @@ describe('siasn referensi data', function () {
 
         expect(KedudukanHukum::count())->not->toBeEmpty();
     });
+
+    it('can fetch ref dokumen and store to database', function () {
+        $service = new SiasnReferensiService();
+
+        $service->fetchRefDokumen();
+    });
 });

@@ -1,6 +1,6 @@
 <?php
 
-use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
+use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtamaRequest;
 use App\Models\Siasn\SiasnPnsDataUtama;
 use App\Models\User;
 use Saloon\Http\Faking\MockResponse;
@@ -24,7 +24,7 @@ it('can handle request to fetch pns data from siasn', function () {
     $response = $this->actingAs($user)
         ->post(route('fetch-pns-data-utama'), ['nip' => $siasn->nipBaru]);
 
-    \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataUtama::class);
+    \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsDataUtamaRequest::class);
 
     $response->assertRedirect();
 });

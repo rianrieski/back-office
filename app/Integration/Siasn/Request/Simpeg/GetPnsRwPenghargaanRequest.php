@@ -5,16 +5,16 @@ namespace App\Integration\Siasn\Request\Simpeg;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
-class GetPnsDataOrtu extends Request
+class GetPnsRwPenghargaanRequest extends Request
 {
     protected Method $method = Method::GET;
 
-    public function __construct(public string|int $nip)
+    public function __construct(protected string $nip)
     {
     }
 
     public function resolveEndpoint(): string
     {
-        return '/pns/data-ortu/' . $this->nip;
+        return '/pns/rw-penghargaan/' . $this->nip;
     }
 }
