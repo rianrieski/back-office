@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\SiasnPenghargaanData;
 use App\Data\SiasnPnsDataOrtuData;
 use App\Data\SiasnPnsDataPasanganData;
 use App\Integration\Siasn\Authenticator\SiasnSimpegAuthenticator;
@@ -10,13 +11,22 @@ use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtu;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasangan;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtama;
 use App\Integration\Siasn\Request\Simpeg\GetPnsRwPenghargaan;
+use App\Integration\Siasn\Request\Simpeg\PostPenghargaan;
+use App\Integration\Siasn\Request\Token\GetApimwsTokenRequest;
+use App\Integration\Siasn\Request\Token\GetSiasnTokenRequest;
 use App\Jobs\GetSiasnPnsDataUtamaJob;
 use App\Models\Siasn\SiasnPnsDataOrtu;
 use App\Models\Siasn\SiasnPnsDataPasangan;
 use App\Models\Siasn\SiasnPnsDataUtama;
 use App\Models\Siasn\SiasnPnsRwPenghargaan;
+use Illuminate\Http\Client\HttpClientException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
+use ReflectionException;
+use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Exceptions\PendingRequestException;
 use Saloon\Exceptions\Request\ClientException;
+use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\Statuses\NotFoundException;
 
@@ -146,5 +156,54 @@ class SiasnSimpegService
                 continue;
             }
         }
+    }
+
+    /**
+     * @throws InvalidResponseClassException
+     * @throws ClientException
+     * @throws ReflectionException
+     * @throws FatalRequestException
+     * @throws PendingRequestException
+     * @throws RequestException
+     */
+    public function postPenghargaan(SiasnPenghargaanData $data): void
+    {
+        $response = $this->connector->sendAndRetry(new PostPenghargaan($data), 3, 1000, $this->resetToken);
+
+        if (!$response->json('success')) {
+            throw new ClientException($response, $response->json('message'));
+        }
+    }
+
+    /**
+     * @throws InvalidResponseClassException
+     * @throws ReflectionException
+     * @throws HttpClientException
+     * @throws PendingRequestException
+     */
+    public function uploadFile($filePath, int|string $id_ref_dokumen)
+    {
+        $url = config('services.apimws-bkn.base_url') . '/upload-dok';
+
+        $stream = fopen($filePath, 'r');
+
+        $siasnToken = $this->connector->send(new GetSiasnTokenRequest());
+        $apimws = $this->connector->send(new GetApimwsTokenRequest());
+
+        $response = Http::withHeaders([
+            'Auth' => 'bearer ' . $siasnToken->json('access_token'),
+            'Authorization' => 'Bearer ' . $apimws->json('access_token'),
+        ])
+            ->attach('file', $stream)
+            ->acceptJson()
+            ->post($url, [
+                'id_ref_dokumen' => $id_ref_dokumen,
+            ]);
+
+        if (!$response->json('code')) {
+            throw new HttpClientException($response->json('message'));
+        }
+
+        return $response->json('data');
     }
 }

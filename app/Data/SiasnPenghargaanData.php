@@ -13,6 +13,7 @@ class SiasnPenghargaanData extends Data
         #[DateFormat('dd-mm-yyyy')]
         public string  $skDate,
         public string  $skNomor,
+        public int     $tahun,
         public ?string $id = null,
         public ?array  $path = null,
     )

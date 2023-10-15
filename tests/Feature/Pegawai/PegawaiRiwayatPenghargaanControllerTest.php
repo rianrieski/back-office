@@ -95,7 +95,11 @@ it('can handle riwayat penghargaan delete request', function () {
     $this->actingAs($user)
         ->delete(route('riwayat-penghargaan.destroy', $riwayat))
         ->assertRedirect(route('riwayat-penghargaan.index'))
-        ->assertSessionHas('toast', ['message' => 'Data berhasil dihapus']);
+        ->assertSessionHas('toast', ['message' => 'Data berhasil dihapus, silakan hapus data terkait pada SIASN']);
 
     $this->assertModelMissing($riwayat);
 });
+
+test('dispatch post riwayat penghargaan job to siasn when created', function () {
+//
+})->skip();
