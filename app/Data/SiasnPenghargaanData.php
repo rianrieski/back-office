@@ -4,9 +4,16 @@ namespace App\Data;
 
 use Spatie\LaravelData\Attributes\Validation\DateFormat;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Exceptions\DataMissingFeature;
 
 class SiasnPenghargaanData extends Data
 {
+    /** @var array<SiasnUploadedFile> */
+    public mixed $path;
+
+    /**
+     * @throws DataMissingFeature
+     */
     public function __construct(
         public string  $hargaId,
         public string  $pnsOrangId,
@@ -15,8 +22,18 @@ class SiasnPenghargaanData extends Data
         public string  $skNomor,
         public int     $tahun,
         public ?string $id = null,
-        public ?array  $path = null,
+                       $path = null,
+
     )
     {
+        if ($path) {
+            foreach ($path as $single) {
+                if (!$single instanceof SiasnUploadedFile) {
+                    throw new DataMissingFeature('Path harus berupa instance dari SiasnUploadedFile');
+                }
+            }
+        }
+
+        $this->path = $path;
     }
 }

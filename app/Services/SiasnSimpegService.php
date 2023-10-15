@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Data\SiasnPenghargaanData;
 use App\Data\SiasnPnsDataOrtuData;
 use App\Data\SiasnPnsDataPasanganData;
+use App\Data\SiasnUploadedFile;
 use App\Integration\Siasn\Authenticator\SiasnSimpegAuthenticator;
 use App\Integration\Siasn\Connector\SiasnSimpegConnector;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtu;
@@ -181,7 +182,7 @@ class SiasnSimpegService
      * @throws HttpClientException
      * @throws PendingRequestException
      */
-    public function uploadFile($filePath, int|string $id_ref_dokumen)
+    public function uploadFile(string $filePath, int|string $id_ref_dokumen): SiasnUploadedFile
     {
         $url = config('services.apimws-bkn.base_url') . '/upload-dok';
 
@@ -204,6 +205,6 @@ class SiasnSimpegService
             throw new HttpClientException($response->json('message'));
         }
 
-        return $response->json('data');
+        return SiasnUploadedFile::from($response->json('data'));
     }
 }
