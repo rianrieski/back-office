@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Siasn\SiasnPnsDataUtama;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Support\Arr;
 
 class Pegawai extends Model implements HasMedia
 {
@@ -31,6 +32,11 @@ class Pegawai extends Model implements HasMedia
         });
     }
 
+    public function siasnPegawai(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(SiasnPnsDataUtama::class, 'nipBaru', 'nip');
+    }
+
     public function agama()
     {
         return $this->belongsTo(Agama::class);
@@ -50,10 +56,12 @@ class Pegawai extends Model implements HasMedia
     {
         return $this->belongsTo(StatusPegawai::class);
     }
+
     public function pegawai_riwayat_jabatan()
     {
         return $this->hasMany(PegawaiRiwayatJabatan::class);
     }
+
     public function pegawai_alamat()
     {
         return $this->hasMany(PegawaiAlamat::class);

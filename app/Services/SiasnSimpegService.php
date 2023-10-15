@@ -21,6 +21,7 @@ use App\Models\Siasn\SiasnPnsDataPasangan;
 use App\Models\Siasn\SiasnPnsDataUtama;
 use App\Models\Siasn\SiasnPnsRwPenghargaan;
 use Illuminate\Http\Client\HttpClientException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use ReflectionException;
@@ -167,13 +168,15 @@ class SiasnSimpegService
      * @throws PendingRequestException
      * @throws RequestException
      */
-    public function postPenghargaan(SiasnPenghargaanData $data): void
+    public function postPenghargaan(SiasnPenghargaanData $data): string
     {
         $response = $this->connector->sendAndRetry(new PostPenghargaan($data), 3, 1000, $this->resetToken);
 
         if (!$response->json('success')) {
             throw new ClientException($response, $response->json('message'));
         }
+
+        return $response->json('mapData')['rwPenghargaanId'];
     }
 
     /**
@@ -199,11 +202,8 @@ class SiasnSimpegService
             ->acceptJson()
             ->post($url, [
                 'id_ref_dokumen' => $id_ref_dokumen,
-            ]);
-
-        if (!$response->json('code')) {
-            throw new HttpClientException($response->json('message'));
-        }
+            ])
+            ->throwIf(fn(Response $response) => $response->json('code') != 1);
 
         return SiasnUploadedFile::from($response->json('data'));
     }

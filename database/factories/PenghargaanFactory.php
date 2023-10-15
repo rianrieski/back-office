@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Penghargaan;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class PenghargaanFactory extends Factory
 {
@@ -13,9 +12,8 @@ class PenghargaanFactory extends Factory
     public function definition(): array
     {
         return [
-            'nama' => $this->faker->word(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'nama' => fake()->word(),
+            'bkn_id' => fake()->numerify('###'),
         ];
     }
 }

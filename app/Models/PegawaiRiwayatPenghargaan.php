@@ -13,6 +13,9 @@ class PegawaiRiwayatPenghargaan extends Model implements HasMedia
 
     protected $guarded = [];
     protected $table = 'pegawai_riwayat_penghargaan';
+    protected $casts = [
+        'tanggal_sk' => 'date'
+    ];
 
     public function penghargaan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
