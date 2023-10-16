@@ -7,10 +7,12 @@ import ShowingResultTable from "@/Components/ShowingResultTable.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { router } from "@inertiajs/vue3";
 import {
+    EyeIcon,
     PencilSquareIcon,
     TrashIcon,
 } from "@heroicons/vue/24/outline/index.js";
 import { useConfirm } from "@/Composables/sweetalert.ts";
+import { useLocaleDate } from "@/Composables/filters.ts";
 
 defineProps(["riwayat"]);
 
@@ -99,7 +101,7 @@ const destroy = async (data) => {
                         <td>{{ row.pegawai.nama }}</td>
                         <td>{{ row.penghargaan.nama }}</td>
                         <td>{{ row.no_sk }}</td>
-                        <td>{{ row.tanggal_sk }}</td>
+                        <td>{{ useLocaleDate(new Date(row.tanggal_sk)) }}</td>
                         <td>{{ row.tahun }}</td>
                         <td>
                             <div class="flex gap-1">
@@ -112,8 +114,18 @@ const destroy = async (data) => {
                                     "
                                 >
                                     <PencilSquareIcon
-                                        class="h-5 w-5 text-primary"
+                                        class="h-5 w-5 text-success"
                                     />
+                                </Link>
+                                <Link
+                                    :href="
+                                        route(
+                                            'riwayat-penghargaan.show',
+                                            row.id,
+                                        )
+                                    "
+                                >
+                                    <EyeIcon class="h-5 w-5 text-primary" />
                                 </Link>
                                 <TrashIcon
                                     @click="destroy(row)"

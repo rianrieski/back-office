@@ -43,6 +43,8 @@ class PegawaiRiwayatPenghargaanController extends Controller
                 ->when($nama = request('nama'), fn(Builder $builder) => $builder
                     ->where('nama_depan', 'like', "%$nama%")
                     ->orWhere('nama_belakang', 'like', "%$nama%"))
+                ->where('status_dinas', 1)
+                ->orderBy('nama_depan')
                 ->limit(10)
                 ->get(),
             'penghargaan' => fn() => Penghargaan::select('id', 'nama')->get(),
@@ -67,7 +69,15 @@ class PegawaiRiwayatPenghargaanController extends Controller
         ])->dispatch();
 
         return to_route('riwayat-penghargaan.index')
-            ->with('toast', ['message' => 'Data berhasil disimpan']);
+            ->with('toast', ['message' => 'Data berhasil disimpan, sinkronisasi sedang diproses.']);
+    }
+
+    public function show(PegawaiRiwayatPenghargaan $riwayat_penghargaan)
+    {
+        return Inertia::render('Pegawai/PegawaiRiwayatPenghargaan/Show', [
+            'riwayat' => $riwayat_penghargaan->load(['pegawai:id,nama_depan,nama_belakang', 'penghargaan:id,nama']),
+            'media_sk' => $riwayat_penghargaan->getFirstMediaUrl('media_sk'),
+        ]);
     }
 
     public function edit(PegawaiRiwayatPenghargaan $riwayat_penghargaan)
@@ -107,7 +117,7 @@ class PegawaiRiwayatPenghargaanController extends Controller
         }
 
         return to_route('riwayat-penghargaan.index')
-            ->with('toast', ['message' => 'Data berhasil disimpan']);
+            ->with('toast', ['message' => 'Data berhasil disimpan, sinkronisasi sedang diproses.']);
     }
 
     public function destroy(PegawaiRiwayatPenghargaan $riwayat_penghargaan)

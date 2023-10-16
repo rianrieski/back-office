@@ -20,7 +20,7 @@ class SiasnPnsDataUtamaFactory extends Factory
             'gelarBelakang' => fake()->word(),
             'tempatLahir' => fake()->word(),
             'tempatLahirId' => fake()->word(),
-            'tglLahir' => fake()->date(),
+            'tglLahir' => fake()->date('d-m-Y'),
             'agama' => fake()->word(),
             'agamaId' => 1,
             'email' => fake()->unique()->safeEmail(),

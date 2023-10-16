@@ -26,7 +26,7 @@ it('can render riwayat penghargaan list page', function () {
 
 it('can render riwayat penghargaan create page', function () {
     $user = User::factory()->create();
-    Pegawai::factory()->count(20)->create();
+    Pegawai::factory()->count(20)->create(['status_dinas' => 1]);
     Penghargaan::factory()->count(5)->create();
 
     $this->actingAs($user)
@@ -48,7 +48,7 @@ it('can handle riwayat penghargaan store request', function () {
     $this->actingAs($user)
         ->post(route('riwayat-penghargaan.store'))
         ->assertRedirect(route('riwayat-penghargaan.index'))
-        ->assertSessionHas('toast', ['message' => 'Data berhasil disimpan']);
+        ->assertSessionHas('toast', ['message' => 'Data berhasil disimpan, sinkronisasi sedang diproses.']);
 
     $this->assertDatabaseCount(PegawaiRiwayatPenghargaan::class, 1);
 
@@ -62,6 +62,17 @@ it('can handle riwayat penghargaan store request', function () {
         ->media->toHaveCount(1)
         ->penghargaan->is($penghargaan)->toBeTrue()
         ->pegawai->is($pegawai)->toBeTrue();
+});
+
+it('can render riwayat penghargaan show page', function () {
+    $riwayat = PegawaiRiwayatPenghargaan::factory()->create();
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('riwayat-penghargaan.show', $riwayat))
+        ->assertInertia(fn(AssertableInertia $page) => $page
+            ->component('Pegawai/PegawaiRiwayatPenghargaan/Show')
+            ->where('riwayat.id', $riwayat->id));
 });
 
 it('can render riwayat penghargaan edit page', function () {
@@ -89,7 +100,7 @@ it('can handle riwayat penghargaan update request', function () {
     $this->actingAs($user)
         ->put(route('riwayat-penghargaan.update', $riwayat))
         ->assertRedirect(route('riwayat-penghargaan.index'))
-        ->assertSessionHas('toast', ['message' => 'Data berhasil disimpan']);
+        ->assertSessionHas('toast', ['message' => 'Data berhasil disimpan, sinkronisasi sedang diproses.']);
 
     \Illuminate\Support\Facades\Queue::assertPushedWithChain(PostSiasnPenghargaanJob::class, [GetSiasnRwPenghargaanJob::class]);
 

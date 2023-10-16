@@ -30,7 +30,7 @@ const errors = computed(() => usePage().props.errors);
 const selectedPegawai = computed({
     get: () =>
         [...pegawai.value, currentPegawai?.value].find(
-            (peg) => peg.id === props.pegawai_id,
+            (peg) => peg?.id === props.pegawai_id,
         ),
     set: (value) => emit("update:pegawai_id", value.id),
 });
