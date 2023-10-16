@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,16 +15,16 @@ return new class extends Migration
             $table->string('nik', 16);
             $table->string('nip', 18);
             $table->string('nama_depan');
-            $table->string('nama_belakang');
+            $table->string('nama_belakang')->nullable();
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->unsignedTinyInteger('agama_id');
             $table->enum('golongan_darah', ['O', 'A', 'B', 'AB'])->nullable();
             $table->unsignedTinyInteger('jenis_kawin_id');
             $table->string('tempat_lahir', 50);
             $table->date('tanggal_lahir');
-            $table->string('email_kantor', 50);
+            $table->string('email_kantor', 50)->nullable();
             $table->string('email_pribadi', 50)->nullable();
-            $table->string('no_telp', 13)->nullable();
+            $table->string('no_telp', 15)->nullable();
             $table->unsignedTinyInteger('jenis_pegawai_id');
             $table->unsignedTinyInteger('status_pegawai_id');
             $table->boolean('status_dinas');

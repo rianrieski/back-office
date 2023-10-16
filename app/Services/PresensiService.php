@@ -13,4 +13,18 @@ class PresensiService
             ->get()
             ->pluck('nip');
     }
+
+    public static function getAllNipAndEnroll()
+    {
+        return Pegawai::select('nipp as nip', 'enroll_no')
+            ->whereNotNull('nipp')
+            ->get();
+    }
+
+    public static function getEnrollNumberByNip(int|string $nip): null|string
+    {
+        return Pegawai::select('enroll_no')
+            ->firstWhere('nipp', '=', $nip)
+            ?->enroll_no;
+    }
 }

@@ -16,7 +16,6 @@ use App\Integration\Siasn\Request\Simpeg\GetRwPenghargaanRequest;
 use App\Integration\Siasn\Request\Simpeg\PostPenghargaanRequest;
 use App\Integration\Siasn\Request\Token\GetApimwsTokenRequest;
 use App\Integration\Siasn\Request\Token\GetSiasnTokenRequest;
-use App\Jobs\GetSiasnPnsDataUtamaJob;
 use App\Models\Siasn\SiasnPnsDataOrtu;
 use App\Models\Siasn\SiasnPnsDataPasangan;
 use App\Models\Siasn\SiasnPnsDataUtama;
@@ -55,6 +54,13 @@ class SiasnSimpegService
         };
     }
 
+    /**
+     * @throws InvalidResponseClassException
+     * @throws ReflectionException
+     * @throws FatalRequestException
+     * @throws PendingRequestException
+     * @throws RequestException
+     */
     public function fetchPnsDataUtama(string|int $nip): SiasnPnsDataUtama
     {
         $response = $this->connector->sendAndRetry(new GetPnsDataUtamaRequest($nip), 3, 5000, $this->resetToken);
@@ -67,18 +73,13 @@ class SiasnSimpegService
         );
     }
 
-    public function fetchAllPnsDataUtama(bool $sync = true): void
+    public function fetchAllPnsDataUtama(): void
     {
         foreach (SiapService::getAllNip() as $nip) {
-
-            if (!$sync) {
-                GetSiasnPnsDataUtamaJob::dispatch($nip);
-            } else {
-                try {
-                    $this->fetchPnsDataUtama($nip);
-                } catch (NotFoundException $exception) {
-                    continue;
-                }
+            try {
+                $this->fetchPnsDataUtama($nip);
+            } catch (NotFoundException $exception) {
+                continue;
             }
         }
     }
