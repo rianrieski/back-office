@@ -3,6 +3,7 @@
 namespace App\Models\Siasn;
 
 use App\Integration\Siap\Model\Pegawai as SiapPegawai;
+use App\Models\Pegawai;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,5 +20,10 @@ class SiasnPnsDataUtama extends Model
     public function siap(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(SiapPegawai::class, 'nipBaru', 'NIPBaru');
+    }
+
+    public function pegawai(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Pegawai::class, 'nipBaru', 'nip');
     }
 }

@@ -7,6 +7,7 @@ import { useLocaleDateTime } from "@/Composables/filters.ts";
 import SearchInput from "@/Components/SearchInput.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
+import { ArrowPathIcon } from "@heroicons/vue/24/outline/index.js";
 
 defineProps(["penghargaan"]);
 
@@ -29,6 +30,21 @@ const fetchData = (params = {}) => {
         },
     );
 };
+
+const synchronize = () => {
+    router.get(route("fetch-all-rw-penghargaan"));
+};
+
+const syncItem = (data) => {
+    router.get(
+        route("fetch-pns-rw-penghargaan", data),
+        {},
+        {
+            preserveScroll: true,
+            replace: true,
+        },
+    );
+};
 </script>
 
 <template>
@@ -37,7 +53,10 @@ const fetchData = (params = {}) => {
     <MainCard title="Daftar Riwayat Penghargaan">
         <div class="mt-8 flex justify-between">
             <div>
-                <button class="btn btn-primary btn-outline btn-sm">
+                <button
+                    class="btn btn-primary btn-outline btn-sm"
+                    @click="synchronize"
+                >
                     Sinkronisasi
                 </button>
             </div>
@@ -61,6 +80,7 @@ const fetchData = (params = {}) => {
                         <td>Nomor SK</td>
                         <td>Tanggal SK</td>
                         <td>Terakhir Update</td>
+                        <td>Aksi</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,12 +90,18 @@ const fetchData = (params = {}) => {
                     <tr v-else v-for="(row, i) in penghargaan.data" :key="i">
                         <td>{{ penghargaan.from + i }}</td>
                         <td>{{ row.siasn_pegawai?.nama }}</td>
-                        <td>{{ row.hargaNama }}</td>
+                        <td>{{ row.penghargaan.nama }}</td>
                         <td>{{ row.tahun }}</td>
                         <td>{{ row.skNomor }}</td>
                         <td>{{ row.skDate }}</td>
                         <td>
                             {{ useLocaleDateTime(new Date(row.updated_at)) }}
+                        </td>
+                        <td>
+                            <ArrowPathIcon
+                                class="h-5 w-5 cursor-pointer text-primary"
+                                @click="syncItem(row)"
+                            />
                         </td>
                     </tr>
                 </tbody>

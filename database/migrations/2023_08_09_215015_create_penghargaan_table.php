@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::create('penghargaan', function (Blueprint $table) {
             $table->id();
-            $table->string('bkn_id', 5);
             $table->string('nama', 100);
             $table->timestamps();
         });

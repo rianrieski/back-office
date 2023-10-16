@@ -6,12 +6,7 @@ import PerPageOption from "@/Components/PerPageOption.vue";
 import ShowingResultTable from "@/Components/ShowingResultTable.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { router } from "@inertiajs/vue3";
-import {
-    EyeIcon,
-    PencilSquareIcon,
-    TrashIcon,
-} from "@heroicons/vue/24/outline/index.js";
-import { useConfirm } from "@/Composables/sweetalert.ts";
+import { EyeIcon } from "@heroicons/vue/24/outline/index.js";
 import { useLocaleDate } from "@/Composables/filters.ts";
 
 defineProps(["riwayat"]);
@@ -34,19 +29,6 @@ const fetchData = (params = {}) => {
             replace: true,
         },
     );
-};
-
-const destroy = async (data) => {
-    const confirmed = await useConfirm({
-        text: `Hapus data riwayat penghargaan ini untuk pegawai ${data.pegawai.nama}`,
-    });
-
-    router.delete(route("riwayat-penghargaan.destroy", data.id), {
-        onBefore: () => confirmed,
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-    });
 };
 </script>
 
@@ -104,34 +86,13 @@ const destroy = async (data) => {
                         <td>{{ useLocaleDate(new Date(row.tanggal_sk)) }}</td>
                         <td>{{ row.tahun }}</td>
                         <td>
-                            <div class="flex gap-1">
-                                <Link
-                                    :href="
-                                        route(
-                                            'riwayat-penghargaan.edit',
-                                            row.id,
-                                        )
-                                    "
-                                >
-                                    <PencilSquareIcon
-                                        class="h-5 w-5 text-success"
-                                    />
-                                </Link>
-                                <Link
-                                    :href="
-                                        route(
-                                            'riwayat-penghargaan.show',
-                                            row.id,
-                                        )
-                                    "
-                                >
-                                    <EyeIcon class="h-5 w-5 text-primary" />
-                                </Link>
-                                <TrashIcon
-                                    @click="destroy(row)"
-                                    class="h-5 w-5 cursor-pointer text-error"
-                                />
-                            </div>
+                            <Link
+                                :href="
+                                    route('riwayat-penghargaan.show', row.id)
+                                "
+                            >
+                                <EyeIcon class="h-5 w-5 text-primary" />
+                            </Link>
                         </td>
                     </tr>
                 </tbody>

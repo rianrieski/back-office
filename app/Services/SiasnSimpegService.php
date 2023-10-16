@@ -164,7 +164,7 @@ class SiasnSimpegService
 
     public function fetchRwPenghargaan(string $rwPenghargaanId)
     {
-        $response = $this->connector->sendAndRetry(new GetRwPenghargaanRequest('094bbc1e-4072-49b1-8fdf-20eafe223fd0'), 3, 1000, $this->resetToken);
+        $response = $this->connector->sendAndRetry(new GetRwPenghargaanRequest($rwPenghargaanId), 3, 1000, $this->resetToken);
 
         if ($response->json('code')) {
             $result = $response->json('data');

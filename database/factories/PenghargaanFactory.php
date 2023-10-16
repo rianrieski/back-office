@@ -13,7 +13,6 @@ class PenghargaanFactory extends Factory
     {
         return [
             'nama' => fake()->word(),
-            'bkn_id' => fake()->numerify('###'),
         ];
     }
 }

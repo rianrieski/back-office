@@ -12,8 +12,8 @@ return new class extends Migration {
             $table->string('bkn_id')->nullable();
             $table->foreignId('pegawai_id')->constrained('pegawai')->cascadeOnDelete();
             $table->foreignId('penghargaan_id')->nullable()->constrained('penghargaan')->nullOnDelete();
-            $table->string('no_sk');
-            $table->date('tanggal_sk');
+            $table->string('no_sk')->nullable();
+            $table->date('tanggal_sk')->nullable();
             $table->year('tahun');
             $table->timestamps();
         });

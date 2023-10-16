@@ -34,10 +34,10 @@ test('post siasn penghargaan job', function () {
     ]);
 
     $riwayat = PegawaiRiwayatPenghargaan::factory()
-        ->for(Penghargaan::factory()->state(['bkn_id' => 201]))
+        ->for(Penghargaan::factory()->state(['id' => 201]))
         ->create();
     RefDokumen::factory()->create(['detailLayananNama' => 'Riwayat Penghargaan']);
-    
+
     $uploaded = UploadedFile::fake()->create('example.pdf', 5, 'application/pdf');
     $riwayat->addMedia($uploaded)->toMediaCollection('media_sk');
     SiasnPnsDataUtama::factory()->create(['nipBaru' => $riwayat->pegawai->nip]);

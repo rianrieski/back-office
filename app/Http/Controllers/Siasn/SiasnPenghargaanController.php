@@ -11,11 +11,11 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class SiasnPenghargaanController extends Controller
 {
-    public function index()
+    public function __invoke()
     {
         return Inertia::render('Siasn/Penghargaan/Index', [
             'penghargaan' => QueryBuilder::for(SiasnPnsRwPenghargaan::class)
-                ->with('siasnPegawai:id,nama')
+                ->with(['siasnPegawai:id,nama', 'penghargaan:id,nama'])
                 ->allowedFilters([
                     AllowedFilter::callback('pegawai', fn(Builder $query, $value) => $query
                         ->whereRelation('siasnPegawai', 'nama', 'like', "%$value%"))

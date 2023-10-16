@@ -62,12 +62,14 @@ const destroy = async () => {
                 <div class="w-1/4">File</div>
                 <div class="w-3/4">
                     <a
+                        v-if="riwayat.media[0]"
                         :href="media_sk"
                         download
                         class="text-blue-600 underline"
                     >
                         {{ riwayat.media[0].file_name }}
                     </a>
+                    <span v-else>-</span>
                 </div>
             </div>
         </div>

@@ -28,6 +28,10 @@ class SiasnPenghargaanData extends Data
     {
         if ($path) {
             foreach ($path as $single) {
+                if (empty($single)) {
+                    continue;
+                }
+
                 if (!$single instanceof SiasnUploadedFile) {
                     throw new DataMissingFeature('Path harus berupa instance dari SiasnUploadedFile');
                 }

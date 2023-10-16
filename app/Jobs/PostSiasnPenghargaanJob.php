@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Data\SiasnPenghargaanData;
 use App\Data\SiasnUploadedFile;
 use App\Models\PegawaiRiwayatPenghargaan;
-use App\Models\Siasn\Referensi\RefDokumen;
 use App\Services\SiasnSimpegService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,7 +16,7 @@ class PostSiasnPenghargaanJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected SiasnUploadedFile $file;
+    protected ?SiasnUploadedFile $file = null;
 
     /**
      * Create a new job instance.
@@ -34,15 +33,13 @@ class PostSiasnPenghargaanJob implements ShouldQueue
         $service = new SiasnSimpegService();
 
         if ($this->riwayatPenghargaan->hasMedia('media_sk')) {
-            $idRefDokumen = RefDokumen::where('detailLayananNama', '=', 'Riwayat Penghargaan')->firstOrFail()->id;
-
             $filePath = $this->riwayatPenghargaan->getFirstMediaPath('media_sk');
 
-            $this->file = $service->uploadFile($filePath, $idRefDokumen);
+            $this->file = $service->uploadFile($filePath, 892);
         }
 
         $data = new SiasnPenghargaanData(
-            hargaId: $this->riwayatPenghargaan->penghargaan->bkn_id,
+            hargaId: $this->riwayatPenghargaan->penghargaan->id,
             pnsOrangId: $this->riwayatPenghargaan->pegawai->siasnPegawai->id,
             skDate: $this->riwayatPenghargaan->tanggal_sk->format('d-m-Y'),
             skNomor: $this->riwayatPenghargaan->no_sk,
