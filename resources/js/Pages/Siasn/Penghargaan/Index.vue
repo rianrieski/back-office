@@ -38,9 +38,9 @@ const synchronize = () => {
     router.get(route("fetch-all-rw-penghargaan"));
 };
 
-const syncItem = (data) => {
+const syncItem = (riwayat_id) => {
     router.get(
-        route("fetch-pns-rw-penghargaan", data),
+        route("fetch-pns-rw-penghargaan", riwayat_id),
         {},
         {
             preserveScroll: true,
@@ -50,28 +50,22 @@ const syncItem = (data) => {
 };
 
 const downloadUrl = (path) => {
-    let filePath;
+    let filePath = path[0]?.dok_uri ? path[0].dok_uri : path[892]?.dok_uri;
 
-    if (Array.isArray(path)) {
-        filePath = path[0][892]?.dok_uri;
-    } else {
-        filePath = path[892]?.dok_uri;
+    if (!filePath) {
+        return;
     }
 
-    if (filePath) {
-        return route("siasn-download-file", {
-            _query: { filePath },
-        });
-    } else {
-        return null;
-    }
+    return route("siasn-download-file", {
+        _query: { filePath },
+    });
 };
 </script>
 
 <template>
     <Head title="Penghargaan" />
 
-    <MainCard title="Daftar Riwayat Penghargaan">
+    <MainCard title="Daftar Riwayat Penghargaan Data SIASN">
         <div class="mt-8 flex justify-between">
             <div>
                 <button
@@ -131,7 +125,7 @@ const downloadUrl = (path) => {
                                 </a>
                                 <ArrowPathIcon
                                     class="h-5 w-5 cursor-pointer text-success"
-                                    @click="syncItem(row)"
+                                    @click="syncItem(row.id)"
                                 />
                             </div>
                         </td>
