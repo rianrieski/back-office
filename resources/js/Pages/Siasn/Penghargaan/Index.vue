@@ -7,7 +7,10 @@ import { useLocaleDateTime } from "@/Composables/filters.ts";
 import SearchInput from "@/Components/SearchInput.vue";
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
-import { ArrowPathIcon } from "@heroicons/vue/24/outline/index.js";
+import {
+    ArrowDownTrayIcon,
+    ArrowPathIcon,
+} from "@heroicons/vue/24/outline/index.js";
 
 defineProps(["penghargaan"]);
 
@@ -44,6 +47,24 @@ const syncItem = (data) => {
             replace: true,
         },
     );
+};
+
+const downloadUrl = (path) => {
+    let filePath;
+
+    if (Array.isArray(path)) {
+        filePath = path[0][892]?.dok_uri;
+    } else {
+        filePath = path[892]?.dok_uri;
+    }
+
+    if (filePath) {
+        return route("siasn-download-file", {
+            _query: { filePath },
+        });
+    } else {
+        return null;
+    }
 };
 </script>
 
@@ -98,10 +119,21 @@ const syncItem = (data) => {
                             {{ useLocaleDateTime(new Date(row.updated_at)) }}
                         </td>
                         <td>
-                            <ArrowPathIcon
-                                class="h-5 w-5 cursor-pointer text-primary"
-                                @click="syncItem(row)"
-                            />
+                            <div class="flex gap-1">
+                                <a
+                                    download="penghargaan"
+                                    v-if="downloadUrl(row.path)"
+                                    :href="downloadUrl(row.path)"
+                                >
+                                    <ArrowDownTrayIcon
+                                        class="h-5 w-5 text-primary"
+                                    />
+                                </a>
+                                <ArrowPathIcon
+                                    class="h-5 w-5 cursor-pointer text-success"
+                                    @click="syncItem(row)"
+                                />
+                            </div>
                         </td>
                     </tr>
                 </tbody>

@@ -8,6 +8,7 @@ use App\Data\SiasnPnsDataPasanganData;
 use App\Data\SiasnUploadedFile;
 use App\Integration\Siasn\Authenticator\SiasnSimpegAuthenticator;
 use App\Integration\Siasn\Connector\SiasnSimpegConnector;
+use App\Integration\Siasn\Request\Simpeg\DownloadFileRequest;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataOrtuRequest;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataPasanganRequest;
 use App\Integration\Siasn\Request\Simpeg\GetPnsDataUtamaRequest;
@@ -227,5 +228,17 @@ class SiasnSimpegService
             ->throwIf(fn(Response $response) => $response->json('code') != 1);
 
         return SiasnUploadedFile::from($response->json('data'));
+    }
+
+    /**
+     * @throws InvalidResponseClassException
+     * @throws FatalRequestException
+     * @throws ReflectionException
+     * @throws RequestException
+     * @throws PendingRequestException
+     */
+    public function downloadFile(string $filePath): \Saloon\Contracts\Response
+    {
+        return $this->connector->sendAndRetry(new DownloadFileRequest($filePath), 3, 1000, $this->resetToken);
     }
 }

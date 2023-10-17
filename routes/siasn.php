@@ -3,6 +3,7 @@
 use App\Http\Controllers\Siasn\FetchAllPnsDataUtamaController;
 use App\Http\Controllers\Siasn\FetchPnsDataUtamaController;
 use App\Http\Controllers\Siasn\FetchPnsRwPenghargaanController;
+use App\Http\Controllers\Siasn\SiasnDownloadFileController;
 use App\Http\Controllers\Siasn\SiasnPenghargaanController;
 use App\Http\Controllers\Siasn\SiasnPnsController;
 use App\Http\Controllers\SyncRiwayatPenghargaanController;
@@ -18,4 +19,6 @@ Route::prefix('siasn')->group(function () {
     Route::get('penghargaan/{penghargaan}/fetch', FetchPnsRwPenghargaanController::class)->name('fetch-pns-rw-penghargaan');
     Route::get('penghargaan/fetch-all', SyncRiwayatPenghargaanController::class)->name('fetch-all-rw-penghargaan');
     Route::get('penghargaan', SiasnPenghargaanController::class)->name('siasn-penghargaan.index');
+
+    Route::get('download', SiasnDownloadFileController::class)->name('siasn-download-file');
 });
