@@ -114,7 +114,7 @@ class SiasnSimpegService
         }
     }
 
-    public function fetchPnsRwPenghargaan(string|int $nip): void
+    public function fetchRwPenghargaanByNip(string|int $nip): void
     {
         $response = $this->connector->sendAndRetry(new GetPnsRwPenghargaanRequest($nip), 3, 5000, $this->resetToken);
 
@@ -129,11 +129,11 @@ class SiasnSimpegService
         }
     }
 
-    public function fetchAllPnsRwPenghargaan(): void
+    public function fetchAllRwPenghargaan(): void
     {
         foreach (SiapService::getAllNip() as $nip) {
             try {
-                $this->fetchPnsRwPenghargaan($nip);
+                $this->fetchRwPenghargaanByNip($nip);
             } catch (NotFoundException $exception) {
                 continue;
             }

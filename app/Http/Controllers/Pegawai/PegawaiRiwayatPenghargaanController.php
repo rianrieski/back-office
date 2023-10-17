@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Pegawai;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PegawaiRiwayatPenghargaanRequest;
-use App\Jobs\GetSiasnRwPenghargaanJob;
 use App\Jobs\PostSiasnPenghargaanJob;
+use App\Jobs\UpdateSiasnRwPenghargaanJob;
 use App\Models\Pegawai;
 use App\Models\PegawaiRiwayatPenghargaan;
 use App\Models\Penghargaan;
@@ -65,7 +65,7 @@ class PegawaiRiwayatPenghargaanController extends Controller
 
         Bus::chain([
             new PostSiasnPenghargaanJob($riwayat),
-            new GetSiasnRwPenghargaanJob($riwayat),
+            new UpdateSiasnRwPenghargaanJob($riwayat),
         ])->dispatch();
 
         return to_route('riwayat-penghargaan.index')
@@ -108,7 +108,7 @@ class PegawaiRiwayatPenghargaanController extends Controller
 
         Bus::chain([
             new PostSiasnPenghargaanJob($riwayat_penghargaan),
-            new GetSiasnRwPenghargaanJob($riwayat_penghargaan),
+            new UpdateSiasnRwPenghargaanJob($riwayat_penghargaan),
         ])->dispatch();
 
         if ($request->validated('media_sk')) {

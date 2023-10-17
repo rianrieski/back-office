@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Jobs\GetAllSiasnRwPenghargaanJob;
 use App\Jobs\SyncRiwayatPenghargaanJob;
 use App\Models\Siasn\SiasnPnsRwPenghargaan;
+use App\Services\SiasnSimpegService;
 use Illuminate\Support\Facades\Bus;
 
 class SyncRiwayatPenghargaanController extends Controller
 {
-    public function __invoke()
+    public function __invoke(SiasnSimpegService $service)
     {
         Bus::chain([
             new GetAllSiasnRwPenghargaanJob,

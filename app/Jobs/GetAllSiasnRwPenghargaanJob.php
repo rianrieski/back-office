@@ -13,12 +13,14 @@ class GetAllSiasnRwPenghargaanJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public int $timeout = 300;
+
     public function __construct()
     {
     }
 
     public function handle(): void
     {
-        (new SiasnSimpegService())->fetchAllPnsRwPenghargaan();
+        (new SiasnSimpegService())->fetchAllRwPenghargaan();
     }
 }

@@ -13,6 +13,6 @@ class FetchSiasnRwPenghargaanCommand extends Command
 
     public function handle(): void
     {
-        (new SiasnSimpegService())->fetchAllPnsRwPenghargaan();
+        (new SiasnSimpegService())->fetchAllRwPenghargaan();
     }
 }

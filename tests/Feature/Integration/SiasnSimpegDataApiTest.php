@@ -107,7 +107,7 @@ describe('siasn riwayat penghargaan', function () {
 
         expect(SiasnPnsRwPenghargaan::count())->toBeEmpty();
 
-        $service->fetchPnsRwPenghargaan(197809072002121002);
+        $service->fetchRwPenghargaanByNip(197809072002121002);
 
         \Saloon\Laravel\Facades\Saloon::assertSent(GetPnsRwPenghargaanRequest::class);
 

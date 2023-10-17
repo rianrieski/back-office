@@ -43,6 +43,8 @@ class SyncRiwayatPenghargaanJob implements ShouldQueue
 
             $fileName = Arr::last(explode('/', $uri));
 
+            $riwayat->clearMediaCollection('media_sk');
+
             $riwayat->addMediaFromStream($content)
                 ->usingName($name)
                 ->usingFileName($fileName)

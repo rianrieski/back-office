@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Requests\PegawaiRiwayatPenghargaanRequest;
-use App\Jobs\GetSiasnRwPenghargaanJob;
 use App\Jobs\PostSiasnPenghargaanJob;
+use App\Jobs\UpdateSiasnRwPenghargaanJob;
 use App\Models\Pegawai;
 use App\Models\PegawaiRiwayatPenghargaan;
 use App\Models\Penghargaan;
@@ -52,7 +52,7 @@ it('can handle riwayat penghargaan store request', function () {
 
     $this->assertDatabaseCount(PegawaiRiwayatPenghargaan::class, 1);
 
-    \Illuminate\Support\Facades\Queue::assertPushedWithChain(PostSiasnPenghargaanJob::class, [GetSiasnRwPenghargaanJob::class]);
+    \Illuminate\Support\Facades\Queue::assertPushedWithChain(PostSiasnPenghargaanJob::class, [UpdateSiasnRwPenghargaanJob::class]);
 
     $riwayat = PegawaiRiwayatPenghargaan::first();
     $penghargaan = Penghargaan::first();
@@ -102,7 +102,7 @@ it('can handle riwayat penghargaan update request', function () {
         ->assertRedirect(route('riwayat-penghargaan.index'))
         ->assertSessionHas('toast', ['message' => 'Data berhasil disimpan, sinkronisasi sedang diproses.']);
 
-    \Illuminate\Support\Facades\Queue::assertPushedWithChain(PostSiasnPenghargaanJob::class, [GetSiasnRwPenghargaanJob::class]);
+    \Illuminate\Support\Facades\Queue::assertPushedWithChain(PostSiasnPenghargaanJob::class, [UpdateSiasnRwPenghargaanJob::class]);
 
     expect($riwayat->fresh())->getMedia('media_sk')->toHaveCount(1);
 });
