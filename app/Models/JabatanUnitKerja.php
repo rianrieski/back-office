@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class JabatanUnitKerja extends Model
 {
+    use HasFactory;
+
     protected $table = 'jabatan_unit_kerja';
     protected $guarded = [];
     protected $primaryKey = 'id';
     protected $keyType = 'int';
     public $incrementing = true;
+
     public function jabatan_tukin()
     {
         return $this->belongsTo(JabatanTukin::class);

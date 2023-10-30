@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class PegawaiRiwayatJabatan extends Model
 {
-    use InteractsWithMedia;
+    use HasFactory, InteractsWithMedia;
 
     protected $table = 'pegawai_riwayat_jabatan';
     protected $guarded = [];

@@ -387,10 +387,7 @@ defineEmits([
             </div>
         </div>
         <div class="form-control col-span-3">
-            <label class="label justify-start">
-                No BPJS
-                <span class="ml-1 text-sm text-red-700">*)</span>
-            </label>
+            <label class="label justify-start"> No BPJS </label>
             <input
                 :value="no_bpjs"
                 type="text"
@@ -438,10 +435,7 @@ defineEmits([
             </div>
         </div>
         <div class="form-control col-span-2">
-            <label class="label justify-start">
-                No Kartu Pegawai
-                <span class="ml-1 text-sm text-red-700">*)</span>
-            </label>
+            <label class="label justify-start"> No Kartu Pegawai </label>
             <input
                 :value="no_kartu_pegawai"
                 type="text"

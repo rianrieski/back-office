@@ -29,6 +29,29 @@ const tanggalFormat = (dateString) => {
                 { label: 'Data Pegawai' },
             ]"
         />
+        <!-- <ul class="flex flex-wrap">
+            <li class="mr-2">
+                <Link
+                    :href="route('profil_pegawai.show', pegawai.id)"
+                    aria-current="page"
+                    class="active inline-block rounded-t-lg bg-base-100 px-4 py-4 text-center text-sm font-medium text-slate-600"
+                >
+                    Profil
+                </Link>
+                <Link
+                    :href="
+                        route(
+                            'profil_pegawai.riwayat_jabatan_pegawai.index',
+                            pegawai.id,
+                        )
+                    "
+                    aria-current="page"
+                    class="active inline-block rounded-t-lg bg-gray-300 px-4 py-4 text-center text-sm font-medium text-slate-600"
+                >
+                    Riwayat Jabatan
+                </Link>
+            </li>
+        </ul> -->
         <MainCard>
             <div class="grid grid-cols-6 gap-4">
                 <table class="col-span-4 text-left">
@@ -227,7 +250,18 @@ const tanggalFormat = (dateString) => {
                     />
                 </div>
             </div>
-            <div class="mt-4 grid justify-items-end">
+            <div class="mt-4 flex justify-end gap-4">
+                <Link
+                    class="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-500"
+                    :href="
+                        route(
+                            'profil_pegawai.riwayat_jabatan_pegawai.index',
+                            pegawai.id,
+                        )
+                    "
+                >
+                    Riwayat Jabatan
+                </Link>
                 <Link
                     class="rounded-md bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-500"
                     :href="route('profil_pegawai.edit', pegawai.id)"

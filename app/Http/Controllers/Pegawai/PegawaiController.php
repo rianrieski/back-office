@@ -110,6 +110,8 @@ class PegawaiController extends Controller
             'status_pegawai:id,nama',
         ]);
 
+        // dd($profil_pegawai);
+
         return inertia(
             'Pegawai/PegawaiProfil/Show',
             [

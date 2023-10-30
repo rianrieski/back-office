@@ -128,10 +128,10 @@ const hapusPegawai = async (id) => {
                             <td>{{ item.nip }}</td>
                             <td>
                                 <span v-if="item.status_dinas === 0">
-                                    Aktif
+                                    Tidak Aktif
                                 </span>
                                 <span v-else-if="item.status_dinas === 1">
-                                    Tidak Aktif
+                                    Aktif
                                 </span>
                             </td>
                             <td>

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class UnitKerja extends Model
 {
+    use HasFactory;
+
     protected $table = 'unit_kerja';
     protected $guarded = [];
     protected $primaryKey = 'id';
@@ -19,7 +21,8 @@ class UnitKerja extends Model
     public function child_hirarki()
     {
         return $this->hasMany(HirarkiUnitKerja::class, 'child_unit_kerja_id');
-    }public function parent_hirarki()
+    }
+    public function parent_hirarki()
     {
         return $this->hasMany(HirarkiUnitKerja::class, 'parent_unit_kerja_id');
     }

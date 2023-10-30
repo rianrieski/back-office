@@ -13,8 +13,8 @@ class TukinFactory extends Factory
     public function definition()
     {
         return [
-            'grade' => $this->faker->randomNumber(),
-            'nominal' => $this->faker->randomNumber(),
+            'grade' => $this->faker->numberBetween(1, 20),
+            'nominal' => $this->faker->numerify('########'),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class JenisUnitKerja extends Model
 {
+    use HasFactory;
+
     protected $table = 'jenis_unit_kerja';
     protected $guarded = [];
     protected $primaryKey = 'id';

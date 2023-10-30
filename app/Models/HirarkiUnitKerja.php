@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class HirarkiUnitKerja extends Model
 {
+    use HasFactory;
+
     protected $table = 'hirarki_unit_kerja';
     protected $guarded = [];
     protected $primaryKey = 'id';
@@ -18,9 +20,10 @@ class HirarkiUnitKerja extends Model
     }
     public function child()
     {
-        return $this->belongsTo(UnitKerja::class,'child_unit_kerja_id');
-    }public function parent()
+        return $this->belongsTo(UnitKerja::class, 'child_unit_kerja_id');
+    }
+    public function parent()
     {
-        return $this->belongsTo(UnitKerja::class,'parent_unit_kerja_id');
+        return $this->belongsTo(UnitKerja::class, 'parent_unit_kerja_id');
     }
 }

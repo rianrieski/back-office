@@ -2,52 +2,132 @@
 import { Link, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import { debounce } from "lodash";
-import Swal from "sweetalert2";
+import Breadcrumb from "@/Components/Breadcrumb.vue";
 import MainCard from "@/Components/MainCard.vue";
+import { useNoPhotoUrl } from "@/Composables/helpers.ts";
 
-const props = defineProps({
+defineProps({
     pegawai: Object,
-    filter: Object,
+    media_foto_pegawai: String,
 });
 
-const perPage = ref(props.pegawai.per_page);
+const noPhotoUrl = useNoPhotoUrl();
 
-const cari = ref(props.filter.cari);
+// const perPage = ref(props.pegawai.per_page);
 
-const getPerPage = () => {
-    router.get(
-        route("profil_pegawai.index"),
-        { perPage: perPage.value, cari: cari.value },
-        {
-            preserveState: true,
-            preserveScroll: true,
-            replace: true,
-        },
-    );
-};
+// const cari = ref(props.filter.cari);
 
-watch(
-    cari,
-    debounce((value) => {
-        router.get(
-            route("profil_pegawai.index"),
-            { perPage: perPage.value, cari: value },
-            {
-                preserveState: true,
-                preserveScroll: true,
-                replace: true,
-            },
-        );
-    }, 500),
-);
+// const getPerPage = () => {
+//     router.get(
+//         route("profil_pegawai.index"),
+//         { perPage: perPage.value, cari: cari.value },
+//         {
+//             preserveState: true,
+//             preserveScroll: true,
+//             replace: true,
+//         },
+//     );
+// };
 
-const tambahRiwayatJabatanPegawai = () => {
-    router.get(route("riwayat_jabatan_pegawai.create"));
-};
+// watch(
+//     cari,
+//     debounce((value) => {
+//         router.get(
+//             route("profil_pegawai.index"),
+//             { perPage: perPage.value, cari: value },
+//             {
+//                 preserveState: true,
+//                 preserveScroll: true,
+//                 replace: true,
+//             },
+//         );
+//     }, 500),
+// );
+
+// const tambahRiwayatJabatanPegawai = () => {
+//     router.get(route("riwayat_jabatan_pegawai.create"));
+// };
 </script>
 
 <template>
     <div>
+        <Head title="Lihat Pegawai" />
+        <Breadcrumb
+            :lists="[
+                { label: 'Beranda', url: route('dashboard') },
+                { label: 'Pegawai', url: route('profil_pegawai.index') },
+                {
+                    label: 'Data Pegawai',
+                    url: route('profil_pegawai.show', pegawai.id),
+                },
+                { label: 'Riwayat Jabatan' },
+            ]"
+        />
+        <MainCard>
+            <div class="grid grid-cols-6 gap-4">
+                <div class="col-span-5">
+                    <table class="text-left">
+                        <tr>
+                            <th class="align-top">Nama Lengkap</th>
+                            <td class="px-2 align-top">:</td>
+                            <td class="align-top">{{ pegawai.nama }}</td>
+                        </tr>
+                        <tr>
+                            <th class="align-top">Nomor Induk Pegawai</th>
+                            <td class="px-2 align-top">:</td>
+                            <td class="align-top">{{ pegawai.nip }}</td>
+                        </tr>
+                        <tr>
+                            <th class="align-top">Riwayat Jabatan</th>
+                            <td class="px-2 align-top">:</td>
+                            <td class="align-top">
+                                <div class="overflow-x-auto">
+                                    <table class="table">
+                                        <!-- head -->
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Nama Jabatan</th>
+                                                <th>Jenis Jabatan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                v-for="(
+                                                    item, index
+                                                ) in pegawai.pegawai_riwayat_jabatan"
+                                            >
+                                                <td>
+                                                    {{ index + 1 }}
+                                                </td>
+                                                <td>
+                                                    {{
+                                                        item.jabatan_unit_kerja_id
+                                                    }}
+                                                </td>
+                                                <td>
+                                                    Quality Control Specialist
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    {{ pegawai.pegawai_riwayat_jabatan }}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-span-1">
+                    <img
+                        :src="media_foto_pegawai || noPhotoUrl"
+                        class="mb-4 rounded-md border-2"
+                        alt=""
+                    />
+                </div>
+            </div>
+        </MainCard>
+    </div>
+    <!-- <div>
         <Head title="Riwayat Jabatan" />
         <div class="breadcrumbs text-sm">
             <ul>
@@ -210,5 +290,5 @@ const tambahRiwayatJabatanPegawai = () => {
                 </div>
             </div>
         </MainCard>
-    </div>
+    </div> -->
 </template>

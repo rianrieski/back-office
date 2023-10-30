@@ -53,11 +53,6 @@ const useRouteStore = defineStore("route-store", () => {
                     href: route("profil_pegawai.index"),
                 },
                 {
-                    icon: Square3Stack3DIcon,
-                    label: "Riwayat Jabatan Pegawai",
-                    href: route("riwayat_jabatan_pegawai.index"),
-                },
-                {
                     icon: ArrowRightIcon,
                     label: "Alamat Pegawai",
                     href: route("alamat.index"),
